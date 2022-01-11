@@ -1,10 +1,11 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.library'
+}
 
 android {
     compileSdkVersion compile_sdk_version
-    buildToolsVersion build_tools_version
+
     defaultConfig {
-        applicationId "net.csdn.davinci.demo"
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
         versionCode 1
@@ -14,9 +15,10 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -25,5 +27,6 @@ android {
 
 dependencies {
     implementation "androidx.appcompat:appcompat:$lib_appcompat"
-    implementation "com.google.android.material:material:$lib_appcompat"
 }
+
+apply from: '../maven_upload.gradle'
