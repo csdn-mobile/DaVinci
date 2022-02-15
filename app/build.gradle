@@ -24,6 +24,6 @@ android {
 }
 
 dependencies {
+    implementation project(':davinci')
     implementation "androidx.appcompat:appcompat:$lib_appcompat"
-    implementation "com.google.android.material:material:$lib_appcompat"
 }

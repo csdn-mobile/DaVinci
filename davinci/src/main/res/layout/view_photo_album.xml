@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/view_blank"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.4"
+        android:background="@color/davinci_album_back" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_dirs"
+        android:layout_width="match_parent"
+        android:layout_height="340dp"
+        android:background="@color/davinci_white" />
+
+</RelativeLayout>

@@ -27,6 +27,10 @@ android {
 
 dependencies {
     implementation "androidx.appcompat:appcompat:$lib_appcompat"
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+    implementation 'io.github.csdn-mobile:StatusBar:1.1.1'
+    implementation 'it.sephiroth.android.library.imagezoom:library:1.0.4'
 }
 
 apply from: '../maven_upload.gradle'
