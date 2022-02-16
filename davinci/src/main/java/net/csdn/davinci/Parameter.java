@@ -14,6 +14,10 @@ public class Parameter {
      */
     public static int column;
     /**
+     * 是否显示GIF
+     */
+    public static boolean showGif;
+    /**
      * 已选中的照片
      */
     public static List<String> selectedPhotos;
@@ -28,6 +32,7 @@ public class Parameter {
     public static void reset(){
         maxSelectable = 9;
         column = 4;
+        showGif = false;
         selectedPhotos = new ArrayList<>();
         currentUri = "";
     }

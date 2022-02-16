@@ -45,6 +45,14 @@ public class DaVinci {
         }
 
         /**
+         * 是否显示GIF
+         */
+        public DaVinciBuilder showGif(boolean showGif){
+            Parameter.showGif = showGif;
+            return this;
+        }
+
+        /**
          * 已选中的图片
          */
         public DaVinciBuilder selectedPhotos(List<String> selectedPhotos) {

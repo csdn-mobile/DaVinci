@@ -12,11 +12,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.csdn.davinci.R;
+import net.csdn.davinci.core.adapter.AlbumAdapter;
+import net.csdn.davinci.core.album.AlbumClickListener;
+import net.csdn.davinci.core.bean.Album;
+
+import java.util.ArrayList;
 
 public class PhotoAlbum extends RelativeLayout {
 
     private RecyclerView rvDirs;
     private View viewBlank;
+
+    private AlbumClickListener mOnClickListener;
 
     public PhotoAlbum(Context context) {
         this(context, null);
@@ -45,6 +52,13 @@ public class PhotoAlbum extends RelativeLayout {
                 closeAlbum();
             }
         });
+    }
+
+    /**
+     * 设置相册点击监听
+     */
+    public void setAlbumClickListener(AlbumClickListener onClickListener) {
+        this.mOnClickListener = onClickListener;
     }
 
     /**
@@ -92,5 +106,20 @@ public class PhotoAlbum extends RelativeLayout {
             }
         });
         rvDirs.startAnimation(translateAnimation);//给imageView添加的动画效果
+    }
+
+    /**
+     * 设置相册数据
+     */
+    public void setData(ArrayList<Album> albums) {
+        AlbumAdapter adapter = new AlbumAdapter(albums, new AlbumClickListener() {
+            @Override
+            public void onAlbumClick(Album album) {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onAlbumClick(album);
+                }
+            }
+        });
+        rvDirs.setAdapter(adapter);
     }
 }

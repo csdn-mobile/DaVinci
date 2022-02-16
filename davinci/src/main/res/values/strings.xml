@@ -3,5 +3,7 @@
 
   <string name="davinci_title">标题</string>
   <string name="davinci_confirm">确定</string>
+  <string name="davinci_all_image">所有图片</string>
+  <string name="davinci_image_count">(%1$d)</string>
 
 </resources>
