@@ -31,7 +31,7 @@ public class Config {
     /**
      * 当前选中的照片地址
      */
-    public static String currentUri;
+    public static String currentPath;
     /**
      * 图片加载引擎
      */
@@ -46,7 +46,7 @@ public class Config {
         showGif = false;
         showCamera = true;
         selectedPhotos = new ArrayList<>();
-        currentUri = "";
+        currentPath = "";
         imageEngine = new GlideEngine();
     }
 }

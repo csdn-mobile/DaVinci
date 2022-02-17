@@ -1,5 +1,7 @@
 package net.csdn.davinci.ui.activity;
 
+import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -13,6 +15,9 @@ import com.csdn.statusbar.annotation.FontMode;
 
 import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
+import net.csdn.davinci.utils.PhotoUtils;
+
+import java.io.File;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
@@ -33,12 +38,15 @@ public class PreviewActivity extends AppCompatActivity {
         ImageViewTouch iv = findViewById(R.id.iv);
         iv.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
 
-        Glide.with(this)
-                .load(Config.currentUri)
-                .apply(new RequestOptions()
-                        .priority(Priority.HIGH)
-                        .fitCenter())
-                .into(iv);
+
+        Point size = PhotoUtils.getBitmapSize(Uri.fromFile(new File(Config.currentPath)), this);
+        Config.imageEngine.loadImage(this, size.x, size.y, iv, Config.currentPath);
+//        Glide.with(this)
+//                .load(Config.currentPath)
+//                .apply(new RequestOptions()
+//                        .priority(Priority.HIGH)
+//                        .fitCenter())
+//                .into(iv);
     }
 
     @Override

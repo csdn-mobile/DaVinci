@@ -93,7 +93,7 @@ public class DaVinci {
             if (activity == null) {
                 return;
             }
-            Config.currentUri = TextUtils.isEmpty(currentUri) ? "" : currentUri;
+            Config.currentPath = TextUtils.isEmpty(currentUri) ? "" : currentUri;
             Intent intent = new Intent(activity, PreviewActivity.class);
             activity.startActivity(intent);
         }
