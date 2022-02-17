@@ -78,7 +78,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else {
             photo = mDatas.get(position);
         }
-        Config.imageEngine.loadThumbnail(mContext, mImageWidth, R.color.davinci_white, holder.ivPhoto, photo.imgPath);
+        Config.imageEngine.loadThumbnail(mContext, mImageWidth, R.color.davinci_place_holder, holder.ivPhoto, photo.imgPath);
 
 //        final boolean isChecked = isSelected(photo);
 //

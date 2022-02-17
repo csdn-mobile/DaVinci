@@ -17,7 +17,7 @@
             android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/davinci_background" />
+            android:background="@color/davinci_white" />
 
         <net.csdn.davinci.ui.view.PhotoAlbum
             android:id="@+id/album"
