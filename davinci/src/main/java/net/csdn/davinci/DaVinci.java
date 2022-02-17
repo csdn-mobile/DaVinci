@@ -16,7 +16,11 @@ public class DaVinci {
     }
 
     public static DaVinciBuilder create() {
-        return new DaVinciBuilder();
+        return create(true);
+    }
+
+    public static DaVinciBuilder create(boolean reset) {
+        return new DaVinciBuilder(reset);
     }
 
     /**
@@ -24,8 +28,10 @@ public class DaVinci {
      */
     public static class DaVinciBuilder {
 
-        private DaVinciBuilder() {
-            Config.reset();
+        private DaVinciBuilder(boolean reset) {
+            if (reset) {
+                Config.reset();
+            }
         }
 
         /**
@@ -47,7 +53,7 @@ public class DaVinci {
         /**
          * 是否显示GIF
          */
-        public DaVinciBuilder showGif(boolean showGif){
+        public DaVinciBuilder showGif(boolean showGif) {
             Config.showGif = showGif;
             return this;
         }
@@ -55,7 +61,7 @@ public class DaVinci {
         /**
          * 是否显示相机
          */
-        public DaVinciBuilder showCamera(boolean showCamera){
+        public DaVinciBuilder showCamera(boolean showCamera) {
             Config.showCamera = showCamera;
             return this;
         }

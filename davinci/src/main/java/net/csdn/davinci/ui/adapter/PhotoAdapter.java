@@ -1,5 +1,6 @@
 package net.csdn.davinci.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.csdn.davinci.Config;
+import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.Photo;
 import net.csdn.davinci.utils.DensityUtils;
@@ -107,6 +109,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DaVinci.create(false)
+                        .preview((Activity) mContext, photo.imgPath);
             }
         });
         holder.rlSelected.setOnClickListener(new View.OnClickListener() {

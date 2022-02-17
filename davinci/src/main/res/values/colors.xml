@@ -2,6 +2,7 @@
 <resources>
 
     <color name="davinci_white">#FFFFFF</color>
+    <color name="davinci_black">#000000</color>
     <color name="davinci_title">#2A2D33</color>
     <color name="davinci_confirm">#2774CC</color>
     <color name="davinci_unenable">#CED1D6</color>
