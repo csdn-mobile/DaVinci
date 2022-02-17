@@ -102,7 +102,16 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     private void loadAlbum() {
-        mAdapter = new PhotoAdapter(this);
+        mAdapter = new PhotoAdapter(this, new PhotoAdapter.OnPhotoSelectChangeListener() {
+            @Override
+            public void onChange() {
+                if (Config.selectedPhotos.size() <= 0) {
+                    photoNavigation.setDoUnEnable();
+                } else {
+                    photoNavigation.setDoEnable();
+                }
+            }
+        });
         rv.setLayoutManager(new GridLayoutManager(this, Config.column));
         rv.setAdapter(mAdapter);
 

@@ -13,11 +13,14 @@
 
     <RelativeLayout
         android:id="@+id/rl_selected"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:padding="6dp">
+        android:paddingStart="11dp"
+        android:paddingTop="11dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="6dp">
 
         <TextView
             android:id="@+id/tv_selected"

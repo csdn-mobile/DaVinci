@@ -11,4 +11,11 @@
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
         android:src="@drawable/davinci_camera" />
+
+    <View
+        android:id="@+id/view_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/davinci_image_unenable"
+        android:visibility="gone" />
 </net.csdn.davinci.ui.view.SquareRelativeLayout>

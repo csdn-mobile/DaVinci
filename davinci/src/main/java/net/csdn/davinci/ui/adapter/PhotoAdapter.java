@@ -27,9 +27,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context mContext;
     private List<Photo> mDatas;
     private int mImageWidth;
+    private OnPhotoSelectChangeListener mListener;
 
-    public PhotoAdapter(Context context) {
+    public interface OnPhotoSelectChangeListener {
+        void onChange();
+    }
+
+    public PhotoAdapter(Context context, OnPhotoSelectChangeListener listener) {
         this.mContext = context;
+        this.mListener = listener;
         this.mImageWidth = (SystemUtils.getScreenWidth(context) - DensityUtils.dp2px(context, Config.column)) / 4;
     }
 
@@ -62,15 +68,27 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        // 相机
         if (viewHolder instanceof CameraHolder) {
+            CameraHolder cameraHolder = (CameraHolder) viewHolder;
+            boolean canClick = Config.selectedPhotos.size() < Config.maxSelectable;
+            if (!canClick) {
+                cameraHolder.viewShadow.setVisibility(View.VISIBLE);
+            } else {
+                cameraHolder.viewShadow.setVisibility(View.GONE);
+            }
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (!canClick) {
+                        return;
+                    }
                     Log.e("Davinci", "=============clickCamera");
                 }
             });
             return;
         }
+        // 图片
         PhotoHolder holder = (PhotoHolder) viewHolder;
         Photo photo;
         if (Config.showCamera) {
@@ -80,43 +98,42 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         Config.imageEngine.loadThumbnail(mContext, mImageWidth, R.color.davinci_place_holder, holder.ivPhoto, photo.imgPath);
 
-//        final boolean isChecked = isSelected(photo);
-//
-//        holder.rlSelected.setSelected(isChecked);
-//        holder.ivPhoto.setSelected(isChecked);
-//        holder.tvSelected.setText(isChecked ? selectedPhotos.indexOf(photo.getPath()) + 1 + "" : "");
-//
-//        holder.viewShadow.setVisibility(selectedPhotos.size() == maxCount && !isChecked ? View.VISIBLE : View.GONE);
-//        holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (onPhotoClickListener != null) {
-//                    int pos = holder.getAdapterPosition();
-//                    if (previewEnable) {
-//                        onPhotoClickListener.onClick(view, pos, showCamera());
-//                    } else {
-//                        holder.rlSelected.performClick();
-//                    }
-//                }
-//            }
-//        });
-//        holder.rlSelected.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int pos = holder.getAdapterPosition();
-//                boolean isEnable = true;
-//
-//                if (onItemCheckListener != null) {
-//                    isEnable = onItemCheckListener.onItemCheck(pos, photo,
-//                            getSelectedPhotos().size() + (isSelected(photo) ? -1 : 1));
-//                }
-//                if (isEnable) {
-//                    toggleSelection(photo);
-////                        notifyItemChanged(pos);
-//                    notifyDataSetChanged();
-//                }
-//            }
-//        });
+        // 图片选中状态
+        boolean isSelected = Config.selectedPhotos.contains(photo.imgPath);
+        holder.rlSelected.setSelected(isSelected);
+        holder.tvSelected.setText(isSelected ? Config.selectedPhotos.indexOf(photo.imgPath) + 1 + "" : "");
+        holder.viewShadow.setVisibility(Config.selectedPhotos.size() >= Config.maxSelectable && !isSelected ? View.VISIBLE : View.GONE);
+
+        holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+        holder.rlSelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!view.isSelected() && Config.selectedPhotos.size() >= Config.maxSelectable) {
+                    return;
+                }
+                view.setSelected(!view.isSelected());
+                if (view.isSelected()) {
+                    // 选中图片
+                    Config.selectedPhotos.add(photo.imgPath);
+                    if (Config.selectedPhotos.size() < Config.maxSelectable) {
+                        holder.tvSelected.setText(view.isSelected() ? Config.selectedPhotos.indexOf(photo.imgPath) + 1 + "" : "");
+                    } else {
+                        notifyDataSetChanged();
+                    }
+                } else {
+                    // 取消选中
+                    Config.selectedPhotos.remove(photo.imgPath);
+                    notifyDataSetChanged();
+                }
+                if (mListener != null) {
+                    mListener.onChange();
+                }
+            }
+        });
     }
 
 
@@ -136,8 +153,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     static class CameraHolder extends RecyclerView.ViewHolder {
+        private View viewShadow;
+
         CameraHolder(View itemView) {
             super(itemView);
+            viewShadow = itemView.findViewById(R.id.view_shadow);
         }
     }
 
