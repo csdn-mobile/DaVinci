@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 2000) {
             DaVinci.create()
                     .showGif(true)
+                    .showCamera(true)
+                    .column(4)
                     .select(this, 10000);
         }
     }

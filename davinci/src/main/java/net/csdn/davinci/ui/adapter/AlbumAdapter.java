@@ -1,4 +1,4 @@
-package net.csdn.davinci.core.adapter;
+package net.csdn.davinci.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,11 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.album.AlbumClickListener;
-import net.csdn.davinci.core.bean.Album;
+import net.csdn.davinci.core.entity.Album;
 import net.csdn.davinci.utils.DensityUtils;
-import net.csdn.davinci.utils.GlideUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ListHolder> 
         }
         Album album = mDatas.get(position);
 
-        GlideUtils.loadThumbnail(mContext, DensityUtils.dp2px(mContext, 40), R.color.davinci_place_holder, holder.ivCover, album.coverPath);
+        Config.imageEngine.loadThumbnail(mContext, DensityUtils.dp2px(mContext, 40), R.color.davinci_place_holder, holder.ivCover, album.coverPath);
         holder.tvName.setText(album.name);
         holder.tvCount.setText(holder.tvCount.getContext().getString(R.string.davinci_image_count, album.photoList == null ? 0 : album.photoList.size()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {

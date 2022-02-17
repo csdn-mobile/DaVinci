@@ -6,16 +6,19 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.csdn.statusbar.StatusBar;
 import com.csdn.statusbar.annotation.FontMode;
 
+import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.album.AlbumClickListener;
 import net.csdn.davinci.core.album.AlbumHelper;
 import net.csdn.davinci.core.album.AlbumResultCallback;
-import net.csdn.davinci.core.bean.Album;
+import net.csdn.davinci.core.entity.Album;
+import net.csdn.davinci.ui.adapter.PhotoAdapter;
 import net.csdn.davinci.ui.view.EmptyView;
 import net.csdn.davinci.ui.view.PhotoAlbum;
 import net.csdn.davinci.ui.view.PhotoNavigation;
@@ -30,6 +33,7 @@ public class PhotoActivity extends AppCompatActivity {
     private PhotoNavigation photoNavigation;
 
     private AlbumHelper mAlbumHelper;
+    private PhotoAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,6 +102,11 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     private void loadAlbum() {
+        mAdapter = new PhotoAdapter(this);
+        rv.setLayoutManager(new GridLayoutManager(this, Config.column));
+        rv.setAdapter(mAdapter);
+
+        // 读取相簿
         mAlbumHelper = new AlbumHelper();
         mAlbumHelper.onCreate(this);
         mAlbumHelper.loadAlbums(new AlbumResultCallback() {
@@ -108,6 +117,7 @@ public class PhotoActivity extends AppCompatActivity {
                 selectAlbum(albums.get(0));
             }
         });
+
     }
 
     private void selectAlbum(Album album) {
@@ -115,6 +125,7 @@ public class PhotoActivity extends AppCompatActivity {
             return;
         }
         photoNavigation.setTitle(album.name);
+        mAdapter.setDatas(album.photoList);
     }
 
     private void closeAlbum() {

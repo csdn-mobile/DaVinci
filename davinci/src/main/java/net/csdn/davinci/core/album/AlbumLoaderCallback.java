@@ -1,7 +1,4 @@
 package net.csdn.davinci.core.album;
-
-import static android.provider.MediaStore.MediaColumns.DATA;
-
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Loader;
@@ -14,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import net.csdn.davinci.R;
-import net.csdn.davinci.core.bean.Album;
-import net.csdn.davinci.core.bean.Photo;
+import net.csdn.davinci.core.entity.Album;
+import net.csdn.davinci.core.entity.Photo;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -57,7 +54,7 @@ public class AlbumLoaderCallback implements LoaderManager.LoaderCallbacks<Cursor
 
         while (data.moveToNext()) {
             int imageId = data.getInt(data.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
-            String imagePath = data.getString(data.getColumnIndexOrThrow(DATA));
+            String imagePath = data.getString(data.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
             String albumId = data.getString(data.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_ID));
             String albumName = data.getString(data.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
 

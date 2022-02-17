@@ -1,9 +1,12 @@
 package net.csdn.davinci;
 
+import net.csdn.davinci.core.engine.GlideEngine;
+import net.csdn.davinci.core.engine.ImageEngine;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Parameter {
+public class Config {
 
     /**
      * 最大可选张数
@@ -18,6 +21,10 @@ public class Parameter {
      */
     public static boolean showGif;
     /**
+     * 是否显示相机
+     */
+    public static boolean showCamera;
+    /**
      * 已选中的照片
      */
     public static List<String> selectedPhotos;
@@ -25,15 +32,21 @@ public class Parameter {
      * 当前选中的照片地址
      */
     public static String currentUri;
+    /**
+     * 图片加载引擎
+     */
+    public static ImageEngine imageEngine;
 
     /**
      * 重置
      */
-    public static void reset(){
+    public static void reset() {
         maxSelectable = 9;
         column = 4;
         showGif = false;
+        showCamera = true;
         selectedPhotos = new ArrayList<>();
         currentUri = "";
+        imageEngine = new GlideEngine();
     }
 }

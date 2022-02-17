@@ -1,4 +1,4 @@
-package net.csdn.davinci.core.bean;
+package net.csdn.davinci.core.entity;
 
 public class Photo {
     public String id;

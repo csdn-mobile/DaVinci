@@ -8,5 +8,7 @@
     <color name="davinci_album_back">#06060D</color>
     <color name="davinci_line">#EEEEEE</color>
     <color name="davinci_place_holder">#F0F0F5</color>
+    <color name="davinci_image_unenable">#B3FFFFFF</color>
+    <color name="davinci_background">#F0F0F0</color>
 
 </resources>

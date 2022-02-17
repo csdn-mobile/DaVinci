@@ -25,14 +25,14 @@ public class DaVinci {
     public static class DaVinciBuilder {
 
         private DaVinciBuilder() {
-            Parameter.reset();
+            Config.reset();
         }
 
         /**
          * 最多可选照片数
          */
         public DaVinciBuilder maxSelectable(int maxSelectable) {
-            Parameter.maxSelectable = maxSelectable;
+            Config.maxSelectable = maxSelectable;
             return this;
         }
 
@@ -40,7 +40,7 @@ public class DaVinci {
          * 图片列数
          */
         public DaVinciBuilder column(int column) {
-            Parameter.column = column;
+            Config.column = column;
             return this;
         }
 
@@ -48,7 +48,15 @@ public class DaVinci {
          * 是否显示GIF
          */
         public DaVinciBuilder showGif(boolean showGif){
-            Parameter.showGif = showGif;
+            Config.showGif = showGif;
+            return this;
+        }
+
+        /**
+         * 是否显示相机
+         */
+        public DaVinciBuilder showCamera(boolean showCamera){
+            Config.showCamera = showCamera;
             return this;
         }
 
@@ -56,7 +64,7 @@ public class DaVinci {
          * 已选中的图片
          */
         public DaVinciBuilder selectedPhotos(List<String> selectedPhotos) {
-            Parameter.selectedPhotos = selectedPhotos == null ? new ArrayList<>() : selectedPhotos;
+            Config.selectedPhotos = selectedPhotos == null ? new ArrayList<>() : selectedPhotos;
             return this;
         }
 
@@ -79,7 +87,7 @@ public class DaVinci {
             if (activity == null) {
                 return;
             }
-            Parameter.currentUri = TextUtils.isEmpty(currentUri) ? "" : currentUri;
+            Config.currentUri = TextUtils.isEmpty(currentUri) ? "" : currentUri;
             Intent intent = new Intent(activity, PreviewActivity.class);
             activity.startActivity(intent);
         }

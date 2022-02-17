@@ -13,14 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <net.csdn.davinci.ui.view.PhotoAlbum
-            android:id="@+id/album"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/davinci_background" />
+
+        <net.csdn.davinci.ui.view.PhotoAlbum
+            android:id="@+id/album"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone" />

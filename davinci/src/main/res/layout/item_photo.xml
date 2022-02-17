@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<net.csdn.davinci.ui.view.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingEnd="1dp"
+    android:paddingBottom="1dp">
+
+    <ImageView
+        android:id="@+id/iv_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <RelativeLayout
+        android:id="@+id/rl_selected"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:padding="6dp">
+
+        <TextView
+            android:id="@+id/tv_selected"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/davinci_picker_selector"
+            android:gravity="center"
+            android:textColor="@color/davinci_white"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/davinci_image_unenable"
+        android:visibility="gone" />
+</net.csdn.davinci.ui.view.SquareRelativeLayout>

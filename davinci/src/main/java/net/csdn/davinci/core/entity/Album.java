@@ -1,4 +1,4 @@
-package net.csdn.davinci.core.bean;
+package net.csdn.davinci.core.entity;
 
 import java.util.ArrayList;
 import java.util.List;

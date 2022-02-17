@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.csdn.davinci.R;
-import net.csdn.davinci.core.adapter.AlbumAdapter;
 import net.csdn.davinci.core.album.AlbumClickListener;
-import net.csdn.davinci.core.bean.Album;
+import net.csdn.davinci.core.entity.Album;
+import net.csdn.davinci.ui.adapter.AlbumAdapter;
 
 import java.util.ArrayList;
 
