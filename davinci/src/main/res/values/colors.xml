@@ -6,5 +6,7 @@
     <color name="davinci_confirm">#2774CC</color>
     <color name="davinci_unenable">#CED1D6</color>
     <color name="davinci_album_back">#06060D</color>
+    <color name="davinci_line">#EEEEEE</color>
+
 
 </resources>

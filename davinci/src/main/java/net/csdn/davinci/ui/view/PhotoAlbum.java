@@ -112,7 +112,7 @@ public class PhotoAlbum extends RelativeLayout {
      * 设置相册数据
      */
     public void setData(ArrayList<Album> albums) {
-        AlbumAdapter adapter = new AlbumAdapter(albums, new AlbumClickListener() {
+        AlbumAdapter adapter = new AlbumAdapter(getContext(), albums, new AlbumClickListener() {
             @Override
             public void onAlbumClick(Album album) {
                 if (mOnClickListener != null) {

@@ -27,7 +27,10 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:gravity="center"
+            android:maxWidth="160dp"
+            android:maxLines="1"
             android:text="标题"
             android:textColor="@color/davinci_title"
             android:textSize="17sp" />
@@ -52,4 +55,10 @@
         android:text="@string/davinci_confirm"
         android:textColor="@color/davinci_unenable"
         android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/davinci_line" />
 </RelativeLayout>

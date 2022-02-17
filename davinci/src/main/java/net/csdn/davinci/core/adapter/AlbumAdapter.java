@@ -1,5 +1,6 @@
 package net.csdn.davinci.core.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
 import net.csdn.davinci.R;
@@ -21,15 +23,27 @@ import java.util.List;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ListHolder> {
 
+    private Context mContext;
     private List<Album> mDatas;
     private AlbumClickListener mOnClickListener;
 
-    public AlbumAdapter(List<Album> albums, AlbumClickListener onClickListener) {
+    private RequestOptions mOptions;
+    private RequestManager mRequestManager;
+
+
+    public AlbumAdapter(Context context, List<Album> albums, AlbumClickListener onClickListener) {
+        this.mContext = context;
         this.mDatas = albums;
         this.mOnClickListener = onClickListener;
         if (this.mDatas == null) {
             this.mDatas = new ArrayList<>();
         }
+
+        mOptions = new RequestOptions()
+                .dontAnimate()
+                .dontTransform()
+                .override(300, 300);
+        mRequestManager = Glide.with(mContext);
     }
 
     @Override
@@ -50,12 +64,9 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ListHolder> 
             return;
         }
         Album album = mDatas.get(position);
-        final RequestOptions options = new RequestOptions()
-                .dontAnimate()
-                .dontTransform()
-                .override(800, 800);
-        Glide.with(holder.itemView.getContext())
-                .setDefaultRequestOptions(options)
+
+        mRequestManager
+                .setDefaultRequestOptions(mOptions)
                 .load(album.coverPath)
                 .thumbnail(0.1f)
                 .into(holder.ivCover);
@@ -79,9 +90,9 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ListHolder> 
 
         ListHolder(View rootView) {
             super(rootView);
-            ivCover = rootView.findViewById(R.id.iv_dir_cover);
-            tvName = rootView.findViewById(R.id.tv_dir_name);
-            tvCount = rootView.findViewById(R.id.tv_dir_count);
+            ivCover = rootView.findViewById(R.id.iv_cover);
+            tvName = rootView.findViewById(R.id.tv_name);
+            tvCount = rootView.findViewById(R.id.tv_count);
         }
     }
 }
