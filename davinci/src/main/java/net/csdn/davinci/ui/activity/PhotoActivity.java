@@ -198,6 +198,7 @@ public class PhotoActivity extends AppCompatActivity {
             }
             captureManager.galleryAddPic();
             String path = captureManager.getCurrentPhotoPath();
+            Config.selectedPhotos.add(path);
             mAdapter.getDatas().add(0, new Photo(path));
             mAdapter.notifyDataSetChanged();
         }
