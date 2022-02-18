@@ -110,6 +110,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             @Override
             public void onClick(View view) {
                 DaVinci.create(false)
+                        .previewSelectable(true)
                         .preview((Activity) mContext, photo.imgPath);
             }
         });

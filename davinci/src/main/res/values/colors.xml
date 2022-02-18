@@ -4,12 +4,15 @@
     <color name="davinci_white">#FFFFFF</color>
     <color name="davinci_black">#000000</color>
     <color name="davinci_title">#2A2D33</color>
-    <color name="davinci_confirm">#2774CC</color>
+    <color name="davinci_confirm">#4788C7</color>
     <color name="davinci_unenable">#CED1D6</color>
     <color name="davinci_album_back">#06060D</color>
     <color name="davinci_line">#EEEEEE</color>
     <color name="davinci_place_holder">#F0F0F5</color>
     <color name="davinci_image_unenable">#B3FFFFFF</color>
     <color name="davinci_background">#F0F0F0</color>
+    <color name="davinci_preview_nav">#6606060D</color>
+    <color name="davinci_page_gray">#989DAD</color>
+    <color name="davinci_red">#FC5531</color>
 
 </resources>

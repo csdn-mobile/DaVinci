@@ -5,5 +5,7 @@
   <string name="davinci_confirm">确定</string>
   <string name="davinci_all_image">所有图片</string>
   <string name="davinci_image_count">(%1$d)</string>
+  <string name="davinci_over_max_count_tips">你最多可以选择%1$d张图片</string>
+  <string name="davinci_pager_page">%1$d / %2$d</string>
 
 </resources>

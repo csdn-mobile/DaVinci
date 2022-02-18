@@ -2,6 +2,7 @@ package net.csdn.davinci;
 
 import net.csdn.davinci.core.engine.GlideEngine;
 import net.csdn.davinci.core.engine.ImageEngine;
+import net.csdn.davinci.core.entity.Photo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +26,25 @@ public class Config {
      */
     public static boolean showCamera;
     /**
-     * 已选中的照片
+     * 是否预览可选择
      */
-    public static List<String> selectedPhotos;
-    /**
-     * 当前选中的照片地址
-     */
-    public static String currentPath;
+    public static boolean previewSelectable;
     /**
      * 图片加载引擎
      */
     public static ImageEngine imageEngine;
+    /**
+     * 已选中的照片
+     */
+    public static List<String> selectedPhotos;
+    /**
+     * 当前预览的图片地址
+     */
+    public static List<String> showPhotos;
+    /**
+     * 当前选中的照片地址
+     */
+    public static String currentPath;
 
     /**
      * 重置
@@ -45,7 +54,9 @@ public class Config {
         column = 4;
         showGif = false;
         showCamera = true;
+        previewSelectable = false;
         selectedPhotos = new ArrayList<>();
+        showPhotos = new ArrayList<>();
         currentPath = "";
         imageEngine = new GlideEngine();
     }

@@ -18,12 +18,14 @@ import net.csdn.davinci.core.album.AlbumClickListener;
 import net.csdn.davinci.core.album.AlbumHelper;
 import net.csdn.davinci.core.album.AlbumResultCallback;
 import net.csdn.davinci.core.entity.Album;
+import net.csdn.davinci.core.entity.Photo;
 import net.csdn.davinci.ui.adapter.PhotoAdapter;
 import net.csdn.davinci.ui.view.EmptyView;
 import net.csdn.davinci.ui.view.PhotoAlbum;
 import net.csdn.davinci.ui.view.PhotoNavigation;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoActivity extends AppCompatActivity {
 
@@ -55,8 +57,17 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        Config.reset();
         if (mAlbumHelper != null) {
             mAlbumHelper.onDestroy();
         }
@@ -135,6 +146,12 @@ public class PhotoActivity extends AppCompatActivity {
         }
         photoNavigation.setTitle(album.name);
         mAdapter.setDatas(album.photoList);
+
+        List<String> list = new ArrayList<>();
+        for (Photo photo : album.photoList) {
+            list.add(photo.imgPath);
+        }
+        Config.showPhotos = list;
     }
 
     private void closeAlbum() {

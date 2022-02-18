@@ -28,7 +28,7 @@
             android:layout_height="22dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/davinci_picker_selector"
+            android:background="@drawable/davinci_selector_picker"
             android:gravity="center"
             android:textColor="@color/davinci_white"
             android:textSize="12sp" />

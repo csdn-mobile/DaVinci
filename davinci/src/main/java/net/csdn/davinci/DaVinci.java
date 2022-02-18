@@ -67,6 +67,14 @@ public class DaVinci {
         }
 
         /**
+         * 是否预览可以选择图片
+         */
+        public DaVinciBuilder previewSelectable(boolean previewSelectable) {
+            Config.previewSelectable = previewSelectable;
+            return this;
+        }
+
+        /**
          * 已选中的图片
          */
         public DaVinciBuilder selectedPhotos(List<String> selectedPhotos) {

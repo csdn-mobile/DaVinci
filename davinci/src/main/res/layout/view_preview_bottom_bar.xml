@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/davinci_preview_nav"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingStart="16dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/tv_selected"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/davinci_selector_picker"
+            android:gravity="center"
+            android:textColor="@color/davinci_white"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp" />
+</LinearLayout>
