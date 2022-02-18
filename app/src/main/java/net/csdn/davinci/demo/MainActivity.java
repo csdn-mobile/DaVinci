@@ -18,8 +18,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         String[] storage = new String[]{
+                Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+
         };
         ActivityCompat.requestPermissions(this, storage, 2000);
     }

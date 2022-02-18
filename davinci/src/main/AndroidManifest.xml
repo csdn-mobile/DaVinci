@@ -3,6 +3,15 @@
     package="net.csdn.davinci">
 
     <application>
+        <provider
+            android:name=".core.photo.PhotoFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/davinci_provider_paths" />
+        </provider>
         <activity
             android:name=".ui.activity.PhotoActivity"
             android:screenOrientation="portrait"

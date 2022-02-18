@@ -1,5 +1,7 @@
 package net.csdn.davinci.ui.activity;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +25,10 @@ import net.csdn.davinci.ui.adapter.PhotoAdapter;
 import net.csdn.davinci.ui.view.EmptyView;
 import net.csdn.davinci.ui.view.PhotoAlbum;
 import net.csdn.davinci.ui.view.PhotoNavigation;
+import net.csdn.davinci.core.photo.PhotoCaptureManager;
+import net.csdn.davinci.utils.PermissionsUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +39,7 @@ public class PhotoActivity extends AppCompatActivity {
     private PhotoAlbum photoAlbum;
     private PhotoNavigation photoNavigation;
 
+    private PhotoCaptureManager captureManager;
     private AlbumHelper mAlbumHelper;
     private PhotoAdapter mAdapter;
 
@@ -51,6 +57,8 @@ public class PhotoActivity extends AppCompatActivity {
         emptyView = findViewById(R.id.empty);
         photoAlbum = findViewById(R.id.album);
         photoNavigation = findViewById(R.id.navigation);
+
+        captureManager = new PhotoCaptureManager(this);
 
         setListener();
         loadAlbum();
@@ -122,6 +130,17 @@ public class PhotoActivity extends AppCompatActivity {
                     photoNavigation.setDoEnable();
                 }
             }
+        }, new PhotoAdapter.OnCameraClickListener() {
+            @Override
+            public void onClick() {
+                if (!PermissionsUtils.checkCameraPermission(PhotoActivity.this)) {
+                    return;
+                }
+                if (!PermissionsUtils.checkWriteStoragePermission(PhotoActivity.this)) {
+                    return;
+                }
+                openCamera();
+            }
         });
         rv.setLayoutManager(new GridLayoutManager(this, Config.column));
         rv.setAdapter(mAdapter);
@@ -158,4 +177,30 @@ public class PhotoActivity extends AppCompatActivity {
         photoAlbum.closeAlbum();
         photoNavigation.setArrowDown();
     }
+
+    private void openCamera() {
+        try {
+            Intent intent = captureManager.dispatchTakePictureIntent();
+            startActivityForResult(intent, PhotoCaptureManager.REQUEST_TAKE_PHOTO);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ActivityNotFoundException e) {
+            Log.e("PhotoPickerFragment", "No Activity Found to handle Intent", e);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PhotoCaptureManager.REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            if (captureManager == null) {
+                captureManager = new PhotoCaptureManager(this);
+            }
+            captureManager.galleryAddPic();
+            String path = captureManager.getCurrentPhotoPath();
+            mAdapter.getDatas().add(0, new Photo(path));
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
 }

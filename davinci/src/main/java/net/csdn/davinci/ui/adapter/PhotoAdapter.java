@@ -2,7 +2,6 @@ package net.csdn.davinci.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,24 +25,35 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int TYPE_CAMERA = 1000;
     private static final int TYPE_PHOTO = 1001;
 
+    private int mImageWidth;
     private Context mContext;
     private List<Photo> mDatas;
-    private int mImageWidth;
+
     private OnPhotoSelectChangeListener mListener;
+    private OnCameraClickListener mOnCameraClickListener;
 
     public interface OnPhotoSelectChangeListener {
         void onChange();
     }
 
-    public PhotoAdapter(Context context, OnPhotoSelectChangeListener listener) {
+    public interface OnCameraClickListener {
+        void onClick();
+    }
+
+    public PhotoAdapter(Context context, OnPhotoSelectChangeListener listener, OnCameraClickListener onCameraClickListener) {
         this.mContext = context;
         this.mListener = listener;
+        this.mOnCameraClickListener = onCameraClickListener;
         this.mImageWidth = (SystemUtils.getScreenWidth(context) - DensityUtils.dp2px(context, Config.column)) / 4;
     }
 
     public void setDatas(List<Photo> datas) {
         this.mDatas = datas;
         notifyDataSetChanged();
+    }
+
+    public List<Photo> getDatas() {
+        return mDatas;
     }
 
     @Override
@@ -85,7 +95,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     if (!canClick) {
                         return;
                     }
-                    Log.e("Davinci", "=============clickCamera");
+                    if (mOnCameraClickListener != null) {
+                        mOnCameraClickListener.onClick();
+                    }
                 }
             });
             return;
