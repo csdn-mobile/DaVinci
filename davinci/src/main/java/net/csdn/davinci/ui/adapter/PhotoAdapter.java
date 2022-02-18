@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -93,6 +94,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     if (!canClick) {
+                        Toast.makeText(mContext, mContext.getString(R.string.davinci_over_max_count_tips, Config.maxSelectable), Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (mOnCameraClickListener != null) {
