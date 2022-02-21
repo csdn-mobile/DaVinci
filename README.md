@@ -7,7 +7,6 @@
 |![](images/01.jpg)|![](images/02.jpg)|
 |---|---|
 |![](images/03.jpg)|![](images/04.jpg)|
-|---|---|
 
 ### 注意
 * 最低支持版本为Android5.0（minSdkVersion 21）
@@ -55,6 +54,10 @@ DaVinci.preview()
         .start(this);
 ……
 ```
+
+### 未来计划
+* 支持网络图片预览
+* 支持更多样式自定义
 
 ### 版本记录
 |版本号|更新内容|
