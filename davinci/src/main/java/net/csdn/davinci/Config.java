@@ -2,10 +2,8 @@ package net.csdn.davinci;
 
 import net.csdn.davinci.core.engine.GlideEngine;
 import net.csdn.davinci.core.engine.ImageEngine;
-import net.csdn.davinci.core.entity.Photo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Config {
 
@@ -40,7 +38,7 @@ public class Config {
     /**
      * 当前预览的图片地址
      */
-    public static ArrayList<String> showPhotos;
+    public static ArrayList<String> previewPhotos;
     /**
      * 当前选中的照片地址
      */
@@ -56,7 +54,7 @@ public class Config {
         showCamera = true;
         previewSelectable = false;
         selectedPhotos = new ArrayList<>();
-        showPhotos = new ArrayList<>();
+        previewPhotos = new ArrayList<>();
         currentPath = "";
         imageEngine = new GlideEngine();
     }

@@ -202,7 +202,7 @@ public class PhotoActivity extends AppCompatActivity {
         for (Photo photo : album.photoList) {
             list.add(photo.imgPath);
         }
-        Config.showPhotos = list;
+        Config.previewPhotos = list;
     }
 
     private void closeAlbum() {

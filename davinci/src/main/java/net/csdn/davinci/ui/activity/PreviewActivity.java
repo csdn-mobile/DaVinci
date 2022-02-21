@@ -47,7 +47,7 @@ public class PreviewActivity extends AppCompatActivity {
         bottomBar = findViewById(R.id.bottom_bar);
         tvPage = findViewById(R.id.tv_page);
 
-        tvPage.setVisibility(!Config.previewSelectable && Config.showPhotos.size() > 1 ? View.VISIBLE : View.GONE);
+        tvPage.setVisibility(!Config.previewSelectable && Config.previewPhotos.size() > 1 ? View.VISIBLE : View.GONE);
 
         setPage();
         setListener();
@@ -81,13 +81,13 @@ public class PreviewActivity extends AppCompatActivity {
         bottomBar.setOnSelectedPhotoClickListener(new PreviewSelectedAdapter.OnSelectedPhotoClickListener() {
             @Override
             public void onClick(String path) {
-                viewPager.setCurrentItem(Config.showPhotos.indexOf(path), false);
+                viewPager.setCurrentItem(Config.previewPhotos.indexOf(path), false);
             }
         });
     }
 
     private void setAdapter() {
-        PreviewPagerAdapter adapter = new PreviewPagerAdapter(getSupportFragmentManager(), Config.showPhotos, new ImageViewTouch.OnImageViewTouchSingleTapListener() {
+        PreviewPagerAdapter adapter = new PreviewPagerAdapter(getSupportFragmentManager(), Config.previewPhotos, new ImageViewTouch.OnImageViewTouchSingleTapListener() {
             @Override
             public void onSingleTapConfirmed() {
                 if (!Config.previewSelectable) {
@@ -111,7 +111,7 @@ public class PreviewActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                Config.currentPath = Config.showPhotos.get(position);
+                Config.currentPath = Config.previewPhotos.get(position);
                 bottomBar.notifyDataSetChanged();
                 setPage();
             }
@@ -122,10 +122,10 @@ public class PreviewActivity extends AppCompatActivity {
             }
         });
 
-        viewPager.setCurrentItem(Config.showPhotos.indexOf(Config.currentPath), false);
+        viewPager.setCurrentItem(Config.previewPhotos.indexOf(Config.currentPath), false);
     }
 
     private void setPage() {
-        tvPage.setText(getResources().getString(R.string.davinci_pager_page, Config.showPhotos.indexOf(Config.currentPath) + 1, Config.showPhotos.size()));
+        tvPage.setText(getResources().getString(R.string.davinci_pager_page, Config.previewPhotos.indexOf(Config.currentPath) + 1, Config.previewPhotos.size()));
     }
 }

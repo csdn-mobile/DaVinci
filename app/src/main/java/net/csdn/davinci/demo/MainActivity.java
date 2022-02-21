@@ -37,11 +37,16 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 2000) {
-            DaVinci.create()
+            DaVinci.select()
                     .showGif(true)
                     .showCamera(true)
                     .column(4)
-                    .select(this, 10000);
+                    .start(this, 10000);
+
+//            DaVinci.pre()
+//                    .showGif(true)
+//                    .previewPhotos()
+//                    .preview(this);
         }
     }
 

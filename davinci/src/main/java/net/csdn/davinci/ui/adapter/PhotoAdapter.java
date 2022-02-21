@@ -123,9 +123,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DaVinci.create(false)
+                DaVinci.preview(false)
                         .previewSelectable(true)
-                        .preview((Activity) mContext, photo.imgPath);
+                        .start((Activity) mContext, photo.imgPath);
             }
         });
         holder.rlSelected.setOnClickListener(new View.OnClickListener() {
