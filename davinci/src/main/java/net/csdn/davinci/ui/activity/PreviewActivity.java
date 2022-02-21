@@ -91,6 +91,7 @@ public class PreviewActivity extends AppCompatActivity {
             @Override
             public void onSingleTapConfirmed() {
                 if (!Config.previewSelectable) {
+                    finish();
                     return;
                 }
                 if (navigation.getVisibility() == View.VISIBLE) {
