@@ -45,13 +45,6 @@ public class PhotoAlbum extends RelativeLayout {
         viewBlank = view.findViewById(R.id.view_blank);
 
         rvDirs.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-
-        viewBlank.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeAlbum();
-            }
-        });
     }
 
     /**
@@ -59,6 +52,16 @@ public class PhotoAlbum extends RelativeLayout {
      */
     public void setAlbumClickListener(AlbumClickListener onClickListener) {
         this.mOnClickListener = onClickListener;
+    }
+
+    /**
+     * 空白处点击
+     */
+    public void setOnBlankClickListener(OnClickListener listener){
+        if (viewBlank == null || listener == null){
+            return;
+        }
+        viewBlank.setOnClickListener(listener);
     }
 
     /**

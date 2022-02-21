@@ -143,6 +143,13 @@ public class PhotoActivity extends AppCompatActivity {
             }
         });
 
+        photoAlbum.setOnBlankClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeAlbum();
+            }
+        });
+
         photoAlbum.setAlbumClickListener(new AlbumClickListener() {
             @Override
             public void onAlbumClick(Album album) {
