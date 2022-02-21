@@ -5,9 +5,7 @@ import android.content.CursorLoader;
 import android.provider.MediaStore;
 import android.util.Log;
 
-
 import net.csdn.davinci.Config;
-import net.csdn.davinci.utils.SystemUtils;
 
 /**
  * 读取相册列表
@@ -31,8 +29,7 @@ public class AlbumLoader extends CursorLoader {
         // 过滤文件类型
         String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                 + (Config.showGif ? "" : " AND " + MediaStore.MediaColumns.MIME_TYPE + "!=?")
-                + " AND " + MediaStore.MediaColumns.SIZE + ">0"
-                + (SystemUtils.underAndroidQ() ? ") GROUP BY (" + MediaStore.Images.Media.BUCKET_ID : "");
+                + " AND " + MediaStore.MediaColumns.SIZE + ">0";
         Log.e("AlbumLoad", "selection====" + selection);
         setSelection(selection);
 

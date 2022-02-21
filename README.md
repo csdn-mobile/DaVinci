@@ -34,7 +34,7 @@ allprojects {
 **Step 2. 添加项目依赖**
 ``` gradle
 dependencies {
-    implementation 'io.github.csdn-mobile:DaVinci:0.1.2'
+    implementation 'io.github.csdn-mobile:DaVinci:0.1.4'
 }
 ```
 **Step 3. 在Activity中添加代码**
@@ -61,6 +61,6 @@ DaVinci.preview()
 ### 版本记录
 |版本号|更新内容|
 |---|---|
-|0.1.2|Fix bug|
+|0.1.4|Fix bug|
 |0.1.0|First Version|
 
