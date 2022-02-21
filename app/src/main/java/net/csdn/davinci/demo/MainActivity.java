@@ -43,10 +43,13 @@ public class MainActivity extends AppCompatActivity {
                     .column(4)
                     .start(this, 10000);
 
-//            DaVinci.pre()
-//                    .showGif(true)
-//                    .previewPhotos()
-//                    .preview(this);
+//            ArrayList<String> paths = new ArrayList<>();
+//            paths.add("/storage/emulated/0/DCIM/Screenshots/Screenshot_2021-12-07-10-17-48-578_vip.mytokenpocket.jpg");
+//            paths.add("/storage/emulated/0/DCIM/Camera/IMG_20211114_142634.jpg");
+//            paths.add("/storage/emulated/0/DCIM/Camera/IMG_20211113_095951.jpg");
+//            DaVinci.preview()
+//                    .previewPhotos(paths)
+//                    .start(this);
         }
     }
 
