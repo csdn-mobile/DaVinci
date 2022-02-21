@@ -1,5 +1,6 @@
 package net.csdn.davinci.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import com.csdn.statusbar.StatusBar;
 import com.csdn.statusbar.annotation.FontMode;
 
 import net.csdn.davinci.Config;
+import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
 import net.csdn.davinci.ui.adapter.PreviewPagerAdapter;
 import net.csdn.davinci.ui.adapter.PreviewSelectedAdapter;
@@ -21,6 +23,8 @@ import net.csdn.davinci.ui.view.PreviewNavigation;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
 public class PreviewActivity extends AppCompatActivity {
+
+    public static final int RESULT_PREVIEW = 2048;
 
     private ViewPager viewPager;
     private PreviewNavigation navigation;
@@ -64,10 +68,13 @@ public class PreviewActivity extends AppCompatActivity {
             }
         });
 
-        navigation.setOnConfirmClick(new View.OnClickListener() {
+        navigation.setOnConfirmClick(new PreviewNavigation.OnConfirmClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onConfirmClick() {
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra(DaVinci.KEY_SELECTED_PHOTOS, Config.selectedPhotos);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 

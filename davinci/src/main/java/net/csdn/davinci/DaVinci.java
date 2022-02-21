@@ -8,9 +8,10 @@ import net.csdn.davinci.ui.activity.PhotoActivity;
 import net.csdn.davinci.ui.activity.PreviewActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DaVinci {
+
+    public final static String KEY_SELECTED_PHOTOS = "SELECTED_PHOTOS";
 
     private DaVinci() {
     }
@@ -77,7 +78,7 @@ public class DaVinci {
         /**
          * 已选中的图片
          */
-        public DaVinciBuilder selectedPhotos(List<String> selectedPhotos) {
+        public DaVinciBuilder selectedPhotos(ArrayList<String> selectedPhotos) {
             Config.selectedPhotos = selectedPhotos == null ? new ArrayList<>() : selectedPhotos;
             return this;
         }
@@ -103,7 +104,7 @@ public class DaVinci {
             }
             Config.currentPath = TextUtils.isEmpty(currentUri) ? "" : currentUri;
             Intent intent = new Intent(activity, PreviewActivity.class);
-            activity.startActivity(intent);
+            activity.startActivityForResult(intent, PreviewActivity.RESULT_PREVIEW);
         }
     }
 }

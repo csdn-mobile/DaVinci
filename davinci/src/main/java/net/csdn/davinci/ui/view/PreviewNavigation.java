@@ -16,11 +16,19 @@ import com.csdn.statusbar.StatusBar;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
 
+import java.util.ArrayList;
+
 public class PreviewNavigation extends RelativeLayout {
 
     private View viewStatusBar;
     private ImageView ivBack;
     private TextView tvConfirm;
+
+    private OnConfirmClickListener mOnConfirmClickListener;
+
+    public interface OnConfirmClickListener {
+        void onConfirmClick();
+    }
 
     public PreviewNavigation(Context context) {
         this(context, null);
@@ -47,6 +55,20 @@ public class PreviewNavigation extends RelativeLayout {
         viewStatusBar.setLayoutParams(layoutParams);
 
         setVisibility(Config.previewSelectable ? VISIBLE : GONE);
+
+        tvConfirm.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Config.selectedPhotos == null || Config.selectedPhotos.size() <= 0) {
+                    Config.selectedPhotos = new ArrayList<>();
+                    Config.selectedPhotos.add(Config.currentPath);
+                }
+
+                if (Config.selectedPhotos.size() > 0) {
+                    mOnConfirmClickListener.onConfirmClick();
+                }
+            }
+        });
     }
 
     /**
@@ -62,11 +84,8 @@ public class PreviewNavigation extends RelativeLayout {
     /**
      * 设置确认点击事件
      */
-    public void setOnConfirmClick(OnClickListener listener) {
-        if (tvConfirm == null || listener == null) {
-            return;
-        }
-        tvConfirm.setOnClickListener(listener);
+    public void setOnConfirmClick(OnConfirmClickListener listener) {
+        this.mOnConfirmClickListener = listener;
     }
 
     /**

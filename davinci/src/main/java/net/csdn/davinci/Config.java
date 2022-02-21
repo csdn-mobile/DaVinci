@@ -36,11 +36,11 @@ public class Config {
     /**
      * 已选中的照片
      */
-    public static List<String> selectedPhotos;
+    public static ArrayList<String> selectedPhotos;
     /**
      * 当前预览的图片地址
      */
-    public static List<String> showPhotos;
+    public static ArrayList<String> showPhotos;
     /**
      * 当前选中的照片地址
      */

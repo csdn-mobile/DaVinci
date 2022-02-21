@@ -15,22 +15,22 @@ import com.csdn.statusbar.StatusBar;
 import com.csdn.statusbar.annotation.FontMode;
 
 import net.csdn.davinci.Config;
+import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.album.AlbumClickListener;
 import net.csdn.davinci.core.album.AlbumHelper;
 import net.csdn.davinci.core.album.AlbumResultCallback;
 import net.csdn.davinci.core.entity.Album;
 import net.csdn.davinci.core.entity.Photo;
+import net.csdn.davinci.core.photo.PhotoCaptureManager;
 import net.csdn.davinci.ui.adapter.PhotoAdapter;
 import net.csdn.davinci.ui.view.EmptyView;
 import net.csdn.davinci.ui.view.PhotoAlbum;
 import net.csdn.davinci.ui.view.PhotoNavigation;
-import net.csdn.davinci.core.photo.PhotoCaptureManager;
 import net.csdn.davinci.utils.PermissionsUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PhotoActivity extends AppCompatActivity {
 
@@ -91,6 +91,31 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case PhotoCaptureManager.REQUEST_TAKE_PHOTO: {
+                if (captureManager == null) {
+                    captureManager = new PhotoCaptureManager(this);
+                }
+                captureManager.galleryAddPic();
+                String path = captureManager.getCurrentPhotoPath();
+                Config.selectedPhotos.add(path);
+                mAdapter.getDatas().add(0, new Photo(path));
+                mAdapter.notifyDataSetChanged();
+            }
+            break;
+            case PreviewActivity.RESULT_PREVIEW: {
+                finishAndSetResult();
+            }
+            break;
+        }
+    }
+
     private void setListener() {
         photoNavigation.setOnBackClick(new View.OnClickListener() {
             @Override
@@ -108,6 +133,13 @@ public class PhotoActivity extends AppCompatActivity {
                 } else {
                     closeAlbum();
                 }
+            }
+        });
+
+        photoNavigation.setOnConfirmClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishAndSetResult();
             }
         });
 
@@ -166,7 +198,7 @@ public class PhotoActivity extends AppCompatActivity {
         photoNavigation.setTitle(album.name);
         mAdapter.setDatas(album.photoList);
 
-        List<String> list = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
         for (Photo photo : album.photoList) {
             list.add(photo.imgPath);
         }
@@ -189,19 +221,11 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PhotoCaptureManager.REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            if (captureManager == null) {
-                captureManager = new PhotoCaptureManager(this);
-            }
-            captureManager.galleryAddPic();
-            String path = captureManager.getCurrentPhotoPath();
-            Config.selectedPhotos.add(path);
-            mAdapter.getDatas().add(0, new Photo(path));
-            mAdapter.notifyDataSetChanged();
-        }
+    private void finishAndSetResult() {
+        Intent intent = new Intent();
+        intent.putStringArrayListExtra(DaVinci.KEY_SELECTED_PHOTOS, Config.selectedPhotos);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
 }

@@ -114,4 +114,14 @@ public class PhotoNavigation extends RelativeLayout {
         }
         llTitle.setOnClickListener(listener);
     }
+
+    /**
+     * 设置确定事件
+     */
+    public void setOnConfirmClick(OnClickListener listener) {
+        if (tvDo == null || listener == null) {
+            return;
+        }
+        tvDo.setOnClickListener(listener);
+    }
 }
