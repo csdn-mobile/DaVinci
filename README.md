@@ -10,9 +10,9 @@
 ### 注意
 * 最低支持版本为Android5.0（minSdkVersion 21）
 * 本项目仅提供AndroidX版本
-* 网络图预览暂未支持，预计下版本开放
 
 ### 特点
+* 支持预览网络图片
 * 支持是否显示GIF
 * 支持修改图片最大选择数
 * 支持修改图片展示列数
@@ -34,7 +34,7 @@ allprojects {
 **Step 2. 添加项目依赖**
 ``` gradle
 dependencies {
-    implementation 'io.github.csdn-mobile:DaVinci:0.1.5'
+    implementation 'io.github.csdn-mobile:DaVinci:0.2.0'
 }
 ```
 **Step 3. 在Activity中添加代码**
@@ -55,12 +55,12 @@ DaVinci.preview()
 ```
 
 ### 未来计划
-* 支持网络图片预览
 * 支持更多样式自定义
 
 ### 版本记录
 |版本号|更新内容|
 |---|---|
+|0.2.0|Support preview network pictures|
 |0.1.5|Fix bug|
 |0.1.0|First Version|
 

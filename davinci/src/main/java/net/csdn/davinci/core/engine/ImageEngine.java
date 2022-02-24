@@ -1,7 +1,12 @@
 package net.csdn.davinci.core.engine;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.request.RequestListener;
 
 public interface ImageEngine {
 
@@ -16,7 +21,7 @@ public interface ImageEngine {
     void loadImage(Context context, int resizeX, int resizeY, ImageView imageView, String path);
 
     /**
-     * 读取GIF图片
+     * 读取网络图片
      */
-    void loadGifImage(Context context, int resizeX, int resizeY, ImageView imageView, String path);
+    void loadNetImage(Context context, ImageView imageView, String path, @Nullable RequestListener<Drawable> listener);
 }

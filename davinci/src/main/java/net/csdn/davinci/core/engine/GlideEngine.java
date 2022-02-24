@@ -1,11 +1,18 @@
 package net.csdn.davinci.core.engine;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 public class GlideEngine implements ImageEngine {
 
@@ -38,17 +45,13 @@ public class GlideEngine implements ImageEngine {
     }
 
     /**
-     * 读取GIF图片
+     * 读取网络图片
      */
     @Override
-    public void loadGifImage(Context context, int resizeX, int resizeY, ImageView imageView, String path) {
+    public void loadNetImage(Context context, ImageView imageView, String path, @Nullable RequestListener<Drawable> listener) {
         Glide.with(context)
-                .asGif()
                 .load(path)
-                .apply(new RequestOptions()
-                        .override(resizeX, resizeY)
-                        .priority(Priority.HIGH)
-                        .fitCenter())
+                .addListener(listener)
                 .into(imageView);
     }
 }

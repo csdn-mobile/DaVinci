@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity {
                     .start(this, 10000);
 
 //            ArrayList<String> paths = new ArrayList<>();
-//            paths.add("/storage/emulated/0/DCIM/Screenshots/Screenshot_2021-12-07-10-17-48-578_vip.mytokenpocket.jpg");
-//            paths.add("/storage/emulated/0/DCIM/Camera/IMG_20211114_142634.jpg");
-//            paths.add("/storage/emulated/0/DCIM/Camera/IMG_20211113_095951.jpg");
+//            paths.add("https://csdn-app.csdn.net/1111_activity_2.png");
+//            paths.add("https://csdn-app.csdn.net/2dcode/magaz.png");
+//            paths.add("https://csdn-app.csdn.net/6.5英寸 4@3x.png");
 //            DaVinci.preview()
 //                    .previewPhotos(paths)
 //                    .start(this);
