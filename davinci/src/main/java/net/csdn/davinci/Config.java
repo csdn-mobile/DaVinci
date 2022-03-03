@@ -2,7 +2,6 @@ package net.csdn.davinci;
 
 import net.csdn.davinci.core.engine.GlideEngine;
 import net.csdn.davinci.core.engine.ImageEngine;
-import net.csdn.davinci.listener.QrSacnCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +48,7 @@ public class Config {
     /**
      * 二维码扫描回调
      */
-    public static QrSacnCallback qrSacnCallback;
+    public static DaVinci.QrSacnCallback qrSacnCallback;
     /**
      * 网络图片缓存地址
      */

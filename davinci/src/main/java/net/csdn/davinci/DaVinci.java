@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import net.csdn.davinci.listener.QrSacnCallback;
 import net.csdn.davinci.ui.activity.PhotoActivity;
 import net.csdn.davinci.ui.activity.PreviewActivity;
 
@@ -168,5 +167,12 @@ public class DaVinci {
             Intent intent = new Intent(activity, PreviewActivity.class);
             activity.startActivityForResult(intent, PreviewActivity.RESULT_PREVIEW);
         }
+    }
+
+    /**
+     * 二维码扫描回调
+     */
+    public interface QrSacnCallback {
+        void onResult(String result);
     }
 }

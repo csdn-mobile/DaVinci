@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import net.csdn.davinci.DaVinci;
-import net.csdn.davinci.listener.QrSacnCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
             DaVinci.preview()
                     .previewPhotos(paths)
-                    .qrScanCallback(new QrSacnCallback() {
+                    .qrScanCallback(new DaVinci.QrSacnCallback() {
                         @Override
                         public void onResult(String result) {
                             Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
