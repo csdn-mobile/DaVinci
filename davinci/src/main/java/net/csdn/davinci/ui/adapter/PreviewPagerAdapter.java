@@ -9,14 +9,12 @@ import net.csdn.davinci.ui.fragment.PreviewFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.sephiroth.android.library.imagezoom.ImageViewTouch;
-
 public class PreviewPagerAdapter extends FragmentPagerAdapter {
 
     private List<String> mDatas;
-    private ImageViewTouch.OnImageViewTouchSingleTapListener mListener;
+    private PreviewFragment.OnPhotoClickListener mListener;
 
-    public PreviewPagerAdapter(FragmentManager fm, List<String> datas, ImageViewTouch.OnImageViewTouchSingleTapListener listener) {
+    public PreviewPagerAdapter(FragmentManager fm, List<String> datas, PreviewFragment.OnPhotoClickListener listener) {
         super(fm);
         this.mDatas = datas;
         if (this.mDatas == null) {
@@ -28,7 +26,7 @@ public class PreviewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         PreviewFragment fragment = PreviewFragment.newInstance(mDatas.get(position));
-        fragment.setOnImageViewTouchSingleTapListener(mListener);
+        fragment.setOnPhotoClickListener(mListener);
         return fragment;
     }
 

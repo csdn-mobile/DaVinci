@@ -1,5 +1,6 @@
 package net.csdn.davinci.ui.fragment;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -17,7 +19,9 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.CustomViewTarget;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 
 import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
@@ -33,8 +37,14 @@ public class PreviewFragment extends Fragment {
     private static final String ARGS_ITEM = "args_item";
     private static final String SAVE_PATH = "save_path";
 
-    private ImageViewTouch.OnImageViewTouchSingleTapListener mListener;
     private String mPath;
+    private OnPhotoClickListener mListener;
+
+    public interface OnPhotoClickListener {
+        void onSingleClick();
+
+        void onLongClick(String url);
+    }
 
     public static PreviewFragment newInstance(String path) {
         PreviewFragment fragment = new PreviewFragment();
@@ -66,9 +76,23 @@ public class PreviewFragment extends Fragment {
 
         ImageViewTouch iv = view.findViewById(R.id.iv);
         iv.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-        if (mListener != null) {
-            iv.setSingleTapListener(mListener);
-        }
+        iv.setSingleTapListener(new ImageViewTouch.OnImageViewTouchSingleTapListener() {
+            @Override
+            public void onSingleTapConfirmed() {
+                if (mListener != null) {
+                    mListener.onSingleClick();
+                }
+            }
+        });
+        iv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mListener != null) {
+                    mListener.onLongClick(mPath);
+                }
+                return false;
+            }
+        });
         if (mPath.startsWith("http")) {
             ProgressBar progressBar = view.findViewById(R.id.progress_bar);
             progressBar.setVisibility(View.VISIBLE);
@@ -99,8 +123,7 @@ public class PreviewFragment extends Fragment {
         }
     }
 
-    public void setOnImageViewTouchSingleTapListener(ImageViewTouch.OnImageViewTouchSingleTapListener listener) {
+    public void setOnPhotoClickListener(OnPhotoClickListener listener) {
         this.mListener = listener;
     }
-
 }

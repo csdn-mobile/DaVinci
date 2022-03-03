@@ -1,6 +1,6 @@
 package net.csdn.davinci.core.photo;
 
-import android.content.Context;
+import android.app.Application;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -24,11 +24,22 @@ public class PhotoCaptureManager {
     public static final int REQUEST_TAKE_PHOTO = 1;
 
     private String mCurrentPhotoPath;
-    private Context mContext;
+    private Application mContext;
 
-    public PhotoCaptureManager(Context mContext) {
-        this.mContext = mContext;
+    private PhotoCaptureManager() {
     }
+
+    private static class InstanceHolder {
+        private static final PhotoCaptureManager instance = new PhotoCaptureManager();
+    }
+
+    public static PhotoCaptureManager getInstance(Application context) {
+        if (InstanceHolder.instance.mContext == null && context != null) {
+            InstanceHolder.instance.mContext = context;
+        }
+        return InstanceHolder.instance;
+    }
+
 
     private File createImageFile() throws IOException {
         // Create an image file name

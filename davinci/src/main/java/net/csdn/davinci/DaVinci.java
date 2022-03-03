@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import net.csdn.davinci.listener.QrSacnCallback;
 import net.csdn.davinci.ui.activity.PhotoActivity;
 import net.csdn.davinci.ui.activity.PreviewActivity;
 
@@ -130,6 +131,14 @@ public class DaVinci {
          */
         public DaVinciPreviewBuilder previewPhotos(ArrayList<String> selectedPhotos) {
             Config.previewPhotos = selectedPhotos == null ? new ArrayList<>() : selectedPhotos;
+            return this;
+        }
+
+        /**
+         * 二维码扫描回调
+         */
+        public DaVinciPreviewBuilder qrScanCallback(QrSacnCallback callback) {
+            Config.qrSacnCallback = callback;
             return this;
         }
 

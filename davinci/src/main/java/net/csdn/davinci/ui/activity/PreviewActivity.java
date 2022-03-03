@@ -15,12 +15,13 @@ import com.csdn.statusbar.annotation.FontMode;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
+import net.csdn.davinci.core.photo.PhotoHandleManager;
+import net.csdn.davinci.core.photo.PhotoHandleManagerImpl;
 import net.csdn.davinci.ui.adapter.PreviewPagerAdapter;
 import net.csdn.davinci.ui.adapter.PreviewSelectedAdapter;
+import net.csdn.davinci.ui.fragment.PreviewFragment;
 import net.csdn.davinci.ui.view.PreviewBottomBar;
 import net.csdn.davinci.ui.view.PreviewNavigation;
-
-import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
 public class PreviewActivity extends AppCompatActivity {
 
@@ -30,6 +31,8 @@ public class PreviewActivity extends AppCompatActivity {
     private PreviewNavigation navigation;
     private PreviewBottomBar bottomBar;
     private TextView tvPage;
+
+    private PhotoHandleManager mHandleManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class PreviewActivity extends AppCompatActivity {
         tvPage = findViewById(R.id.tv_page);
 
         tvPage.setVisibility(!Config.previewSelectable && Config.previewPhotos.size() > 1 ? View.VISIBLE : View.GONE);
+        mHandleManager = new PhotoHandleManagerImpl(this);
 
         setPage();
         setListener();
@@ -87,9 +91,9 @@ public class PreviewActivity extends AppCompatActivity {
     }
 
     private void setAdapter() {
-        PreviewPagerAdapter adapter = new PreviewPagerAdapter(getSupportFragmentManager(), Config.previewPhotos, new ImageViewTouch.OnImageViewTouchSingleTapListener() {
+        PreviewPagerAdapter adapter = new PreviewPagerAdapter(getSupportFragmentManager(), Config.previewPhotos, new PreviewFragment.OnPhotoClickListener() {
             @Override
-            public void onSingleTapConfirmed() {
+            public void onSingleClick() {
                 if (!Config.previewSelectable) {
                     finish();
                     return;
@@ -101,6 +105,14 @@ public class PreviewActivity extends AppCompatActivity {
                     navigation.show();
                     bottomBar.show();
                 }
+            }
+
+            @Override
+            public void onLongClick(String url) {
+                if (!url.startsWith("http")) {
+                    return;
+                }
+                mHandleManager.showDialog(url);
             }
         });
         viewPager.setAdapter(adapter);

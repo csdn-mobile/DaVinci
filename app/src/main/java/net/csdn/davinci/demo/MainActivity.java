@@ -6,6 +6,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import net.csdn.davinci.DaVinci;
+import net.csdn.davinci.listener.QrSacnCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,19 +40,27 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 2000) {
-            DaVinci.select()
-                    .showGif(true)
-                    .showCamera(true)
-                    .column(4)
-                    .start(this, 10000);
+//            DaVinci.select()
+//                    .showGif(true)
+//                    .showCamera(true)
+//                    .column(4)
+//                    .start(this, 10000);
 
-//            ArrayList<String> paths = new ArrayList<>();
-//            paths.add("https://csdn-app.csdn.net/1111_activity_2.png");
-//            paths.add("https://csdn-app.csdn.net/2dcode/magaz.png");
-//            paths.add("https://csdn-app.csdn.net/6.5英寸 4@3x.png");
-//            DaVinci.preview()
-//                    .previewPhotos(paths)
-//                    .start(this);
+            ArrayList<String> paths = new ArrayList<>();
+            paths.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwww.cqhorun.com%2Fzb_users%2Fupload%2Fprinter%2F2021-10-17%2F616c1110d9713.jpg&refer=http%3A%2F%2Fwww.cqhorun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1648887138&t=c9bb41e6bf4b75ecd718b4932c1fa5ac");
+            paths.add("https://csdn-app.csdn.net/1111_activity_2.png");
+            paths.add("https://csdn-app.csdn.net/2dcode/magaz.png");
+            paths.add("https://csdn-app.csdn.net/6.5英寸 4@3x.png");
+
+            DaVinci.preview()
+                    .previewPhotos(paths)
+                    .qrScanCallback(new QrSacnCallback() {
+                        @Override
+                        public void onResult(String result) {
+                            Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .start(this);
         }
     }
 

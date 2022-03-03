@@ -39,7 +39,6 @@ public class PhotoActivity extends AppCompatActivity {
     private PhotoAlbum photoAlbum;
     private PhotoNavigation photoNavigation;
 
-    private PhotoCaptureManager captureManager;
     private AlbumHelper mAlbumHelper;
     private PhotoAdapter mAdapter;
 
@@ -57,8 +56,6 @@ public class PhotoActivity extends AppCompatActivity {
         emptyView = findViewById(R.id.empty);
         photoAlbum = findViewById(R.id.album);
         photoNavigation = findViewById(R.id.navigation);
-
-        captureManager = new PhotoCaptureManager(this);
 
         setListener();
         loadAlbum();
@@ -99,11 +96,8 @@ public class PhotoActivity extends AppCompatActivity {
         }
         switch (requestCode) {
             case PhotoCaptureManager.REQUEST_TAKE_PHOTO: {
-                if (captureManager == null) {
-                    captureManager = new PhotoCaptureManager(this);
-                }
-                captureManager.galleryAddPic();
-                String path = captureManager.getCurrentPhotoPath();
+                PhotoCaptureManager.getInstance(getApplication()).galleryAddPic();
+                String path = PhotoCaptureManager.getInstance(getApplication()).getCurrentPhotoPath();
                 Config.selectedPhotos.add(path);
                 mAdapter.getDatas().add(0, new Photo(path));
                 mAdapter.notifyDataSetChanged();
@@ -219,7 +213,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     private void openCamera() {
         try {
-            Intent intent = captureManager.dispatchTakePictureIntent();
+            Intent intent = PhotoCaptureManager.getInstance(getApplication()).dispatchTakePictureIntent();
             startActivityForResult(intent, PhotoCaptureManager.REQUEST_TAKE_PHOTO);
         } catch (IOException e) {
             e.printStackTrace();
