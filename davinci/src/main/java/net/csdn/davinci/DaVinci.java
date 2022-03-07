@@ -3,9 +3,11 @@ package net.csdn.davinci;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import net.csdn.davinci.ui.activity.PhotoActivity;
 import net.csdn.davinci.ui.activity.PreviewActivity;
+import net.csdn.davinci.utils.PermissionsUtils;
 
 import java.util.ArrayList;
 
@@ -93,6 +95,10 @@ public class DaVinci {
             if (activity == null) {
                 return;
             }
+            if (PermissionsUtils.checkReadStoragePermission(activity)) {
+                Toast.makeText(activity, activity.getString(R.string.davinci_no_permission_read), Toast.LENGTH_LONG).show();
+                return;
+            }
             Intent intent = new Intent(activity, PhotoActivity.class);
             activity.startActivityForResult(intent, requestCode);
         }
@@ -134,10 +140,26 @@ public class DaVinci {
         }
 
         /**
+         * 是否需要识别二维码
+         */
+        public DaVinciPreviewBuilder needQrScan(boolean needQrScan) {
+            Config.needQrScan = needQrScan;
+            return this;
+        }
+
+        /**
          * 二维码扫描回调
          */
-        public DaVinciPreviewBuilder qrScanCallback(QrSacnCallback callback) {
-            Config.qrSacnCallback = callback;
+        public DaVinciPreviewBuilder qrScanCallback(QrScanCallback callback) {
+            Config.qrScanCallback = callback;
+            return this;
+        }
+
+        /**
+         * 保存图片文件夹名称
+         */
+        public DaVinciPreviewBuilder saveFolderName(String folderName) {
+            Config.saveFolderName = folderName;
             return this;
         }
 
@@ -172,7 +194,7 @@ public class DaVinci {
     /**
      * 二维码扫描回调
      */
-    public interface QrSacnCallback {
+    public interface QrScanCallback {
         void onResult(String result);
     }
 }

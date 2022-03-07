@@ -53,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
             DaVinci.preview()
                     .previewPhotos(paths)
-                    .qrScanCallback(new DaVinci.QrSacnCallback() {
+                    .saveFolderName("CSDN")
+                    .needQrScan(true)
+                    .qrScanCallback(new DaVinci.QrScanCallback() {
                         @Override
                         public void onResult(String result) {
                             Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();

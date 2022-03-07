@@ -1,10 +1,13 @@
 package net.csdn.davinci.ui.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -22,6 +25,7 @@ import net.csdn.davinci.ui.adapter.PreviewSelectedAdapter;
 import net.csdn.davinci.ui.fragment.PreviewFragment;
 import net.csdn.davinci.ui.view.PreviewBottomBar;
 import net.csdn.davinci.ui.view.PreviewNavigation;
+import net.csdn.davinci.utils.PermissionsUtils;
 
 public class PreviewActivity extends AppCompatActivity {
 
@@ -62,6 +66,29 @@ public class PreviewActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.davinci_fade_in, R.anim.davinci_fade_out);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PermissionsUtils.REQUEST_EXTERNAL_WRITE) {
+            // 判断是否所有的权限都已经授予了
+            boolean isAllGranted = true;
+            for (int grant : grantResults) {
+                if (grant != PackageManager.PERMISSION_GRANTED) {
+                    isAllGranted = false;
+                    break;
+                }
+            }
+            if (isAllGranted) {
+                if (mHandleManager != null) {
+                    // 如果url为null，则使用之前设置的url继续下载
+                    mHandleManager.download(null);
+                }
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.davinci_no_permission_write), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void setListener() {
@@ -112,7 +139,7 @@ public class PreviewActivity extends AppCompatActivity {
                 if (!url.startsWith("http")) {
                     return;
                 }
-                mHandleManager.showDialog(url);
+                mHandleManager.showLongClickDialog(url);
             }
         });
         viewPager.setAdapter(adapter);

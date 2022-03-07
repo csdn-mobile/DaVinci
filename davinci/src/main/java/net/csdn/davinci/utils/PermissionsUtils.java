@@ -41,10 +41,10 @@ public class PermissionsUtils {
         return readStoragePermissionGranted;
     }
 
-    public static boolean checkWriteStoragePermission(Activity activity) {
+    public static boolean checkWriteStoragePermission(Activity activity, boolean isRequest) {
         int writeStoragePermissionState = ContextCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE);
         boolean writeStoragePermissionGranted = writeStoragePermissionState == PackageManager.PERMISSION_GRANTED;
-        if (!writeStoragePermissionGranted) {
+        if (!writeStoragePermissionGranted && isRequest) {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_EXTERNAL_WRITE, REQUEST_EXTERNAL_WRITE);
         }
         return writeStoragePermissionGranted;

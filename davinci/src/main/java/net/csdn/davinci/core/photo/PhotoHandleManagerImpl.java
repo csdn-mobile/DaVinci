@@ -1,25 +1,38 @@
 package net.csdn.davinci.core.photo;
 
+import static com.bumptech.glide.request.target.Target.SIZE_ORIGINAL;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import net.csdn.davinci.Config;
+import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.SavePath;
+import net.csdn.davinci.utils.FileUtils;
+import net.csdn.davinci.utils.PermissionsUtils;
 import net.csdn.davinci.utils.UrlUtils;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 public class PhotoHandleManagerImpl implements PhotoHandleManager {
 
@@ -27,7 +40,9 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
 
     private PhotoHandler mHandler = new PhotoHandler();
     private Activity mActivity;
+    private String mUrl;
 
+    @SuppressLint("HandlerLeak")
     private class PhotoHandler extends Handler {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -52,7 +67,7 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
      * 显示保存图片、二维码弹窗
      */
     @Override
-    public void showDialog(String url) {
+    public void showLongClickDialog(String url) {
         if (mActivity == null || TextUtils.isEmpty(url)) {
             return;
         }
@@ -92,7 +107,7 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
      * 分析图片二维码
      */
     private void analysisBitmap(String url, String path) {
-        if (!TextUtils.isEmpty(path)) {
+        if (!TextUtils.isEmpty(path) && Config.needQrScan) {
             CodeUtils.analyzeBitmap(path, new CodeUtils.AnalyzeCallback() {
                 @Override
                 public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
@@ -143,10 +158,10 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
             public void onClick(DialogInterface mdialog, int which) {
                 if (which == 0) {
                     // 图片下载
-                    download(mActivity, url);
+                    download(url);
                 } else {
-                    if (Config.qrSacnCallback != null) {
-                        Config.qrSacnCallback.onResult(result);
+                    if (Config.qrScanCallback != null) {
+                        Config.qrScanCallback.onResult(result);
                     }
                 }
                 mdialog.dismiss();
@@ -156,7 +171,87 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
     }
 
     @Override
-    public void download(Context context, String url) {
+    public void download(String url) {
+        if (!TextUtils.isEmpty(url)) {
+            mUrl = url;
+        }
+        if (!PermissionsUtils.checkWriteStoragePermission(mActivity, false)) {
+            ActivityCompat.requestPermissions(mActivity, PermissionsUtils.PERMISSIONS_EXTERNAL_WRITE, PermissionsUtils.REQUEST_EXTERNAL_WRITE);
+        } else {
+            startDownload(url);
+        }
+    }
 
+    /**
+     * 真正的下载方法
+     */
+    private void startDownload(String url) {
+        String downloadUrl = "";
+        if (!TextUtils.isEmpty(url)) {
+            downloadUrl = url;
+        } else if (!TextUtils.isEmpty(mUrl)) {
+            downloadUrl = mUrl;
+        }
+        if (TextUtils.isEmpty(downloadUrl)) {
+            return;
+        }
+        new DownloadAsyncTask(mActivity, downloadUrl).execute();
+    }
+
+    private static class DownloadAsyncTask extends AsyncTask<Void, Integer, File> {
+
+        private final String mUrl;
+        private WeakReference<Activity> mActivity;
+
+        public DownloadAsyncTask(Activity activity, String url) {
+            this.mUrl = url;
+            this.mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        protected File doInBackground(Void... params) {
+            File file = null;
+            try {
+                Activity activity = mActivity.get();
+                if (activity == null) {
+                    return null;
+                }
+
+                FutureTarget<File> future = Glide
+                        .with(activity)
+                        .load(mUrl)
+                        .downloadOnly(SIZE_ORIGINAL, SIZE_ORIGINAL);
+
+                file = future.get();
+                // 首先保存图片
+                File pictureFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsoluteFile();
+                File appDir = new File(pictureFolder, Config.saveFolderName);
+                if (!appDir.exists()) {
+                    appDir.mkdirs();
+                }
+                String fileName = Config.saveFolderName + "_" + System.currentTimeMillis() + (mUrl.endsWith(".gif") || mUrl.endsWith("=gif") ? ".gif" : ".jpg");
+                File destFile = new File(appDir, fileName);
+                FileUtils.copy(file, destFile);
+                // 最后通知图库更新
+                activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                        Uri.fromFile(new File(destFile.getPath()))));
+            } catch (Exception e) {
+                Log.e("SAVE_PICTURE", e.getMessage());
+            }
+            return file;
+        }
+
+        @Override
+        protected void onPostExecute(File file) {
+            Activity activity = mActivity.get();
+            if (activity == null) {
+                return;
+            }
+            if (file == null) {
+                Toast.makeText(activity, activity.getResources().getString(R.string.davinci_save_fail), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(activity, activity.getResources().getString(R.string.davinci_save_success), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

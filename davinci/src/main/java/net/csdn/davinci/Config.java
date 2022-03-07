@@ -46,13 +46,21 @@ public class Config {
      */
     public static String currentPath;
     /**
+     * 是否需要长按识别二维码
+     */
+    public static boolean needQrScan;
+    /**
      * 二维码扫描回调
      */
-    public static DaVinci.QrSacnCallback qrSacnCallback;
+    public static DaVinci.QrScanCallback qrScanCallback;
     /**
      * 网络图片缓存地址
      */
     public static Map<String, String> absolutePathMap;
+    /**
+     * 文件夹名称
+     */
+    public static String saveFolderName;
 
     /**
      * 重置
@@ -67,7 +75,9 @@ public class Config {
         previewPhotos = new ArrayList<>();
         currentPath = "";
         imageEngine = new GlideEngine();
-        qrSacnCallback = null;
+        needQrScan = true;
+        qrScanCallback = null;
         absolutePathMap = new HashMap<>();
+        saveFolderName = "CSDN";
     }
 }
