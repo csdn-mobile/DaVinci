@@ -95,7 +95,7 @@ public class DaVinci {
             if (activity == null) {
                 return;
             }
-            if (PermissionsUtils.checkReadStoragePermission(activity)) {
+            if (!PermissionsUtils.checkReadStoragePermission(activity)) {
                 Toast.makeText(activity, activity.getString(R.string.davinci_no_permission_read), Toast.LENGTH_LONG).show();
                 return;
             }
