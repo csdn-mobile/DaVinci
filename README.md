@@ -50,7 +50,12 @@ DaVinci.select()
         .selectedPhotos(xxx) // 默认选中图片，ArrayList<String>格式
         .start(this, 10000);
 
-// 图片预览
+// 图片预览（简洁设置）
+DaVinci.preview()
+        .previewPhotos(xxx) // 需要展示的图片，ArrayList<String>格式
+        .start(this);
+        
+// 图片预览（复杂设置）
 DaVinci.preview()
         .previewPhotos(xxx) // 需要展示的图片，ArrayList<String>格式
         .saveFolderName("CSDN") // 长按保存图片的文件夹名称，默认CSDN
