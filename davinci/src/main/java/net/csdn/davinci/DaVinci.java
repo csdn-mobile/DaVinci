@@ -22,6 +22,7 @@ public class DaVinci {
      * 选择照片
      */
     public static DaVinciSelectBuilder select() {
+        Config.reset();
         return new DaVinciSelectBuilder();
     }
 
@@ -36,7 +37,10 @@ public class DaVinci {
      * 预览照片（是否重置设置）
      */
     public static DaVinciPreviewBuilder preview(boolean reset) {
-        return new DaVinciPreviewBuilder(reset);
+        if (reset) {
+            Config.reset();
+        }
+        return new DaVinciPreviewBuilder();
     }
 
     /**
@@ -45,7 +49,6 @@ public class DaVinci {
     public static class DaVinciSelectBuilder {
 
         private DaVinciSelectBuilder() {
-            Config.reset();
         }
 
         /**
@@ -109,10 +112,7 @@ public class DaVinci {
      */
     public static class DaVinciPreviewBuilder {
 
-        private DaVinciPreviewBuilder(boolean reset) {
-            if (reset) {
-                Config.reset();
-            }
+        private DaVinciPreviewBuilder() {
         }
 
         /**
