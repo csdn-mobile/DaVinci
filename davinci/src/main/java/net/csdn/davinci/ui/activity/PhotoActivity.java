@@ -60,6 +60,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         setListener();
         loadAlbum();
+        changeConfirmStatus();
     }
 
     @Override
@@ -98,8 +99,10 @@ public class PhotoActivity extends AppCompatActivity {
         switch (requestCode) {
             case PhotoCaptureManager.REQUEST_TAKE_PHOTO: {
                 PhotoCaptureManager.getInstance(getApplication()).galleryAddPic();
+
                 String path = PhotoCaptureManager.getInstance(getApplication()).getCurrentPhotoPath();
                 Config.selectedPhotos.add(path);
+                changeConfirmStatus();
                 mAdapter.getDatas().add(0, new Photo(path));
                 mAdapter.notifyDataSetChanged();
             }
@@ -158,11 +161,7 @@ public class PhotoActivity extends AppCompatActivity {
         mAdapter = new PhotoAdapter(this, new PhotoAdapter.OnPhotoSelectChangeListener() {
             @Override
             public void onChange() {
-                if (Config.selectedPhotos.size() <= 0) {
-                    photoNavigation.setDoUnEnable();
-                } else {
-                    photoNavigation.setDoEnable();
-                }
+                changeConfirmStatus();
             }
         }, new PhotoAdapter.OnCameraClickListener() {
             @Override
@@ -218,6 +217,14 @@ public class PhotoActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (ActivityNotFoundException e) {
             Log.e("PhotoPickerFragment", "No Activity Found to handle Intent", e);
+        }
+    }
+
+    private void changeConfirmStatus() {
+        if (Config.selectedPhotos.size() <= 0) {
+            photoNavigation.setDoUnEnable();
+        } else {
+            photoNavigation.setDoEnable();
         }
     }
 
