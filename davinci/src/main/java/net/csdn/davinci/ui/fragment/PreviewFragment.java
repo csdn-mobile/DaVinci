@@ -1,6 +1,5 @@
 package net.csdn.davinci.ui.fragment;
 
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -9,7 +8,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -19,18 +17,14 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.CustomViewTarget;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
 import net.csdn.davinci.utils.PhotoUtils;
 
 import java.io.File;
-
-import it.sephiroth.android.library.imagezoom.ImageViewTouch;
-import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
 public class PreviewFragment extends Fragment {
 
@@ -74,11 +68,10 @@ public class PreviewFragment extends Fragment {
             }
         }
 
-        ImageViewTouch iv = view.findViewById(R.id.iv);
-        iv.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-        iv.setSingleTapListener(new ImageViewTouch.OnImageViewTouchSingleTapListener() {
+        PhotoView iv = view.findViewById(R.id.iv);
+        iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSingleTapConfirmed() {
+            public void onClick(View v) {
                 if (mListener != null) {
                     mListener.onSingleClick();
                 }

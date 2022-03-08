@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.viewpager.widget.ViewPager;
 
-import it.sephiroth.android.library.imagezoom.ImageViewTouch;
+import com.github.chrisbanes.photoview.PhotoView;
 
 public class PreviewViewPager extends ViewPager {
 
@@ -16,8 +16,11 @@ public class PreviewViewPager extends ViewPager {
 
     @Override
     protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
-        if (v instanceof ImageViewTouch) {
-            return ((ImageViewTouch) v).canScroll(dx) || super.canScroll(v, checkV, dx, x, y);
+        if (v instanceof PhotoView) {
+            if (((PhotoView) v).getScale() != 1) {
+                return true;
+            }
+            return super.canScroll(v, checkV, dx, x, y);
         }
         return super.canScroll(v, checkV, dx, x, y);
     }
