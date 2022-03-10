@@ -87,7 +87,7 @@ public class DaVinci {
          * 已选中的图片
          */
         public DaVinciSelectBuilder selectedPhotos(ArrayList<String> selectedPhotos) {
-            Config.selectedPhotos = selectedPhotos == null ? new ArrayList<>() : selectedPhotos;
+            Config.selectedPhotos = createNewArray(selectedPhotos);
             return this;
         }
 
@@ -127,15 +127,15 @@ public class DaVinci {
          * 已选中的图片
          */
         public DaVinciPreviewBuilder selectedPhotos(ArrayList<String> selectedPhotos) {
-            Config.selectedPhotos = selectedPhotos == null ? new ArrayList<>() : selectedPhotos;
+            Config.selectedPhotos = createNewArray(selectedPhotos);
             return this;
         }
 
         /**
          * 预览的的图片
          */
-        public DaVinciPreviewBuilder previewPhotos(ArrayList<String> selectedPhotos) {
-            Config.previewPhotos = selectedPhotos == null ? new ArrayList<>() : selectedPhotos;
+        public DaVinciPreviewBuilder previewPhotos(ArrayList<String> previewPhotos) {
+            Config.previewPhotos = createNewArray(previewPhotos);
             return this;
         }
 
@@ -196,5 +196,16 @@ public class DaVinci {
      */
     public interface QrScanCallback {
         void onResult(String result);
+    }
+
+    /**
+     * 创建新ArrayList，避免传入数据被改变
+     */
+    private static ArrayList<String> createNewArray(ArrayList<String> oldList) {
+        ArrayList<String> newList = new ArrayList<>();
+        if (oldList != null && oldList.size() > 0) {
+            newList.addAll(oldList);
+        }
+        return newList;
     }
 }
