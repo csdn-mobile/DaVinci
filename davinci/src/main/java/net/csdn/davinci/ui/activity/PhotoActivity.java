@@ -74,7 +74,6 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Config.reset();
         if (mAlbumHelper != null) {
             mAlbumHelper.onDestroy();
         }
