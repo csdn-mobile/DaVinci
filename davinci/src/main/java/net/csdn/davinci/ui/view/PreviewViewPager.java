@@ -2,6 +2,7 @@ package net.csdn.davinci.ui.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.viewpager.widget.ViewPager;
@@ -23,5 +24,15 @@ public class PreviewViewPager extends ViewPager {
             return super.canScroll(v, checkV, dx, x, y);
         }
         return super.canScroll(v, checkV, dx, x, y);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        try {
+            return super.onInterceptTouchEvent(ev);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

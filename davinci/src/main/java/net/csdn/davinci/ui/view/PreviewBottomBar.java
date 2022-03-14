@@ -143,7 +143,7 @@ public class PreviewBottomBar extends LinearLayout {
      * 更新选中图片的列表
      */
     public void notifyDataSetChanged() {
-        if (mAdapter != null) {
+        if (mAdapter != null && Config.selectedPhotos != null) {
             mAdapter.setSelectedItem(rv, Config.selectedPhotos.contains(Config.currentPath) ? Config.selectedPhotos.indexOf(Config.currentPath) : -1);
             mAdapter.notifyDataSetChanged();
             rlSelected.setSelected(Config.selectedPhotos.contains(Config.currentPath));

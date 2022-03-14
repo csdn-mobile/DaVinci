@@ -3,6 +3,7 @@ package net.csdn.davinci.ui.activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -91,6 +92,16 @@ public class PreviewActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        try {
+            return super.dispatchTouchEvent(ev);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private void setListener() {
         navigation.setOnBackClick(new View.OnClickListener() {
             @Override
@@ -168,4 +179,5 @@ public class PreviewActivity extends AppCompatActivity {
     private void setPage() {
         tvPage.setText(getResources().getString(R.string.davinci_pager_page, Config.previewPhotos.indexOf(Config.currentPath) + 1, Config.previewPhotos.size()));
     }
+
 }
