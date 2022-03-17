@@ -50,6 +50,11 @@ public class PreviewActivity extends AppCompatActivity {
                 .fontMode(FontMode.LIGHT)
                 .change(this);
 
+        if (Config.previewPhotos == null) {
+            finish();
+            return;
+        }
+
         viewPager = findViewById(R.id.vp);
         navigation = findViewById(R.id.navigation);
         bottomBar = findViewById(R.id.bottom_bar);
@@ -177,6 +182,9 @@ public class PreviewActivity extends AppCompatActivity {
     }
 
     private void setPage() {
+        if (Config.previewPhotos == null){
+            return;
+        }
         tvPage.setText(getResources().getString(R.string.davinci_pager_page, Config.previewPhotos.indexOf(Config.currentPath) + 1, Config.previewPhotos.size()));
     }
 
