@@ -16,12 +16,22 @@ public interface ImageEngine {
     void loadThumbnail(Context context, int resize, int placeResource, ImageView imageView, String path);
 
     /**
-     * 读取图片
+     * 读取本地图片
      */
-    void loadImage(Context context, int resizeX, int resizeY, ImageView imageView, String path);
+    void loadLocalImage(Context context, int resizeX, int resizeY, ImageView imageView, String path);
+
+    /**
+     * 读取长图本地图片
+     */
+    void loadLocalLongImage(Context context, ImageView imageView, String path);
 
     /**
      * 读取网络图片
      */
     void loadNetImage(Context context, ImageView imageView, String path, @Nullable RequestListener<Drawable> listener);
+
+    /**
+     * 读取长图网络图片
+     */
+    void loadNetLongImage(Context context, ImageView imageView, String path, @Nullable RequestListener<Drawable> listener);
 }

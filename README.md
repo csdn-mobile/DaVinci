@@ -20,6 +20,7 @@
 * 支持修改图片最大选择数
 * 支持修改图片展示列数
 * 支持默认选中图片
+* 支持长图预览
 * 构建者模式链式调用
 * ......
 
@@ -37,7 +38,7 @@ allprojects {
 **Step 2. 添加项目依赖**
 ``` gradle
 dependencies {
-    implementation 'io.github.csdn-mobile:DaVinci:0.4.6'
+    implementation 'io.github.csdn-mobile:DaVinci:0.5.0'
 }
 ```
 **Step 3. 在Activity中添加代码**
@@ -78,6 +79,7 @@ DaVinci.preview()
 ### 版本记录
 |版本号|更新内容|
 |---|---|
+|0.5.0|Optimize preview long pictures|
 |0.4.6|Fix bug and switch to PhotoView|
 |0.3.0|Support save network picture and analyse QR Code|
 |0.2.0|Support preview network pictures|

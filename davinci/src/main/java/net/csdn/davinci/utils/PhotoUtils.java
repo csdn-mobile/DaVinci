@@ -28,6 +28,13 @@ public final class PhotoUtils {
         return size.x * size.y;
     }
 
+    public static Point getOriginSize(String path, Activity activity){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        return new Point(options.outWidth, options.outHeight);
+    }
+
     public static Point getBitmapSize(Uri uri, Activity activity) {
         ContentResolver resolver = activity.getContentResolver();
         Point imageSize = getBitmapBound(resolver, uri);

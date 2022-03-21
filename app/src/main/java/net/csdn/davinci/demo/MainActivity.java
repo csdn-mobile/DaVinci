@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ArrayList<String> paths = new ArrayList<>();
                 paths.add("https://csdn-app.csdn.net/1111_activity_2.png");
+                paths.add("https://userblink.csdnimg.cn/20220311/programmerjob/pic/c2a20d0577e12cdd1706fc70fa260f4f-0.jpg");
                 paths.add("https://img-blog.csdnimg.cn/img_convert/a69b7a16d351387a4c79125277088aa0.gif");
                 paths.add("https://img-blog.csdnimg.cn/img_convert/c4ea67f19b79bec7678cafdd9c81556d.png");
                 paths.add("https://csdn-app.csdn.net/2dcode/magaz.png");

@@ -7,7 +7,8 @@ import android.view.View;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.github.chrisbanes.photoview.PhotoView;
+import net.csdn.davinci.core.photoview.PhotoView;
+
 
 public class PreviewViewPager extends ViewPager {
 
