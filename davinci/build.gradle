@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
-        versionCode 17
-        versionName "0.5.0"
+        versionCode 18
+        versionName "0.6.0"
     }
 
     buildTypes {
@@ -32,6 +32,7 @@ dependencies {
     implementation 'io.github.csdn-mobile:StatusBar:1.1.1'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
 }
 
 apply from: '../maven_upload.gradle'

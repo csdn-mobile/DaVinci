@@ -1,12 +1,9 @@
 package net.csdn.davinci.ui.fragment;
 
-import android.annotation.SuppressLint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +19,11 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
+import net.csdn.davinci.core.engine.PhotoViewTarget;
 import net.csdn.davinci.core.photoview.PhotoView;
 import net.csdn.davinci.utils.PhotoUtils;
 
@@ -34,14 +33,13 @@ public class PreviewFragment extends Fragment {
 
     private static final String ARGS_ITEM = "args_item";
     private static final String SAVE_PATH = "save_path";
-    private static final int HANDLER_LOAD_LONG = 1100;
 
     private PhotoView iv;
+    private SubsamplingScaleImageView ivLong;
     private ProgressBar progressBar;
 
     private String mPath;
     private OnPhotoClickListener mListener;
-    private PreviewHandler mHandler = new PreviewHandler();
 
     public interface OnPhotoClickListener {
         void onSingleClick();
@@ -78,7 +76,12 @@ public class PreviewFragment extends Fragment {
         }
 
         iv = view.findViewById(R.id.iv);
+        ivLong = view.findViewById(R.id.iv_long);
         progressBar = view.findViewById(R.id.progress_bar);
+
+        iv.setVisibility(View.VISIBLE);
+        ivLong.setVisibility(View.GONE);
+        ivLong.setMaxScale(20f);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +91,23 @@ public class PreviewFragment extends Fragment {
             }
         });
         iv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mListener != null) {
+                    mListener.onLongClick(mPath);
+                }
+                return false;
+            }
+        });
+        ivLong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onSingleClick();
+                }
+            }
+        });
+        ivLong.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (mListener != null) {
@@ -118,8 +138,9 @@ public class PreviewFragment extends Fragment {
                         return false;
                     }
                     // 设置长图缩放
-                    iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    mHandler.sendEmptyMessage(HANDLER_LOAD_LONG);
+                    iv.setVisibility(View.GONE);
+                    ivLong.setVisibility(View.VISIBLE);
+                    Config.imageEngine.loadNetLongImage(getContext(), mPath, new PhotoViewTarget(ivLong, progressBar));
                     return true;
                 }
             });
@@ -131,8 +152,10 @@ public class PreviewFragment extends Fragment {
                 iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 Config.imageEngine.loadLocalImage(getContext(), size.x, size.y, iv, mPath);
             } else {
+                iv.setVisibility(View.GONE);
+                ivLong.setVisibility(View.VISIBLE);
                 iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                Config.imageEngine.loadLocalLongImage(getContext(), iv, mPath);
+                Config.imageEngine.loadLocalLongImage(ivLong, mPath);
             }
         }
     }
@@ -157,31 +180,5 @@ public class PreviewFragment extends Fragment {
 
     public void setOnPhotoClickListener(OnPhotoClickListener listener) {
         this.mListener = listener;
-    }
-
-    @SuppressLint("HandlerLeak")
-    private class PreviewHandler extends Handler {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == HANDLER_LOAD_LONG) {
-                if (TextUtils.isEmpty(mPath)) {
-                    return;
-                }
-                Config.imageEngine.loadNetLongImage(getContext(), iv, mPath, new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
-                });
-            }
-        }
     }
 }

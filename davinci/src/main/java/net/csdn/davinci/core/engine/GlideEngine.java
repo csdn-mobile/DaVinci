@@ -8,8 +8,11 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 public class GlideEngine implements ImageEngine {
 
@@ -40,17 +43,13 @@ public class GlideEngine implements ImageEngine {
                 .into(imageView);
     }
 
-    /**
-     * 读取本地长图片
-     */
     @Override
-    public void loadLocalLongImage(Context context, ImageView imageView, String path) {
-        Glide.with(context)
-                .load(path)
-                .apply(new RequestOptions()
-                        .priority(Priority.HIGH)
-                        .dontTransform())
-                .into(imageView);
+    public void loadLocalLongImage(SubsamplingScaleImageView imageView, String path) {
+        if (imageView == null) {
+            return;
+        }
+        imageView.setOnImageEventListener(new ImageEventListener(imageView));
+        imageView.setImage(ImageSource.uri(path));
     }
 
     /**
@@ -64,17 +63,13 @@ public class GlideEngine implements ImageEngine {
                 .into(imageView);
     }
 
-    /**
-     * 读取长图网络图片
-     */
     @Override
-    public void loadNetLongImage(Context context, ImageView imageView, String path, @Nullable RequestListener<Drawable> listener) {
+    public void loadNetLongImage(Context context, String path, PhotoViewTarget target) {
+        if (target == null) {
+            return;
+        }
         Glide.with(context)
-                .load(path)
-                .addListener(listener)
-                .apply(new RequestOptions()
-                        .priority(Priority.HIGH)
-                        .dontTransform())
-                .into(imageView);
+                .download(new GlideUrl(path))
+                .into(target);
     }
 }

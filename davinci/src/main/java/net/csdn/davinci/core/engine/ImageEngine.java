@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.request.RequestListener;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 public interface ImageEngine {
 
@@ -21,9 +22,9 @@ public interface ImageEngine {
     void loadLocalImage(Context context, int resizeX, int resizeY, ImageView imageView, String path);
 
     /**
-     * 读取长图本地图片
+     * 读取本地图片（SubsamplingScaleImageView）
      */
-    void loadLocalLongImage(Context context, ImageView imageView, String path);
+    void loadLocalLongImage(SubsamplingScaleImageView imageView, String path);
 
     /**
      * 读取网络图片
@@ -31,7 +32,7 @@ public interface ImageEngine {
     void loadNetImage(Context context, ImageView imageView, String path, @Nullable RequestListener<Drawable> listener);
 
     /**
-     * 读取长图网络图片
+     * 读取网络图片（SubsamplingScaleImageView）
      */
-    void loadNetLongImage(Context context, ImageView imageView, String path, @Nullable RequestListener<Drawable> listener);
+    void loadNetLongImage(Context context, String path, PhotoViewTarget target);
 }
