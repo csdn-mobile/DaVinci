@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.csdn.roundview.RoundLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="310dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    app:rRadius="8dp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="@string/davinci_permission_title_read"
+        android:textColor="@color/davinci_title"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:letterSpacing="0.02"
+        android:lineSpacingMultiplier="1.4"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp"
+        android:text="@string/davinci_permission_desc_read"
+        android:textColor="@color/davinci_title"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="32dp">
+
+        <com.csdn.roundview.RoundLinearLayout
+            android:id="@+id/ll_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="29dp"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            app:rRadius="20dp"
+            app:rStrokeColor="@color/davinci_gray"
+            app:rStrokeWidth="1dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/davinci_permission_not_allow"
+                android:textColor="@color/davinci_gray"
+                android:textSize="14sp" />
+        </com.csdn.roundview.RoundLinearLayout>
+
+        <com.csdn.roundview.RoundLinearLayout
+            android:id="@+id/ll_ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="29dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            app:rRadius="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@color/davinci_red"
+                android:gravity="center"
+                android:text="@string/davinci_permission_allow"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </com.csdn.roundview.RoundLinearLayout>
+    </LinearLayout>
+</com.csdn.roundview.RoundLinearLayout>

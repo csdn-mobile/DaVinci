@@ -99,7 +99,7 @@ public class DaVinci {
                 return;
             }
             if (!PermissionsUtils.checkReadStoragePermission(activity)) {
-                Toast.makeText(activity, activity.getString(R.string.davinci_no_permission_read), Toast.LENGTH_LONG).show();
+//                Toast.makeText(activity, activity.getString(R.string.davinci_no_permission_read), Toast.LENGTH_LONG).show();
                 return;
             }
             Intent intent = new Intent(activity, PhotoActivity.class);

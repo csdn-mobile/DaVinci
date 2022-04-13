@@ -14,5 +14,6 @@
     <color name="davinci_preview_nav">#6606060D</color>
     <color name="davinci_page_gray">#989DAD</color>
     <color name="davinci_red">#FC5531</color>
+    <color name="davinci_gray">#9999AA</color>
 
 </resources>

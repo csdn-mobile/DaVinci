@@ -28,7 +28,8 @@ android {
 dependencies {
     implementation "androidx.appcompat:appcompat:$lib_appcompat"
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-
+    
+    implementation 'io.github.csdn-mobile:RoundView:1.7.1'
     implementation 'io.github.csdn-mobile:StatusBar:1.1.1'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'cn.yipianfengye.android:zxing-library:2.2'

@@ -13,4 +13,13 @@
   <string name="davinci_save_success">图片保存成功</string>
   <string name="davinci_save_fail">保存失败</string>
 
+  <string name="davinci_permission_title_read">读取存储</string>
+  <string name="davinci_permission_title_write">写入存储</string>
+  <string name="davinci_permission_title_camera">摄像头</string>
+  <string name="davinci_permission_desc_read">是否允许%s读取储存空间内容？用于读取图片。</string>
+  <string name="davinci_permission_desc_write">是否允许%s写入储存空间内容？用于保存图片。</string>
+  <string name="davinci_permission_desc_camera">是否允许%s使用你的相机/存储权限？用于正常使用拍照功能。</string>
+  <string name="davinci_permission_not_allow">不允许</string>
+  <string name="davinci_permission_allow">好</string>
+
 </resources>

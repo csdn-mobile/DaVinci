@@ -1,5 +1,6 @@
 package net.csdn.davinci.core.photo;
 
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.bumptech.glide.request.target.Target.SIZE_ORIGINAL;
 
 import android.annotation.SuppressLint;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -27,6 +29,7 @@ import com.uuzuche.lib_zxing.activity.CodeUtils;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.SavePath;
+import net.csdn.davinci.ui.dialog.PermissionsDialog;
 import net.csdn.davinci.utils.FileUtils;
 import net.csdn.davinci.utils.PermissionsUtils;
 import net.csdn.davinci.utils.UrlUtils;
@@ -176,7 +179,23 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
             mUrl = url;
         }
         if (!PermissionsUtils.checkWriteStoragePermission(mActivity, false)) {
-            ActivityCompat.requestPermissions(mActivity, PermissionsUtils.PERMISSIONS_EXTERNAL_WRITE, PermissionsUtils.REQUEST_EXTERNAL_WRITE);
+            PermissionsDialog dialog = new PermissionsDialog(PermissionsDialog.TYPE_STORAGE_WRITE, mActivity, new PermissionsDialog.OnButtonClickListener() {
+                @Override
+                public void onConfirmClick() {
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        if (!mActivity.shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) {
+                            // 可以申请权限
+                            ActivityCompat.requestPermissions(mActivity, PermissionsUtils.PERMISSIONS_EXTERNAL_WRITE, PermissionsUtils.REQUEST_EXTERNAL_WRITE);
+                        } else {
+                            // 跳转权限页面
+                            PermissionsUtils.openPermissionPage(mActivity);
+                        }
+                    } else {
+                        ActivityCompat.requestPermissions(mActivity, PermissionsUtils.PERMISSIONS_EXTERNAL_WRITE, PermissionsUtils.REQUEST_EXTERNAL_WRITE);
+                    }
+                }
+            });
+            dialog.show();
         } else {
             startDownload(url);
         }

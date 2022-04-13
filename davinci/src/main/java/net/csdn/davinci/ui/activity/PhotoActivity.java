@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -166,7 +165,7 @@ public class PhotoActivity extends AppCompatActivity {
             @Override
             public void onClick() {
                 if (!PermissionsUtils.checkCameraPermission(PhotoActivity.this)) {
-                    Toast.makeText(PhotoActivity.this, getResources().getString(R.string.davinci_no_permission_camera), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(PhotoActivity.this, getResources().getString(R.string.davinci_no_permission_camera), Toast.LENGTH_LONG).show();
                     return;
                 }
                 openCamera();

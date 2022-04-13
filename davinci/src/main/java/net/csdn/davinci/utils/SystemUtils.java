@@ -1,6 +1,8 @@
 package net.csdn.davinci.utils;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 
 public class SystemUtils {
     /**
@@ -15,5 +17,21 @@ public class SystemUtils {
      */
     public static int getScreenHeight(Context context) {
         return context.getResources().getDisplayMetrics().heightPixels;
+    }
+
+    /**
+     * 获取APP名称
+     */
+    public static String getAppName(Context context) {
+        String name = "";
+        PackageManager packageManager = context.getPackageManager();
+        ApplicationInfo applicationInfo;
+        try {
+            applicationInfo = packageManager.getApplicationInfo(context.getApplicationInfo().packageName, 0);
+            name = (String) (packageManager.getApplicationLabel(applicationInfo));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return name;
     }
 }
