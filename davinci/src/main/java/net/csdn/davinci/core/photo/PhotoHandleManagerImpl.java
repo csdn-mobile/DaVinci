@@ -195,7 +195,7 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
                     }
                 }
             });
-            dialog.show();
+            dialog.show(mActivity);
         } else {
             startDownload(url);
         }

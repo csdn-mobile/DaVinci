@@ -1,5 +1,6 @@
 package net.csdn.davinci.ui.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.text.TextUtils;
@@ -100,8 +101,10 @@ public class PermissionsDialog extends Dialog {
         }
     }
 
-    @Override
-    public void dismiss() {
-        super.dismiss();
+    public void show(Activity activity) {
+        if (activity == null || activity.isDestroyed() || activity.isFinishing()) {
+            return;
+        }
+        super.show();
     }
 }

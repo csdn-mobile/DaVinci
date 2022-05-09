@@ -61,7 +61,7 @@ public class PermissionsUtils {
                     }
                 }
             });
-            dialog.show();
+            dialog.show(activity);
         }
         return readStoragePermissionGranted;
     }
@@ -102,7 +102,7 @@ public class PermissionsUtils {
                     }
                 }
             });
-            dialog.show();
+            dialog.show(activity);
         }
         return cameraPermissionGranted;
     }
