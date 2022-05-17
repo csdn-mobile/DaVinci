@@ -38,7 +38,7 @@ allprojects {
 **Step 2. 添加项目依赖**
 ``` gradle
 dependencies {
-    implementation 'io.github.csdn-mobile:DaVinci:0.5.0'
+    implementation 'io.github.csdn-mobile:DaVinci:0.7.2'
 }
 ```
 **Step 3. 在Activity中添加代码**
@@ -79,6 +79,7 @@ DaVinci.preview()
 ### 版本记录
 |版本号|更新内容|
 |---|---|
+|0.7.2|Add permission request Dialog|
 |0.5.0|Optimize preview long pictures|
 |0.4.6|Fix bug and switch to PhotoView|
 |0.3.0|Support save network picture and analyse QR Code|

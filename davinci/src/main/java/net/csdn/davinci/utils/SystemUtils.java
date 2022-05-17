@@ -1,5 +1,6 @@
 package net.csdn.davinci.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -33,5 +34,12 @@ public class SystemUtils {
             e.printStackTrace();
         }
         return name;
+    }
+
+    /**
+     * Activity是否存活
+     */
+    public static boolean isActivityRunning(Activity activity) {
+        return activity != null && !activity.isDestroyed() && !activity.isFinishing();
     }
 }

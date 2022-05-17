@@ -32,6 +32,7 @@ import net.csdn.davinci.core.entity.SavePath;
 import net.csdn.davinci.ui.dialog.PermissionsDialog;
 import net.csdn.davinci.utils.FileUtils;
 import net.csdn.davinci.utils.PermissionsUtils;
+import net.csdn.davinci.utils.SystemUtils;
 import net.csdn.davinci.utils.UrlUtils;
 
 import java.io.File;
@@ -167,10 +168,14 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
                         Config.qrScanCallback.onResult(result);
                     }
                 }
-                mdialog.dismiss();
+                if (SystemUtils.isActivityRunning(mActivity)) {
+                    mdialog.dismiss();
+                }
             }
         });
-        builder.show();
+        if (SystemUtils.isActivityRunning(mActivity)) {
+            builder.show();
+        }
     }
 
     @Override

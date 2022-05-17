@@ -102,9 +102,8 @@ public class PermissionsDialog extends Dialog {
     }
 
     public void show(Activity activity) {
-        if (activity == null || activity.isDestroyed() || activity.isFinishing()) {
-            return;
+        if (SystemUtils.isActivityRunning(activity)) {
+            super.show();
         }
-        super.show();
     }
 }
