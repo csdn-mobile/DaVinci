@@ -11,7 +11,11 @@ import java.util.List;
  */
 public class BindingAdapter<T, DB extends ViewDataBinding> extends BaseAdapter<T, DB> {
 
-    protected BindingAdapter(int layoutId, int variableId, List<T> datas) {
+    public BindingAdapter(int layoutId, int variableId) {
+        this(layoutId, variableId, null);
+    }
+
+    public BindingAdapter(int layoutId, int variableId, List<T> datas) {
         super(layoutId, variableId, datas);
     }
 

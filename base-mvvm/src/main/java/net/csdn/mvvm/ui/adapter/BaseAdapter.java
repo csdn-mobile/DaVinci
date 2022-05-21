@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author by KG on 2022/05/19
  */
-public abstract class BaseAdapter<T, DB extends ViewDataBinding> extends RecyclerView.Adapter<BaseAdapter.BindingHolder<DB>> {
+public abstract class BaseAdapter<T, DB extends ViewDataBinding> extends RecyclerView.Adapter<BaseAdapter.BindingHolder<DB>> implements AdapterMethod<T> {
 
     protected final int mLayoutId;
     protected final int mVariableId;
@@ -56,6 +56,73 @@ public abstract class BaseAdapter<T, DB extends ViewDataBinding> extends Recycle
     @Override
     public int getItemCount() {
         return mDatas.size();
+    }
+
+    @Override
+    public List<T> getDatas() {
+        return mDatas;
+    }
+
+    @Override
+    public void setDatas(List<T> datas) {
+        this.mDatas = datas;
+        createDatas();
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void addDatas(List<T> datas) {
+        if (datas == null || datas.size() <= 0) {
+            return;
+        }
+        createDatas();
+        mDatas.addAll(datas);
+        notifyItemRangeInserted(mDatas.size() - datas.size(), datas.size());
+    }
+
+    @Override
+    public void addDatas(int position, List<T> datas) {
+        if (datas == null || datas.size() <= 0) {
+            return;
+        }
+        createDatas();
+        mDatas.addAll(position, datas);
+        notifyItemRangeInserted(position, datas.size());
+    }
+
+    @Override
+    public void addData(T data) {
+        if (data == null) {
+            return;
+        }
+        createDatas();
+        mDatas.add(data);
+        notifyItemInserted(mDatas.size() - 1);
+    }
+
+    @Override
+    public void addData(int position, T data) {
+        if (data == null) {
+            return;
+        }
+        createDatas();
+        mDatas.add(position, data);
+        notifyItemInserted(position);
+    }
+
+    @Override
+    public void removeData(int position) {
+        if (mDatas == null || mDatas.size() <= 0) {
+            return;
+        }
+        mDatas.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    private void createDatas() {
+        if (mDatas == null) {
+            mDatas = new ArrayList<>();
+        }
     }
 
     public abstract void onBind(DB dataBinding, T data);

@@ -5,9 +5,6 @@ import androidx.databinding.ViewDataBinding;
 
 import net.csdn.mvvm.viewmodel.BaseAdapterViewModel;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -21,6 +18,10 @@ import java.util.List;
 public class BindingViewModelAdapter<T, DB extends ViewDataBinding> extends BaseAdapter<T, DB> {
 
     private final Class<? extends BaseAdapterViewModel<T>> mVmClass;
+
+    public BindingViewModelAdapter(@LayoutRes int layoutId, int variableId, Class<? extends BaseAdapterViewModel<T>> clazz) {
+        this(layoutId, variableId, clazz, null);
+    }
 
     public BindingViewModelAdapter(@LayoutRes int layoutId, int variableId, Class<? extends BaseAdapterViewModel<T>> clazz, List<T> datas) {
         super(layoutId, variableId, datas);

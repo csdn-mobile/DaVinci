@@ -1,33 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <net.csdn.davinci.ui.view.PhotoNavigation
-        android:id="@+id/navigation"
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="net.csdn.davinci.ui.viewmodel.PhotoViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
+        <net.csdn.davinci.ui.view.PhotoNavigation
+            android:id="@+id/navigation"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/davinci_white" />
+            android:layout_height="wrap_content" />
 
-        <net.csdn.davinci.ui.view.PhotoAlbum
-            android:id="@+id/album"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="match_parent">
 
-        <net.csdn.davinci.ui.view.EmptyView
-            android:id="@+id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </RelativeLayout>
-</LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/davinci_white" />
+
+            <net.csdn.davinci.ui.view.PhotoAlbum
+                android:id="@+id/album"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+            <net.csdn.davinci.ui.view.EmptyView
+                android:id="@+id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+    </LinearLayout>
+</layout>
