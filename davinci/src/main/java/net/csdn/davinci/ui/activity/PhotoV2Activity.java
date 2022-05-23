@@ -7,39 +7,38 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.Observer;
 
 import com.csdn.statusbar.StatusBar;
 import com.csdn.statusbar.annotation.FontMode;
 
 import net.csdn.davinci.BR;
+import net.csdn.davinci.BusEvent;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
-import net.csdn.davinci.core.album.AlbumClickListener;
 import net.csdn.davinci.core.album.AlbumHelper;
 import net.csdn.davinci.core.album.AlbumResultCallback;
 import net.csdn.davinci.core.entity.Album;
 import net.csdn.davinci.core.entity.Photo;
 import net.csdn.davinci.core.photo.PhotoCaptureManager;
 import net.csdn.davinci.databinding.ActivityPhotoBinding;
+import net.csdn.davinci.databinding.ItemAlbumBinding;
 import net.csdn.davinci.ui.adapter.PhotoAdapter;
-import net.csdn.davinci.ui.view.EmptyView;
-import net.csdn.davinci.ui.view.PhotoAlbum;
-import net.csdn.davinci.ui.view.PhotoNavigation;
+import net.csdn.davinci.ui.viewmodel.AlbumItemViewModel;
 import net.csdn.davinci.ui.viewmodel.PhotoViewModel;
 import net.csdn.davinci.utils.PermissionsUtils;
+import net.csdn.mvvm.bus.LiveDataBus;
 import net.csdn.mvvm.ui.activity.BaseBindingViewModelActivity;
+import net.csdn.mvvm.ui.adapter.BindingViewModelAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class PhotoV2Activity extends BaseBindingViewModelActivity<ActivityPhotoBinding, PhotoViewModel> {
 
-    private AlbumHelper mAlbumHelper;
     private PhotoAdapter mAdapter;
+    private AlbumHelper mAlbumHelper;
 
     @Override
     public int getLayoutId() {
@@ -60,7 +59,11 @@ public class PhotoV2Activity extends BaseBindingViewModelActivity<ActivityPhotoB
                 .fontMode(FontMode.DARK)
                 .change(this);
 
+        setBinding();
         setListener();
+        registerBus();
+
+
         loadAlbum();
         changeConfirmStatus();
     }
@@ -115,6 +118,25 @@ public class PhotoV2Activity extends BaseBindingViewModelActivity<ActivityPhotoB
         }
     }
 
+    private void setBinding() {
+        // 设置照片Adapter
+        mAdapter = new PhotoAdapter(this, new PhotoAdapter.OnPhotoSelectChangeListener() {
+            @Override
+            public void onChange() {
+                changeConfirmStatus();
+            }
+        }, new PhotoAdapter.OnCameraClickListener() {
+            @Override
+            public void onClick() {
+                if (!PermissionsUtils.checkCameraPermission(PhotoV2Activity.this)) {
+                    return;
+                }
+                openCamera();
+            }
+        });
+        mBinding.setAdapter(mAdapter);
+    }
+
     private void setListener() {
         mBinding.navigation.setOnBackClick(new View.OnClickListener() {
             @Override
@@ -141,41 +163,31 @@ public class PhotoV2Activity extends BaseBindingViewModelActivity<ActivityPhotoB
                 finishAndSetResult();
             }
         });
+    }
 
-        mBinding.album.setOnBlankClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeAlbum();
-            }
-        });
-
-        mBinding.album.setAlbumClickListener(new AlbumClickListener() {
-            @Override
-            public void onAlbumClick(Album album) {
-                selectAlbum(album);
-                closeAlbum();
-            }
-        });
+    private void registerBus() {
+        // 相簿选择
+        LiveDataBus.getInstance()
+                .with(BusEvent.Photo.ALBUM_SELECT, Album.class)
+                .observe(this, new Observer<Album>() {
+                    @Override
+                    public void onChanged(Album album) {
+                        selectAlbum(album);
+                        closeAlbum();
+                    }
+                });
+        // 相簿空白位置点击关闭
+        LiveDataBus.getInstance()
+                .with(BusEvent.Photo.ALBUM_BLANK_CLICK)
+                .observe(this, new Observer<Object>() {
+                    @Override
+                    public void onChanged(Object o) {
+                        closeAlbum();
+                    }
+                });
     }
 
     private void loadAlbum() {
-        mAdapter = new PhotoAdapter(this, new PhotoAdapter.OnPhotoSelectChangeListener() {
-            @Override
-            public void onChange() {
-                changeConfirmStatus();
-            }
-        }, new PhotoAdapter.OnCameraClickListener() {
-            @Override
-            public void onClick() {
-                if (!PermissionsUtils.checkCameraPermission(PhotoV2Activity.this)) {
-                    return;
-                }
-                openCamera();
-            }
-        });
-        mBinding.rv.setLayoutManager(new GridLayoutManager(this, Config.column));
-        mBinding.rv.setAdapter(mAdapter);
-
         // 读取相簿
         mAlbumHelper = new AlbumHelper();
         mAlbumHelper.onCreate(this);

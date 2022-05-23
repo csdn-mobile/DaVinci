@@ -17,7 +17,6 @@ import com.csdn.statusbar.annotation.FontMode;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
-import net.csdn.davinci.core.album.AlbumClickListener;
 import net.csdn.davinci.core.album.AlbumHelper;
 import net.csdn.davinci.core.album.AlbumResultCallback;
 import net.csdn.davinci.core.entity.Album;
@@ -146,13 +145,13 @@ public class PhotoActivity extends AppCompatActivity {
             }
         });
 
-        photoAlbum.setAlbumClickListener(new AlbumClickListener() {
-            @Override
-            public void onAlbumClick(Album album) {
-                selectAlbum(album);
-                closeAlbum();
-            }
-        });
+//        photoAlbum.setAlbumClickListener(new AlbumClickListener() {
+//            @Override
+//            public void onAlbumClick(Album album) {
+//                selectAlbum(album);
+//                closeAlbum();
+//            }
+//        });
     }
 
     private void loadAlbum() {
