@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
 
         };
-//        ActivityCompat.requestPermissions(this, storage, 2000);
+        ActivityCompat.requestPermissions(this, storage, 2000);
 
         findViewById(R.id.btn_sel).setOnClickListener(new View.OnClickListener() {
             @Override

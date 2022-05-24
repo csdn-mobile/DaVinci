@@ -1,6 +1,7 @@
 package net.csdn.mvvm.databinding;
 
 import androidx.databinding.BindingAdapter;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -16,5 +17,13 @@ public class RecyclerViewBindingAdapter {
     @BindingAdapter("bind_adapter")
     public static void setAdapter(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
         recyclerView.setAdapter(adapter);
+    }
+
+    /**
+     * 设置RecyclerView为GridLayoutManager
+     */
+    @BindingAdapter("bind_column")
+    public static void setColumnCount(RecyclerView recyclerView, int count) {
+        recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(), count));
     }
 }

@@ -39,7 +39,7 @@ public class PhotoAlbum extends RelativeLayout {
     }
 
     private void init(Context context) {
-        mBinding = ViewPhotoAlbumBinding.inflate(LayoutInflater.from(context));
+        mBinding = ViewPhotoAlbumBinding.inflate(LayoutInflater.from(context), this, true);
         mAdapter = new BindingViewModelAdapter<>(R.layout.item_album, BR.viewmodel, AlbumItemViewModel.class, null);
         mBinding.setAdapter(mAdapter);
         mBinding.setOnBlankClick(new OnClickListener() {
