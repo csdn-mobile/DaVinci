@@ -11,8 +11,8 @@ import net.csdn.mvvm.viewmodel.BaseAdapterViewModel;
 
 public class AlbumItemViewModel extends BaseAdapterViewModel<Album> {
 
-    protected AlbumItemViewModel(Album data) {
-        super(data);
+    protected AlbumItemViewModel(int position, Album data) {
+        super(position, data);
     }
 
     public int getPhotoCount() {

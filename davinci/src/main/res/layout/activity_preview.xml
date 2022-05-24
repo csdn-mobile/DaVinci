@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/davinci_black"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <net.csdn.davinci.ui.view.PreviewViewPager
-        android:id="@+id/vp"
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="net.csdn.davinci.ui.viewmodel.PreviewViewModel" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/davinci_black"
+        android:orientation="vertical">
 
-    <net.csdn.davinci.ui.view.PreviewNavigation
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <net.csdn.davinci.ui.view.PreviewViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    <net.csdn.davinci.ui.view.PreviewBottomBar
-        android:id="@+id/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        <net.csdn.davinci.ui.view.PreviewNavigation
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tv_page"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-        android:text="@string/davinci_pager_page"
-        android:textColor="@color/davinci_page_gray"
-        android:textSize="14sp"
-        android:visibility="gone" />
-</RelativeLayout>
+        <net.csdn.davinci.ui.view.PreviewBottomBar
+            android:id="@+id/bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+
+        <TextView
+            android:id="@+id/tv_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:text="@string/davinci_pager_page"
+            android:textColor="@color/davinci_page_gray"
+            android:textSize="14sp"
+            android:visibility="gone"
+            bind_isGone="@{viewmodel.pageGone}"/>
+    </RelativeLayout>
+</layout>

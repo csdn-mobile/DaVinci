@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="84dp"
-    android:layout_height="84dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-        android:id="@+id/iv_photo"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:layout_margin="2dp"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop" />
+    <data>
 
-    <View
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_margin="2dp"
-        android:background="@drawable/davinci_selector_preview_select_photo" />
+        <variable
+            name="onClick"
+            type="android.view.View.OnClickListener" />
 
-</RelativeLayout>
+        <variable
+            name="viewmodel"
+            type="net.csdn.davinci.ui.viewmodel.PreviewSelectedItemViewModel" />
+    </data>
+
+    <RelativeLayout
+        bind_isSelected="@{viewmodel.mSelectPostion == viewmodel.mPosition}"
+        davinci_rlrv_marginStart="@{viewmodel.marginStart}"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:onClick="@{onClick}">
+
+        <ImageView
+            davinci_thumbnail_path="@{viewmodel.mData}"
+            davinci_thumbnail_place="@{@color/davinci_black}"
+            davinci_thumbnail_resize="@{viewmodel.imageResize}"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_margin="2dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+
+        <View
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/davinci_selector_preview_select_photo" />
+
+    </RelativeLayout>
+</layout>
+

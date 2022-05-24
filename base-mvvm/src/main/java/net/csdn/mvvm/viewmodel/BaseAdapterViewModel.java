@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModel;
  */
 public abstract class BaseAdapterViewModel<T> extends ViewModel {
 
+    public int mPosition;
     public T mData;
 
-    protected BaseAdapterViewModel(T data) {
+    protected BaseAdapterViewModel(int position, T data) {
         super();
+        this.mPosition = position;
         this.mData = data;
     }
 }

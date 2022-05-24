@@ -1,41 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/davinci_preview_nav"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <View
-        android:id="@+id/view_status_bar"
+    <data>
+
+        <import type="net.csdn.davinci.Config" />
+
+        <variable
+            name="statusBarHeight"
+            type="Integer" />
+
+        <variable
+            name="onBackClick"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onConfirmClick"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
+        bind_isGone="@{!Config.previewSelectable}"
         android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        android:layout_height="wrap_content"
+        android:background="@color/davinci_preview_nav"
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp">
+        <View
+            bind_height="@{statusBarHeight}"
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:paddingStart="16dp"
-            android:paddingTop="12dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="12dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/davinci_back_white" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
 
-        <TextView
-            android:id="@+id/tv_confirm"
-            android:layout_width="64dp"
-            android:layout_height="28dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/davinci_shape_preivew_confirm"
-            android:gravity="center"
-            android:text="@string/davinci_confirm"
-            android:textColor="@color/davinci_white"
-            android:textSize="16sp" />
-    </RelativeLayout>
-</LinearLayout>
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:onClick="@{onBackClick}"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/davinci_back_white" />
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="28dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/davinci_shape_preivew_confirm"
+                android:gravity="center"
+                android:onClick="@{onConfirmClick}"
+                android:text="@string/davinci_confirm"
+                android:textColor="@color/davinci_white"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

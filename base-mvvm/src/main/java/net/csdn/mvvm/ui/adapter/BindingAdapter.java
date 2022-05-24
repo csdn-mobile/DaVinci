@@ -20,7 +20,7 @@ public class BindingAdapter<T, DB extends ViewDataBinding> extends BaseAdapter<T
     }
 
     @Override
-    public void onBind(DB dataBinding, T data) {
+    public void onBind(int position, DB dataBinding, T data) {
         dataBinding.setVariable(mVariableId, data);
     }
 }

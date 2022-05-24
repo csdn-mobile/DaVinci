@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DaVinci.select()
-                        .maxSelectable(1)
+                        .maxSelectable(4)
                         .showGif(true)
                         .showCamera(true)
                         .column(4)

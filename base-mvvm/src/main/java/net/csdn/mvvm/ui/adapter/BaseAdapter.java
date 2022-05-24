@@ -49,7 +49,7 @@ public abstract class BaseAdapter<T, DB extends ViewDataBinding> extends Recycle
         if (position >= mDatas.size()) {
             return;
         }
-        onBind(holder.mBinding, mDatas.get(position));
+        onBind(position, holder.mBinding, mDatas.get(position));
         holder.mBinding.executePendingBindings();
     }
 
@@ -125,7 +125,7 @@ public abstract class BaseAdapter<T, DB extends ViewDataBinding> extends Recycle
         }
     }
 
-    public abstract void onBind(DB dataBinding, T data);
+    public abstract void onBind(int position, DB dataBinding, T data);
 
     /**
      * 弱化Holder，仅存放DataBinding，内部存放ViewModel或者Bean

@@ -29,18 +29,18 @@ public class BindingViewModelAdapter<T, DB extends ViewDataBinding> extends Base
     }
 
     @Override
-    public void onBind(DB dataBinding, T data) {
-        BaseAdapterViewModel<T> instance = getViewModelInstance(data);
+    public void onBind(int position, DB dataBinding, T data) {
+        BaseAdapterViewModel<T> instance = getViewModelInstance(position, data);
         if (instance != null) {
             dataBinding.setVariable(mVariableId, instance);
         }
     }
 
-    private BaseAdapterViewModel<T> getViewModelInstance(T data) {
+    private BaseAdapterViewModel<T> getViewModelInstance(int position, T data) {
         BaseAdapterViewModel<T> instance = null;
         if (mVmClass != null) {
             try {
-                instance = mVmClass.getDeclaredConstructor(data.getClass()).newInstance(data);
+                instance = mVmClass.getDeclaredConstructor(int.class, data.getClass()).newInstance(position, data);
             } catch (Exception e) {
                 e.printStackTrace();
             }
