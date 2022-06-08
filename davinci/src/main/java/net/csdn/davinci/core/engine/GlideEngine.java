@@ -17,7 +17,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 public class GlideEngine implements ImageEngine {
 
     /**
-     * 读取缩略图
+     * 读取缩略图（资源ID）
      */
     @Override
     public void loadThumbnail(Context context, int resize, int placeResource, ImageView imageView, String path) {
@@ -26,6 +26,20 @@ public class GlideEngine implements ImageEngine {
                 .apply(new RequestOptions()
                         .override(resize, resize)
                         .placeholder(placeResource)
+                        .centerCrop())
+                .into(imageView);
+    }
+
+    /**
+     * 读取缩略图（Drawable）
+     */
+    @Override
+    public void loadThumbnail(Context context, int resize, Drawable placeDrawable, ImageView imageView, String path) {
+        Glide.with(context)
+                .load(path)
+                .apply(new RequestOptions()
+                        .override(resize, resize)
+                        .placeholder(placeDrawable)
                         .centerCrop())
                 .into(imageView);
     }

@@ -8,22 +8,22 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import net.csdn.davinci.BR;
+import net.csdn.davinci.BusEvent;
 import net.csdn.davinci.R;
-import net.csdn.davinci.core.album.AlbumClickListener;
 import net.csdn.davinci.core.entity.Album;
-import net.csdn.davinci.ui.adapter.AlbumAdapter;
+import net.csdn.davinci.databinding.ItemAlbumBinding;
+import net.csdn.davinci.databinding.ViewPhotoAlbumBinding;
+import net.csdn.davinci.ui.viewmodel.AlbumItemViewModel;
+import net.csdn.mvvm.bus.LiveDataBus;
+import net.csdn.mvvm.ui.adapter.BindingViewModelAdapter;
 
 import java.util.ArrayList;
 
 public class PhotoAlbum extends RelativeLayout {
 
-    private RecyclerView rvDirs;
-    private View viewBlank;
-
-    private AlbumClickListener mOnClickListener;
+    private ViewPhotoAlbumBinding mBinding;
+    private BindingViewModelAdapter<Album, ItemAlbumBinding> mAdapter;
 
     public PhotoAlbum(Context context) {
         this(context, null);
@@ -39,36 +39,22 @@ public class PhotoAlbum extends RelativeLayout {
     }
 
     private void init(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_photo_album, this);
-
-        rvDirs = view.findViewById(R.id.rv_dirs);
-        viewBlank = view.findViewById(R.id.view_blank);
-
-        rvDirs.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-    }
-
-    /**
-     * 设置相册点击监听
-     */
-    public void setAlbumClickListener(AlbumClickListener onClickListener) {
-        this.mOnClickListener = onClickListener;
-    }
-
-    /**
-     * 空白处点击
-     */
-    public void setOnBlankClickListener(OnClickListener listener){
-        if (viewBlank == null || listener == null){
-            return;
-        }
-        viewBlank.setOnClickListener(listener);
+        mBinding = ViewPhotoAlbumBinding.inflate(LayoutInflater.from(context), this, true);
+        mAdapter = new BindingViewModelAdapter<>(R.layout.item_album, BR.viewmodel, AlbumItemViewModel.class, null);
+        mBinding.setAdapter(mAdapter);
+        mBinding.setOnBlankClick(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LiveDataBus.getInstance().with(BusEvent.Photo.ALBUM_BLANK_CLICK).setValue(null);
+            }
+        });
     }
 
     /**
      * 打开相簿
      */
     public void openAlbum() {
-        if (rvDirs == null || getVisibility() == View.VISIBLE) {
+        if (getVisibility() == View.VISIBLE) {
             return;
         }
         setVisibility(View.VISIBLE);
@@ -77,14 +63,14 @@ public class PhotoAlbum extends RelativeLayout {
         translateAnimation.setFillEnabled(true);//使其可以填充效果从而不回到原地
         translateAnimation.setFillAfter(true);//不回到起始位置
         //如果不添加setFillEnabled和setFillAfter则动画执行结束后会自动回到远点
-        rvDirs.startAnimation(translateAnimation);//给imageView添加的动画效果
+        mBinding.rvDirs.startAnimation(translateAnimation);//给imageView添加的动画效果
     }
 
     /**
      * 关上相簿
      */
     public void closeAlbum() {
-        if (rvDirs == null || getVisibility() == View.GONE) {
+        if (getVisibility() == View.GONE) {
             return;
         }
         Animation translateAnimation = new TranslateAnimation(1, 0, 1, 0, 1, 0, 1, -1);//平移动画
@@ -108,21 +94,13 @@ public class PhotoAlbum extends RelativeLayout {
 
             }
         });
-        rvDirs.startAnimation(translateAnimation);//给imageView添加的动画效果
+        mBinding.rvDirs.startAnimation(translateAnimation);//给imageView添加的动画效果
     }
 
     /**
      * 设置相册数据
      */
     public void setData(ArrayList<Album> albums) {
-        AlbumAdapter adapter = new AlbumAdapter(getContext(), albums, new AlbumClickListener() {
-            @Override
-            public void onAlbumClick(Album album) {
-                if (mOnClickListener != null) {
-                    mOnClickListener.onAlbumClick(album);
-                }
-            }
-        });
-        rvDirs.setAdapter(adapter);
+        mAdapter.setDatas(albums);
     }
 }

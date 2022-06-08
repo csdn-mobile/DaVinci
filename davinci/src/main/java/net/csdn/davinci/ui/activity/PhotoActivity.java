@@ -7,58 +7,57 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.Observer;
 
 import com.csdn.statusbar.StatusBar;
 import com.csdn.statusbar.annotation.FontMode;
 
+import net.csdn.davinci.BR;
+import net.csdn.davinci.BusEvent;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
-import net.csdn.davinci.core.album.AlbumClickListener;
-import net.csdn.davinci.core.album.AlbumHelper;
-import net.csdn.davinci.core.album.AlbumResultCallback;
 import net.csdn.davinci.core.entity.Album;
 import net.csdn.davinci.core.entity.Photo;
 import net.csdn.davinci.core.photo.PhotoCaptureManager;
+import net.csdn.davinci.databinding.ActivityPhotoBinding;
 import net.csdn.davinci.ui.adapter.PhotoAdapter;
-import net.csdn.davinci.ui.view.EmptyView;
-import net.csdn.davinci.ui.view.PhotoAlbum;
-import net.csdn.davinci.ui.view.PhotoNavigation;
+import net.csdn.davinci.ui.viewmodel.PhotoViewModel;
 import net.csdn.davinci.utils.PermissionsUtils;
+import net.csdn.mvvm.bus.LiveDataBus;
+import net.csdn.mvvm.ui.activity.BaseBindingViewModelActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class PhotoActivity extends AppCompatActivity {
+public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBinding, PhotoViewModel> {
 
-    private RecyclerView rv;
-    private EmptyView emptyView;
-    private PhotoAlbum photoAlbum;
-    private PhotoNavigation photoNavigation;
-
-    private AlbumHelper mAlbumHelper;
     private PhotoAdapter mAdapter;
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_photo;
+    }
+
+    @Override
+    public int getVariableId() {
+        return BR.viewmodel;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
 
         StatusBar.Builder()
                 .color(getResources().getColor(R.color.davinci_white))
                 .fontMode(FontMode.DARK)
                 .change(this);
 
-        rv = findViewById(R.id.rv);
-        emptyView = findViewById(R.id.empty);
-        photoAlbum = findViewById(R.id.album);
-        photoNavigation = findViewById(R.id.navigation);
-
+        setBinding();
         setListener();
-        loadAlbum();
+        registerBus();
+
+        mViewModel.loadAlbum(this);
         changeConfirmStatus();
     }
 
@@ -73,16 +72,14 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mAlbumHelper != null) {
-            mAlbumHelper.onDestroy();
-        }
+        mViewModel.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
-        if (photoAlbum.getVisibility() == View.VISIBLE) {
-            photoAlbum.closeAlbum();
-            photoNavigation.setArrowDown();
+        if (mBinding.album.getVisibility() == View.VISIBLE) {
+            mBinding.album.closeAlbum();
+            mBinding.navigation.setArrowDown();
         } else {
             super.onBackPressed();
         }
@@ -112,50 +109,8 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
-    private void setListener() {
-        photoNavigation.setOnBackClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        photoNavigation.setOnTitleClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (photoAlbum.getVisibility() == View.GONE) {
-                    photoAlbum.openAlbum();
-                    photoNavigation.setArrowUp();
-                } else {
-                    closeAlbum();
-                }
-            }
-        });
-
-        photoNavigation.setOnConfirmClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishAndSetResult();
-            }
-        });
-
-        photoAlbum.setOnBlankClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeAlbum();
-            }
-        });
-
-        photoAlbum.setAlbumClickListener(new AlbumClickListener() {
-            @Override
-            public void onAlbumClick(Album album) {
-                selectAlbum(album);
-                closeAlbum();
-            }
-        });
-    }
-
-    private void loadAlbum() {
+    private void setBinding() {
+        // 设置照片Adapter
         mAdapter = new PhotoAdapter(this, new PhotoAdapter.OnPhotoSelectChangeListener() {
             @Override
             public void onChange() {
@@ -165,34 +120,56 @@ public class PhotoActivity extends AppCompatActivity {
             @Override
             public void onClick() {
                 if (!PermissionsUtils.checkCameraPermission(PhotoActivity.this)) {
-//                    Toast.makeText(PhotoActivity.this, getResources().getString(R.string.davinci_no_permission_camera), Toast.LENGTH_LONG).show();
                     return;
                 }
                 openCamera();
             }
         });
-        rv.setLayoutManager(new GridLayoutManager(this, Config.column));
-        rv.setAdapter(mAdapter);
-
-        // 读取相簿
-        mAlbumHelper = new AlbumHelper();
-        mAlbumHelper.onCreate(this);
-        mAlbumHelper.loadAlbums(new AlbumResultCallback() {
+        mBinding.setAdapter(mAdapter);
+        // 监听相簿数据源变化
+        mViewModel.mAlbumList.observe(this, new Observer<ArrayList<Album>>() {
             @Override
-            public void onResult(ArrayList<Album> albums) {
-                Log.e("AlbumLoad", "onLoadFinished====" + albums.toString());
-                photoAlbum.setData(albums);
+            public void onChanged(ArrayList<Album> albums) {
+                mBinding.album.setData(albums);
                 selectAlbum(albums.get(0));
             }
         });
+    }
 
+    private void setListener() {
+        mBinding.navigation.setListener(v -> onBackPressed(), v -> {
+            if (mBinding.album.getVisibility() == View.GONE) {
+                mBinding.album.openAlbum();
+                mBinding.navigation.setArrowUp();
+            } else {
+                closeAlbum();
+            }
+        }, v -> finishAndSetResult());
+    }
+
+    private void registerBus() {
+        // 相簿选择
+        LiveDataBus.getInstance().with(BusEvent.Photo.ALBUM_SELECT, Album.class).observe(this, new Observer<Album>() {
+            @Override
+            public void onChanged(Album album) {
+                selectAlbum(album);
+                closeAlbum();
+            }
+        });
+        // 相簿空白位置点击关闭
+        LiveDataBus.getInstance().with(BusEvent.Photo.ALBUM_BLANK_CLICK).observe(this, new Observer<Object>() {
+            @Override
+            public void onChanged(Object o) {
+                closeAlbum();
+            }
+        });
     }
 
     private void selectAlbum(Album album) {
-        if (photoNavigation == null || album == null) {
+        if (album == null) {
             return;
         }
-        photoNavigation.setTitle(album.name);
+        mBinding.navigation.setTitle(album.name);
         mAdapter.setDatas(album.photoList);
 
         ArrayList<String> list = new ArrayList<>();
@@ -203,8 +180,8 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     private void closeAlbum() {
-        photoAlbum.closeAlbum();
-        photoNavigation.setArrowDown();
+        mBinding.album.closeAlbum();
+        mBinding.navigation.setArrowDown();
     }
 
     private void openCamera() {
@@ -220,9 +197,9 @@ public class PhotoActivity extends AppCompatActivity {
 
     private void changeConfirmStatus() {
         if (Config.selectedPhotos.size() <= 0) {
-            photoNavigation.setDoUnEnable();
+            mBinding.navigation.setDoUnEnable();
         } else {
-            photoNavigation.setDoEnable();
+            mBinding.navigation.setDoEnable();
         }
     }
 
@@ -232,5 +209,4 @@ public class PhotoActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
         finish();
     }
-
 }

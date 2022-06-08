@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <View
-        android:id="@+id/view_blank"
+    <data>
+
+        <variable
+            name="adapter"
+            type="net.csdn.mvvm.ui.adapter.BindingViewModelAdapter" />
+
+        <variable
+            name="onBlankClick"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.4"
-        android:background="@color/davinci_album_back" />
+        android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_dirs"
-        android:layout_width="match_parent"
-        android:layout_height="340dp"
-        android:background="@color/davinci_white" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.4"
+            android:background="@color/davinci_album_back"
+            android:onClick="@{onBlankClick}" />
 
-</RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_dirs"
+            bind_adapter="@{adapter}"
+            android:layout_width="match_parent"
+            android:layout_height="340dp"
+            android:background="@color/davinci_white"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </RelativeLayout>
+</layout>

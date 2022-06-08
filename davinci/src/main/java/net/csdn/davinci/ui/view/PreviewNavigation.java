@@ -4,31 +4,22 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.csdn.statusbar.StatusBar;
 
 import net.csdn.davinci.Config;
-import net.csdn.davinci.R;
+import net.csdn.davinci.databinding.ViewPreviewNavigationBinding;
 
 import java.util.ArrayList;
 
 public class PreviewNavigation extends RelativeLayout {
 
-    private View viewStatusBar;
-    private ImageView ivBack;
-    private TextView tvConfirm;
+    private ViewPreviewNavigationBinding mBinding;
 
-    private OnConfirmClickListener mOnConfirmClickListener;
-
-    public interface OnConfirmClickListener {
-        void onConfirmClick();
-    }
+    private OnClickListener mOnConfirmClickListener;
 
     public PreviewNavigation(Context context) {
         this(context, null);
@@ -44,19 +35,9 @@ public class PreviewNavigation extends RelativeLayout {
     }
 
     private void init(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_preview_navigation, this);
-
-        viewStatusBar = view.findViewById(R.id.view_status_bar);
-        ivBack = view.findViewById(R.id.iv_back);
-        tvConfirm = view.findViewById(R.id.tv_confirm);
-
-        ViewGroup.LayoutParams layoutParams = viewStatusBar.getLayoutParams();
-        layoutParams.height = StatusBar.getHeight(context);
-        viewStatusBar.setLayoutParams(layoutParams);
-
-        setVisibility(Config.previewSelectable ? VISIBLE : GONE);
-
-        tvConfirm.setOnClickListener(new OnClickListener() {
+        mBinding = ViewPreviewNavigationBinding.inflate(LayoutInflater.from(context), this, true);
+        mBinding.setStatusBarHeight(StatusBar.getHeight(context));
+        mBinding.setOnConfirmClick(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Config.selectedPhotos == null || Config.selectedPhotos.size() <= 0) {
@@ -64,35 +45,23 @@ public class PreviewNavigation extends RelativeLayout {
                     Config.selectedPhotos.add(Config.currentPath);
                 }
 
-                if (Config.selectedPhotos.size() > 0) {
-                    mOnConfirmClickListener.onConfirmClick();
+                if (Config.selectedPhotos.size() > 0 && mOnConfirmClickListener != null) {
+                    mOnConfirmClickListener.onClick(v);
                 }
             }
         });
     }
 
-    /**
-     * 设置返回键点击事件
-     */
-    public void setOnBackClick(OnClickListener listener) {
-        if (ivBack == null || listener == null) {
-            return;
-        }
-        ivBack.setOnClickListener(listener);
-    }
-
-    /**
-     * 设置确认点击事件
-     */
-    public void setOnConfirmClick(OnConfirmClickListener listener) {
-        this.mOnConfirmClickListener = listener;
+    public void setListener(OnClickListener onBackClick, OnClickListener onConfirmClick) {
+        mBinding.setOnBackClick(onBackClick);
+        mOnConfirmClickListener = onConfirmClick;
     }
 
     /**
      * 动画显示导航
      */
     public void show() {
-        if (viewStatusBar == null || getVisibility() == VISIBLE) {
+        if (getVisibility() == VISIBLE) {
             return;
         }
         setVisibility(VISIBLE);
@@ -108,7 +77,7 @@ public class PreviewNavigation extends RelativeLayout {
      * 动画隐藏导航
      */
     public void dismiss() {
-        if (viewStatusBar == null || getVisibility() == GONE) {
+        if (getVisibility() == GONE) {
             return;
         }
 

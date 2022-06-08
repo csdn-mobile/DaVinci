@@ -12,22 +12,18 @@ import java.util.List;
 public class PreviewPagerAdapter extends FragmentPagerAdapter {
 
     private List<String> mDatas;
-    private PreviewFragment.OnPhotoClickListener mListener;
 
-    public PreviewPagerAdapter(FragmentManager fm, List<String> datas, PreviewFragment.OnPhotoClickListener listener) {
+    public PreviewPagerAdapter(FragmentManager fm, List<String> datas) {
         super(fm);
         this.mDatas = datas;
         if (this.mDatas == null) {
             this.mDatas = new ArrayList<>();
         }
-        this.mListener = listener;
     }
 
     @Override
     public Fragment getItem(int position) {
-        PreviewFragment fragment = PreviewFragment.newInstance(mDatas.get(position));
-        fragment.setOnPhotoClickListener(mListener);
-        return fragment;
+        return PreviewFragment.newInstance(mDatas.get(position));
     }
 
     @Override

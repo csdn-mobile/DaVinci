@@ -5,44 +5,50 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
 import com.csdn.statusbar.StatusBar;
 import com.csdn.statusbar.annotation.FontMode;
 
+import net.csdn.davinci.BR;
+import net.csdn.davinci.BusEvent;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.photo.PhotoHandleManager;
 import net.csdn.davinci.core.photo.PhotoHandleManagerImpl;
+import net.csdn.davinci.databinding.ActivityPreviewBinding;
 import net.csdn.davinci.ui.adapter.PreviewPagerAdapter;
-import net.csdn.davinci.ui.adapter.PreviewSelectedAdapter;
 import net.csdn.davinci.ui.fragment.PreviewFragment;
-import net.csdn.davinci.ui.view.PreviewBottomBar;
-import net.csdn.davinci.ui.view.PreviewNavigation;
+import net.csdn.davinci.ui.viewmodel.PreviewViewModel;
 import net.csdn.davinci.utils.PermissionsUtils;
+import net.csdn.mvvm.bus.LiveDataBus;
+import net.csdn.mvvm.ui.activity.BaseBindingViewModelActivity;
 
-public class PreviewActivity extends AppCompatActivity {
+public class PreviewActivity extends BaseBindingViewModelActivity<ActivityPreviewBinding, PreviewViewModel> {
 
     public static final int RESULT_PREVIEW = 2048;
-
-    private ViewPager viewPager;
-    private PreviewNavigation navigation;
-    private PreviewBottomBar bottomBar;
-    private TextView tvPage;
 
     private PhotoHandleManager mHandleManager;
 
     @Override
+    public int getVariableId() {
+        return BR.viewmodel;
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_preview;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preview);
         overridePendingTransition(R.anim.davinci_fade_in, R.anim.davinci_fade_out);
 
         StatusBar.Builder()
@@ -54,19 +60,13 @@ public class PreviewActivity extends AppCompatActivity {
             finish();
             return;
         }
-
-        viewPager = findViewById(R.id.vp);
-        navigation = findViewById(R.id.navigation);
-        bottomBar = findViewById(R.id.bottom_bar);
-        tvPage = findViewById(R.id.tv_page);
-
-        tvPage.setVisibility(!Config.previewSelectable && Config.previewPhotos.size() > 1 ? View.VISIBLE : View.GONE);
         mHandleManager = new PhotoHandleManagerImpl(this);
 
         setPage();
         setListener();
         setAdapter();
     }
+
 
     @Override
     public void finish() {
@@ -108,58 +108,52 @@ public class PreviewActivity extends AppCompatActivity {
     }
 
     private void setListener() {
-        navigation.setOnBackClick(new View.OnClickListener() {
+        mBinding.navigation.setListener(v -> finish(), v -> {
+            Intent intent = new Intent();
+            intent.putStringArrayListExtra(DaVinci.KEY_SELECTED_PHOTOS, Config.selectedPhotos);
+            setResult(RESULT_OK, intent);
+            finish();
+        });
+
+        LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_SELECTED_CLICK, String.class).observe(this, new Observer<String>() {
             @Override
-            public void onClick(View v) {
-                finish();
+            public void onChanged(String path) {
+                mBinding.viewPager.setCurrentItem(Config.previewPhotos.indexOf(path), false);
             }
         });
 
-        navigation.setOnConfirmClick(new PreviewNavigation.OnConfirmClickListener() {
+        LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_CLICK).observe(this, new Observer<Object>() {
             @Override
-            public void onConfirmClick() {
-                Intent intent = new Intent();
-                intent.putStringArrayListExtra(DaVinci.KEY_SELECTED_PHOTOS, Config.selectedPhotos);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
-        bottomBar.setOnSelectedPhotoClickListener(new PreviewSelectedAdapter.OnSelectedPhotoClickListener() {
-            @Override
-            public void onClick(String path) {
-                viewPager.setCurrentItem(Config.previewPhotos.indexOf(path), false);
-            }
-        });
-    }
-
-    private void setAdapter() {
-        PreviewPagerAdapter adapter = new PreviewPagerAdapter(getSupportFragmentManager(), Config.previewPhotos, new PreviewFragment.OnPhotoClickListener() {
-            @Override
-            public void onSingleClick() {
+            public void onChanged(Object o) {
                 if (!Config.previewSelectable) {
                     finish();
                     return;
                 }
-                if (navigation.getVisibility() == View.VISIBLE) {
-                    navigation.dismiss();
-                    bottomBar.dismiss();
+                if (mBinding.navigation.getVisibility() == View.VISIBLE) {
+                    mBinding.navigation.dismiss();
+                    mBinding.bottomBar.dismiss();
                 } else {
-                    navigation.show();
-                    bottomBar.show();
+                    mBinding.navigation.show();
+                    mBinding.bottomBar.show();
                 }
             }
+        });
 
+        LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_LONG_CLICK, String.class).observe(this, new Observer<String>() {
             @Override
-            public void onLongClick(String url) {
+            public void onChanged(String url) {
                 if (!url.startsWith("http")) {
                     return;
                 }
                 mHandleManager.showLongClickDialog(url);
             }
         });
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    }
+
+    private void setAdapter() {
+        PreviewPagerAdapter adapter = new PreviewPagerAdapter(getSupportFragmentManager(), Config.previewPhotos);
+        mBinding.viewPager.setAdapter(adapter);
+        mBinding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -168,7 +162,7 @@ public class PreviewActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 Config.currentPath = Config.previewPhotos.get(position);
-                bottomBar.notifyDataSetChanged();
+                mBinding.bottomBar.notifyDataSetChanged();
                 setPage();
             }
 
@@ -178,14 +172,14 @@ public class PreviewActivity extends AppCompatActivity {
             }
         });
 
-        viewPager.setCurrentItem(Config.previewPhotos.indexOf(Config.currentPath), false);
+        mBinding.viewPager.setCurrentItem(Config.previewPhotos.indexOf(Config.currentPath), false);
     }
 
     private void setPage() {
-        if (Config.previewPhotos == null){
+        if (Config.previewPhotos == null) {
             return;
         }
-        tvPage.setText(getResources().getString(R.string.davinci_pager_page, Config.previewPhotos.indexOf(Config.currentPath) + 1, Config.previewPhotos.size()));
+        mBinding.tvPage.setText(getResources().getString(R.string.davinci_pager_page, Config.previewPhotos.indexOf(Config.currentPath) + 1, Config.previewPhotos.size()));
     }
 
 }
