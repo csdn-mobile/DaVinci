@@ -1,4 +1,4 @@
-package net.csdn.mvvm.databinding;
+package net.csdn.davinci.core.bindingadapter;
 
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;

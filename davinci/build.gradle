@@ -30,6 +30,7 @@ android {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$lib_appcompat"
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'io.github.csdn-mobile:RoundView:1.7.1'
