@@ -3,10 +3,10 @@ package net.csdn.davinci.ui.viewmodel;
 import android.view.View;
 
 import net.csdn.davinci.BusEvent;
-import net.csdn.mvvm.bus.LiveDataBus;
-import net.csdn.mvvm.viewmodel.BaseViewModel;
+import net.csdn.davinci.mvvm.bus.DavinciBus;
+import net.csdn.davinci.mvvm.viewmodel.DavinciViewModel;
 
-public class PreviewFragmentViewModel extends BaseViewModel {
+public class PreviewFragmentViewModel extends DavinciViewModel {
 
     private String mPath;
 
@@ -34,7 +34,7 @@ public class PreviewFragmentViewModel extends BaseViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_CLICK).setValue(null);
+                DavinciBus.getInstance().with(BusEvent.Preview.PREVIEW_CLICK).setValue(null);
             }
         };
     }
@@ -43,7 +43,7 @@ public class PreviewFragmentViewModel extends BaseViewModel {
         return new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_LONG_CLICK, String.class).setValue(mPath);
+                DavinciBus.getInstance().with(BusEvent.Preview.PREVIEW_LONG_CLICK, String.class).setValue(mPath);
                 return false;
             }
         };

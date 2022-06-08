@@ -1,4 +1,4 @@
-package net.csdn.mvvm.ui.fragment;
+package net.csdn.davinci.mvvm.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProvider;
 
-import net.csdn.mvvm.viewmodel.BaseViewModel;
+import net.csdn.davinci.mvvm.viewmodel.DavinciViewModel;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -21,7 +21,7 @@ import java.lang.reflect.Type;
  *
  * @author by KG on 2022/05/13
  */
-public abstract class BaseBindingViewModelFragment<DB extends ViewDataBinding, VM extends BaseViewModel> extends BaseFragment {
+public abstract class DavinciOriginFragment<DB extends ViewDataBinding, VM extends DavinciViewModel> extends BaseFragment {
 
     protected DB mBinding;
     protected VM mViewModel;

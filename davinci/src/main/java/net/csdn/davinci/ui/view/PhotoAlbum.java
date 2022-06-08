@@ -15,15 +15,15 @@ import net.csdn.davinci.core.entity.Album;
 import net.csdn.davinci.databinding.ItemAlbumBinding;
 import net.csdn.davinci.databinding.ViewPhotoAlbumBinding;
 import net.csdn.davinci.ui.viewmodel.AlbumItemViewModel;
-import net.csdn.mvvm.bus.LiveDataBus;
-import net.csdn.mvvm.ui.adapter.BindingViewModelAdapter;
+import net.csdn.davinci.mvvm.bus.DavinciBus;
+import net.csdn.davinci.mvvm.ui.adapter.DavinciOriginAdapter;
 
 import java.util.ArrayList;
 
 public class PhotoAlbum extends RelativeLayout {
 
     private ViewPhotoAlbumBinding mBinding;
-    private BindingViewModelAdapter<Album, ItemAlbumBinding> mAdapter;
+    private DavinciOriginAdapter<Album, ItemAlbumBinding> mAdapter;
 
     public PhotoAlbum(Context context) {
         this(context, null);
@@ -40,12 +40,12 @@ public class PhotoAlbum extends RelativeLayout {
 
     private void init(Context context) {
         mBinding = ViewPhotoAlbumBinding.inflate(LayoutInflater.from(context), this, true);
-        mAdapter = new BindingViewModelAdapter<>(R.layout.item_album, BR.viewmodel, AlbumItemViewModel.class, null);
+        mAdapter = new DavinciOriginAdapter<>(R.layout.item_album, BR.viewmodel, AlbumItemViewModel.class, null);
         mBinding.setAdapter(mAdapter);
         mBinding.setOnBlankClick(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                LiveDataBus.getInstance().with(BusEvent.Photo.ALBUM_BLANK_CLICK).setValue(null);
+                DavinciBus.getInstance().with(BusEvent.Photo.ALBUM_BLANK_CLICK).setValue(null);
             }
         });
     }

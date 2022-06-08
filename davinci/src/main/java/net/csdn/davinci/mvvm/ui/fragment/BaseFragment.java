@@ -1,9 +1,9 @@
-package net.csdn.mvvm.ui.fragment;
+package net.csdn.davinci.mvvm.ui.fragment;
 
 import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 
-public abstract class BaseFragment extends Fragment {
+abstract class BaseFragment extends Fragment {
 
     /**
      * 获取布局ID

@@ -1,9 +1,9 @@
 package net.csdn.davinci.ui.viewmodel;
 
 import net.csdn.davinci.Config;
-import net.csdn.mvvm.viewmodel.BaseViewModel;
+import net.csdn.davinci.mvvm.viewmodel.DavinciViewModel;
 
-public class PreviewViewModel extends BaseViewModel {
+public class PreviewViewModel extends DavinciViewModel {
     public PreviewViewModel() {
         super();
     }

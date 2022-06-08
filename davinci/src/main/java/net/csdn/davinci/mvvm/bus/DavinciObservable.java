@@ -1,10 +1,10 @@
-package net.csdn.mvvm.bus;
+package net.csdn.davinci.mvvm.bus;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
-public interface Observable<T> {
+public interface DavinciObservable<T> {
 
     void setValue(T value);
 

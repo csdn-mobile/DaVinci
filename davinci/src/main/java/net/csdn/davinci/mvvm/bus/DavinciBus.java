@@ -1,31 +1,31 @@
-package net.csdn.mvvm.bus;
+package net.csdn.davinci.mvvm.bus;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class LiveDataBus {
+public class DavinciBus {
     private final Map<String, BusMutableLiveData<Object>> bus;
 
-    private LiveDataBus() {
+    private DavinciBus() {
         bus = new HashMap<>();
     }
 
     private static class SingletonHolder {
-        private static final LiveDataBus INSTANCE = new LiveDataBus();
+        private static final DavinciBus INSTANCE = new DavinciBus();
     }
 
-    public static LiveDataBus getInstance() {
+    public static DavinciBus getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
-    public synchronized <T> Observable<T> with(String key, Class<T> type) {
+    public synchronized <T> DavinciObservable<T> with(String key, Class<T> type) {
         if (!bus.containsKey(key)) {
             bus.put(key, new BusMutableLiveData<>(key));
         }
-        return (Observable<T>) bus.get(key);
+        return (DavinciObservable<T>) bus.get(key);
     }
 
-    public synchronized Observable<Object> with(String key) {
+    public synchronized DavinciObservable<Object> with(String key) {
         return with(key, Object.class);
     }
 

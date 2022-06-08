@@ -1,16 +1,16 @@
-package net.csdn.mvvm.viewmodel;
+package net.csdn.davinci.mvvm.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
 /**
  * @author by KG on 2022/05/13
  */
-public abstract class BaseAdapterViewModel<T> extends ViewModel {
+public abstract class DavinciAdapterViewModel<T> extends ViewModel {
 
     public int mPosition;
     public T mData;
 
-    protected BaseAdapterViewModel(int position, T data) {
+    protected DavinciAdapterViewModel(int position, T data) {
         super();
         this.mPosition = position;
         this.mData = data;

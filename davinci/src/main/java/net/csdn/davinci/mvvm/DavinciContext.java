@@ -1,7 +1,7 @@
-package net.csdn.mvvm;
+package net.csdn.davinci.mvvm;
 
 import android.app.Application;
 
-public class AppContext {
+public class DavinciContext {
     public static Application application;
 }

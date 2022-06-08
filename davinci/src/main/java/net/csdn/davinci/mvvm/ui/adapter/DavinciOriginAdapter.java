@@ -1,9 +1,9 @@
-package net.csdn.mvvm.ui.adapter;
+package net.csdn.davinci.mvvm.ui.adapter;
 
 import androidx.annotation.LayoutRes;
 import androidx.databinding.ViewDataBinding;
 
-import net.csdn.mvvm.viewmodel.BaseAdapterViewModel;
+import net.csdn.davinci.mvvm.viewmodel.DavinciAdapterViewModel;
 
 import java.util.List;
 
@@ -15,29 +15,29 @@ import java.util.List;
  *
  * @author by KG on 2022/05/19
  */
-public class BindingViewModelAdapter<T, DB extends ViewDataBinding> extends BaseAdapter<T, DB> {
+public class DavinciOriginAdapter<T, DB extends ViewDataBinding> extends BaseAdapter<T, DB> {
 
-    private final Class<? extends BaseAdapterViewModel<T>> mVmClass;
+    private final Class<? extends DavinciAdapterViewModel<T>> mVmClass;
 
-    public BindingViewModelAdapter(@LayoutRes int layoutId, int variableId, Class<? extends BaseAdapterViewModel<T>> clazz) {
+    public DavinciOriginAdapter(@LayoutRes int layoutId, int variableId, Class<? extends DavinciAdapterViewModel<T>> clazz) {
         this(layoutId, variableId, clazz, null);
     }
 
-    public BindingViewModelAdapter(@LayoutRes int layoutId, int variableId, Class<? extends BaseAdapterViewModel<T>> clazz, List<T> datas) {
+    public DavinciOriginAdapter(@LayoutRes int layoutId, int variableId, Class<? extends DavinciAdapterViewModel<T>> clazz, List<T> datas) {
         super(layoutId, variableId, datas);
         this.mVmClass = clazz;
     }
 
     @Override
     public void onBind(int position, DB dataBinding, T data) {
-        BaseAdapterViewModel<T> instance = getViewModelInstance(position, data);
+        DavinciAdapterViewModel<T> instance = getViewModelInstance(position, data);
         if (instance != null) {
             dataBinding.setVariable(mVariableId, instance);
         }
     }
 
-    private BaseAdapterViewModel<T> getViewModelInstance(int position, T data) {
-        BaseAdapterViewModel<T> instance = null;
+    private DavinciAdapterViewModel<T> getViewModelInstance(int position, T data) {
+        DavinciAdapterViewModel<T> instance = null;
         if (mVmClass != null) {
             try {
                 instance = mVmClass.getDeclaredConstructor(int.class, data.getClass()).newInstance(position, data);

@@ -1,4 +1,4 @@
-package net.csdn.mvvm.ui.activity;
+package net.csdn.davinci.mvvm.ui.activity;
 
 import android.os.Bundle;
 
@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProvider;
 
-import net.csdn.mvvm.viewmodel.BaseViewModel;
+import net.csdn.davinci.mvvm.viewmodel.DavinciViewModel;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
  *
  * @author by KG on 2022/05/13
  */
-public abstract class BaseBindingViewModelActivity<DB extends ViewDataBinding, VM extends BaseViewModel> extends BaseActivity {
+public abstract class DavinciOriginActivity<DB extends ViewDataBinding, VM extends DavinciViewModel> extends BaseActivity {
 
     protected DB mBinding;
     protected VM mViewModel;

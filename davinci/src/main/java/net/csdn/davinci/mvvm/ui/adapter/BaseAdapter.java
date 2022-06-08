@@ -1,4 +1,4 @@
-package net.csdn.mvvm.ui.adapter;
+package net.csdn.davinci.mvvm.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author by KG on 2022/05/19
  */
-public abstract class BaseAdapter<T, DB extends ViewDataBinding> extends RecyclerView.Adapter<BaseAdapter.BindingHolder<DB>> implements AdapterMethod<T> {
+abstract class BaseAdapter<T, DB extends ViewDataBinding> extends RecyclerView.Adapter<BaseAdapter.BindingHolder<DB>> implements AdapterMethod<T> {
 
     protected final int mLayoutId;
     protected final int mVariableId;

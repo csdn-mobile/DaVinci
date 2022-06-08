@@ -1,8 +1,8 @@
-package net.csdn.mvvm.ui.adapter;
+package net.csdn.davinci.mvvm.ui.adapter;
 
 import java.util.List;
 
-public interface AdapterMethod<T> {
+interface AdapterMethod<T> {
 
     /**
      * 获取所有数据

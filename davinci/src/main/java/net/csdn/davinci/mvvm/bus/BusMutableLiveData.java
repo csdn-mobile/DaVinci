@@ -1,4 +1,4 @@
-package net.csdn.mvvm.bus;
+package net.csdn.davinci.mvvm.bus;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BusMutableLiveData<T> extends MutableLiveData<T> implements Observable<T> {
+class BusMutableLiveData<T> extends MutableLiveData<T> implements DavinciObservable<T> {
 
     private final String key;
     private final Map<Observer<? super T>, Observer<? super T>> observerMap = new HashMap<>();
@@ -73,7 +73,7 @@ public class BusMutableLiveData<T> extends MutableLiveData<T> implements Observa
         }
         super.removeObserver(realObserver);
         if (!hasObservers()) {
-            LiveDataBus.getInstance().getBus().remove(key);
+            DavinciBus.getInstance().getBus().remove(key);
         }
     }
 
