@@ -5,11 +5,11 @@ import android.view.View;
 import net.csdn.davinci.BusEvent;
 import net.csdn.davinci.core.entity.Album;
 import net.csdn.davinci.utils.DensityUtils;
-import net.csdn.davinci.mvvm.DavinciContext;
-import net.csdn.davinci.mvvm.bus.DavinciBus;
-import net.csdn.davinci.mvvm.viewmodel.DavinciAdapterViewModel;
+import net.csdn.mvvm_java.AppContext;
+import net.csdn.mvvm_java.bus.LiveDataBus;
+import net.csdn.mvvm_java.viewmodel.BaseAdapterViewModel;
 
-public class AlbumItemViewModel extends DavinciAdapterViewModel<Album> {
+public class AlbumItemViewModel extends BaseAdapterViewModel<Album> {
 
     protected AlbumItemViewModel(int position, Album data) {
         super(position, data);
@@ -20,14 +20,14 @@ public class AlbumItemViewModel extends DavinciAdapterViewModel<Album> {
     }
 
     public int getImageResize() {
-        return DensityUtils.dp2px(DavinciContext.application, 40);
+        return DensityUtils.dp2px(AppContext.application, 40);
     }
 
     public View.OnClickListener onClick() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DavinciBus.getInstance().with(BusEvent.Photo.ALBUM_SELECT, Album.class).setValue(mData);
+                LiveDataBus.getInstance().with(BusEvent.Photo.ALBUM_SELECT, Album.class).setValue(mData);
             }
         };
     }

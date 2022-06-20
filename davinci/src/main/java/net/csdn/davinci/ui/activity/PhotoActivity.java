@@ -9,8 +9,8 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 
-import com.csdn.statusbar.StatusBar;
-import com.csdn.statusbar.annotation.FontMode;
+import net.csdn.statusbar.StatusBar;
+import net.csdn.statusbar.annotation.FontMode;
 
 import net.csdn.davinci.BR;
 import net.csdn.davinci.BusEvent;
@@ -24,13 +24,13 @@ import net.csdn.davinci.databinding.ActivityPhotoBinding;
 import net.csdn.davinci.ui.adapter.PhotoAdapter;
 import net.csdn.davinci.ui.viewmodel.PhotoViewModel;
 import net.csdn.davinci.utils.PermissionsUtils;
-import net.csdn.davinci.mvvm.bus.DavinciBus;
-import net.csdn.davinci.mvvm.ui.activity.DavinciOriginActivity;
+import net.csdn.mvvm_java.bus.LiveDataBus;
+import net.csdn.mvvm_java.ui.activity.BaseBindingViewModelActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class PhotoActivity extends DavinciOriginActivity<ActivityPhotoBinding, PhotoViewModel> {
+public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBinding, PhotoViewModel> {
 
     private PhotoAdapter mAdapter;
 
@@ -149,7 +149,7 @@ public class PhotoActivity extends DavinciOriginActivity<ActivityPhotoBinding, P
 
     private void registerBus() {
         // 相簿选择
-        DavinciBus.getInstance().with(BusEvent.Photo.ALBUM_SELECT, Album.class).observe(this, new Observer<Album>() {
+        LiveDataBus.getInstance().with(BusEvent.Photo.ALBUM_SELECT, Album.class).observe(this, new Observer<Album>() {
             @Override
             public void onChanged(Album album) {
                 selectAlbum(album);
@@ -157,7 +157,7 @@ public class PhotoActivity extends DavinciOriginActivity<ActivityPhotoBinding, P
             }
         });
         // 相簿空白位置点击关闭
-        DavinciBus.getInstance().with(BusEvent.Photo.ALBUM_BLANK_CLICK).observe(this, new Observer<Object>() {
+        LiveDataBus.getInstance().with(BusEvent.Photo.ALBUM_BLANK_CLICK).observe(this, new Observer<Object>() {
             @Override
             public void onChanged(Object o) {
                 closeAlbum();

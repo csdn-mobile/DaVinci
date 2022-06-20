@@ -21,11 +21,11 @@ import net.csdn.davinci.core.engine.PhotoViewTarget;
 import net.csdn.davinci.databinding.FragmentPreviewBinding;
 import net.csdn.davinci.ui.viewmodel.PreviewFragmentViewModel;
 import net.csdn.davinci.utils.PhotoUtils;
-import net.csdn.davinci.mvvm.ui.fragment.DavinciOriginFragment;
+import net.csdn.mvvm_java.ui.fragment.BaseBindingViewModelFragment;
 
 import java.io.File;
 
-public class PreviewFragment extends DavinciOriginFragment<FragmentPreviewBinding, PreviewFragmentViewModel> {
+public class PreviewFragment extends BaseBindingViewModelFragment<FragmentPreviewBinding, PreviewFragmentViewModel> {
 
     private static final String ARGS_ITEM = "args_item";
 

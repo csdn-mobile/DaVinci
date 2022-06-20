@@ -8,13 +8,13 @@ import net.csdn.davinci.BR;
 import net.csdn.davinci.BusEvent;
 import net.csdn.davinci.R;
 import net.csdn.davinci.databinding.ItemPreviewSelectedBinding;
+import net.csdn.mvvm_java.ui.adapter.BindingViewModelAdapter;
 import net.csdn.davinci.ui.viewmodel.PreviewSelectedItemViewModel;
-import net.csdn.davinci.mvvm.bus.DavinciBus;
-import net.csdn.davinci.mvvm.ui.adapter.DavinciOriginAdapter;
+import net.csdn.mvvm_java.bus.LiveDataBus;
 
 import java.util.List;
 
-public class PreviewSelectedAdapter extends DavinciOriginAdapter<String, ItemPreviewSelectedBinding> {
+public class PreviewSelectedAdapter extends BindingViewModelAdapter<String, ItemPreviewSelectedBinding> {
 
     private int mSelectedPosition = 0;
 
@@ -31,7 +31,7 @@ public class PreviewSelectedAdapter extends DavinciOriginAdapter<String, ItemPre
             @Override
             public void onClick(View v) {
                 setSelectedItem(null, position);
-                DavinciBus.getInstance().with(BusEvent.Preview.PREVIEW_SELECTED_CLICK, String.class).setValue(data);
+                LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_SELECTED_CLICK, String.class).setValue(data);
                 notifyDataSetChanged();
             }
         });

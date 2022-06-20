@@ -8,7 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
-import com.csdn.statusbar.StatusBar;
+import net.csdn.statusbar.StatusBar;
 
 import net.csdn.davinci.Config;
 import net.csdn.davinci.databinding.ViewPreviewNavigationBinding;

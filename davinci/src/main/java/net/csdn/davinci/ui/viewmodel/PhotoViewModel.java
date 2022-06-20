@@ -8,11 +8,11 @@ import androidx.lifecycle.MutableLiveData;
 import net.csdn.davinci.core.album.AlbumHelper;
 import net.csdn.davinci.core.album.AlbumResultCallback;
 import net.csdn.davinci.core.entity.Album;
-import net.csdn.davinci.mvvm.viewmodel.DavinciViewModel;
+import net.csdn.mvvm_java.viewmodel.BaseViewModel;
 
 import java.util.ArrayList;
 
-public class PhotoViewModel extends DavinciViewModel {
+public class PhotoViewModel extends BaseViewModel {
 
     /**
      * 相册数据源

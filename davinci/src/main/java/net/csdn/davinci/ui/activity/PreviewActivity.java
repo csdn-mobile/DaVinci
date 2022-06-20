@@ -12,8 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
-import com.csdn.statusbar.StatusBar;
-import com.csdn.statusbar.annotation.FontMode;
+import net.csdn.statusbar.StatusBar;
+import net.csdn.statusbar.annotation.FontMode;
 
 import net.csdn.davinci.BR;
 import net.csdn.davinci.BusEvent;
@@ -26,10 +26,10 @@ import net.csdn.davinci.databinding.ActivityPreviewBinding;
 import net.csdn.davinci.ui.adapter.PreviewPagerAdapter;
 import net.csdn.davinci.ui.viewmodel.PreviewViewModel;
 import net.csdn.davinci.utils.PermissionsUtils;
-import net.csdn.davinci.mvvm.bus.DavinciBus;
-import net.csdn.davinci.mvvm.ui.activity.DavinciOriginActivity;
+import net.csdn.mvvm_java.bus.LiveDataBus;
+import net.csdn.mvvm_java.ui.activity.BaseBindingViewModelActivity;
 
-public class PreviewActivity extends DavinciOriginActivity<ActivityPreviewBinding, PreviewViewModel> {
+public class PreviewActivity extends BaseBindingViewModelActivity<ActivityPreviewBinding, PreviewViewModel> {
 
     public static final int RESULT_PREVIEW = 2048;
 
@@ -114,14 +114,14 @@ public class PreviewActivity extends DavinciOriginActivity<ActivityPreviewBindin
             finish();
         });
 
-        DavinciBus.getInstance().with(BusEvent.Preview.PREVIEW_SELECTED_CLICK, String.class).observe(this, new Observer<String>() {
+        LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_SELECTED_CLICK, String.class).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String path) {
                 mBinding.viewPager.setCurrentItem(Config.previewPhotos.indexOf(path), false);
             }
         });
 
-        DavinciBus.getInstance().with(BusEvent.Preview.PREVIEW_CLICK).observe(this, new Observer<Object>() {
+        LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_CLICK).observe(this, new Observer<Object>() {
             @Override
             public void onChanged(Object o) {
                 if (!Config.previewSelectable) {
@@ -138,7 +138,7 @@ public class PreviewActivity extends DavinciOriginActivity<ActivityPreviewBindin
             }
         });
 
-        DavinciBus.getInstance().with(BusEvent.Preview.PREVIEW_LONG_CLICK, String.class).observe(this, new Observer<String>() {
+        LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_LONG_CLICK, String.class).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String url) {
                 if (!url.startsWith("http")) {
