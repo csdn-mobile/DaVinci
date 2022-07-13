@@ -79,6 +79,7 @@ DaVinci.preview()
 ### 版本记录
 |版本号|更新内容|
 |---|---|
+|0.10.0|Update targetSdk 29|
 |0.9.4|MVVM + Jetpack|
 |0.7.2|Add permission request Dialog|
 |0.5.0|Optimize preview long pictures|
