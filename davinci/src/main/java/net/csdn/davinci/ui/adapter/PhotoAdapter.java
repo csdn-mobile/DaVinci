@@ -112,12 +112,13 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else {
             photo = mDatas.get(position);
         }
-        Config.imageEngine.loadThumbnail(mContext, mImageWidth, R.color.davinci_place_holder, holder.ivPhoto, photo.imgPath);
+        String uriPath = photo.uri.toString();
+        Config.imageEngine.loadThumbnail(mContext, mImageWidth, R.color.davinci_place_holder, holder.ivPhoto, uriPath);
 
         // 图片选中状态
-        boolean isSelected = Config.selectedPhotos.contains(photo.imgPath);
+        boolean isSelected = Config.selectedPhotos.contains(uriPath);
         holder.rlSelected.setSelected(isSelected);
-        holder.tvSelected.setText(isSelected ? Config.selectedPhotos.indexOf(photo.imgPath) + 1 + "" : "");
+        holder.tvSelected.setText(isSelected ? Config.selectedPhotos.indexOf(uriPath) + 1 + "" : "");
         holder.viewShadow.setVisibility(Config.selectedPhotos.size() >= Config.maxSelectable && !isSelected ? View.VISIBLE : View.GONE);
 
         holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +126,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             public void onClick(View view) {
                 DaVinci.preview(false)
                         .previewSelectable(true)
-                        .start((Activity) mContext, photo.imgPath);
+                        .start((Activity) mContext, uriPath);
             }
         });
         holder.rlSelected.setOnClickListener(new View.OnClickListener() {
@@ -137,15 +138,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 view.setSelected(!view.isSelected());
                 if (view.isSelected()) {
                     // 选中图片
-                    Config.selectedPhotos.add(photo.imgPath);
+                    Config.selectedPhotos.add(uriPath);
                     if (Config.selectedPhotos.size() < Config.maxSelectable) {
-                        holder.tvSelected.setText(view.isSelected() ? Config.selectedPhotos.indexOf(photo.imgPath) + 1 + "" : "");
+                        holder.tvSelected.setText(view.isSelected() ? Config.selectedPhotos.indexOf(uriPath) + 1 + "" : "");
                     } else {
                         notifyDataSetChanged();
                     }
                 } else {
                     // 取消选中
-                    Config.selectedPhotos.remove(photo.imgPath);
+                    Config.selectedPhotos.remove(uriPath);
                     notifyDataSetChanged();
                 }
                 if (mListener != null) {

@@ -2,15 +2,13 @@ package net.csdn.davinci.ui.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
-
-import net.csdn.statusbar.StatusBar;
-import net.csdn.statusbar.annotation.FontMode;
 
 import net.csdn.davinci.BR;
 import net.csdn.davinci.BusEvent;
@@ -26,6 +24,8 @@ import net.csdn.davinci.ui.viewmodel.PhotoViewModel;
 import net.csdn.davinci.utils.PermissionsUtils;
 import net.csdn.mvvm_java.bus.LiveDataBus;
 import net.csdn.mvvm_java.ui.activity.BaseBindingViewModelActivity;
+import net.csdn.statusbar.StatusBar;
+import net.csdn.statusbar.annotation.FontMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -94,11 +94,11 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         switch (requestCode) {
             case PhotoCaptureManager.REQUEST_TAKE_PHOTO: {
                 PhotoCaptureManager.getInstance(getApplication()).galleryAddPic();
-
-                String path = PhotoCaptureManager.getInstance(getApplication()).getCurrentPhotoPath();
-                Config.selectedPhotos.add(path);
+                Uri uri = PhotoCaptureManager.getInstance(getApplication()).getCurrentPhotoUri();
+                Config.selectedPhotos.add(uri.toString());
+                Config.previewPhotos.add(uri.toString());
                 changeConfirmStatus();
-                mAdapter.getDatas().add(0, new Photo(path));
+                mAdapter.getDatas().add(0, new Photo(uri));
                 mAdapter.notifyDataSetChanged();
             }
             break;
@@ -173,8 +173,9 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         mAdapter.setDatas(album.photoList);
 
         ArrayList<String> list = new ArrayList<>();
+        //uri
         for (Photo photo : album.photoList) {
-            list.add(photo.imgPath);
+            list.add(photo.uri.toString());
         }
         Config.previewPhotos = list;
     }

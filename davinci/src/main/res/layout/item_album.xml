@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            davinci_thumbnail_path="@{viewmodel.mData.coverPath}"
+            davinci_thumbnail_path="@{null!=viewmodel.mData.uri ? viewmodel.mData.uri.toString():``}"
             davinci_thumbnail_place="@{@color/davinci_place_holder}"
             davinci_thumbnail_resize="@{viewmodel.imageResize}"
             android:layout_width="40dp"

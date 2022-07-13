@@ -12,12 +12,12 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 public interface ImageEngine {
 
     /**
-     * 读取缩略图（资源ID）
+     * 读取缩略图（资源uri）
      */
-    void loadThumbnail(Context context, int resize, int placeResource, ImageView imageView, String path);
+    void loadThumbnail(Context context, int resize, int placeResource, ImageView imageView, String uriPath);
 
     /**
-     * 读取缩略图（Drawable）
+     * 读取缩略图（path）
      */
     void loadThumbnail(Context context, int resize, Drawable placeDrawable, ImageView imageView, String path);
 

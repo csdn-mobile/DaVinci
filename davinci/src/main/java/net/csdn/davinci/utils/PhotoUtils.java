@@ -7,10 +7,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +31,7 @@ public final class PhotoUtils {
         return size.x * size.y;
     }
 
-    public static Point getOriginSize(String path, Activity activity){
+    public static Point getOriginSize(String path, Activity activity) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
@@ -106,7 +109,13 @@ public final class PhotoUtils {
     private static boolean shouldRotate(ContentResolver resolver, Uri uri) {
         ExifInterface exif;
         try {
-            exif = ExifInterfaceCompat.newInstance(getPath(resolver, uri));
+            ParcelFileDescriptor parcelFileDescriptor = resolver.openFileDescriptor(uri, "r");
+            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                exif = new ExifInterface(fileDescriptor);
+            } else {
+                exif = ExifInterfaceCompat.newInstance(getPath(resolver, uri));
+            }
         } catch (IOException e) {
             Log.e(TAG, "could not read exif info of the image: " + uri);
             return false;

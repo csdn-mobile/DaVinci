@@ -23,8 +23,6 @@ import net.csdn.davinci.ui.viewmodel.PreviewFragmentViewModel;
 import net.csdn.davinci.utils.PhotoUtils;
 import net.csdn.mvvm_java.ui.fragment.BaseBindingViewModelFragment;
 
-import java.io.File;
-
 public class PreviewFragment extends BaseBindingViewModelFragment<FragmentPreviewBinding, PreviewFragmentViewModel> {
 
     private static final String ARGS_ITEM = "args_item";
@@ -94,7 +92,7 @@ public class PreviewFragment extends BaseBindingViewModelFragment<FragmentPrevie
             mBinding.progressBar.setVisibility(View.GONE);
             Point originSize = PhotoUtils.getOriginSize(mViewModel.getPath(), getActivity());
             if (!mViewModel.isLongerImage(originSize.x, originSize.y)) {
-                Point size = PhotoUtils.getBitmapSize(Uri.fromFile(new File(mViewModel.getPath())), getActivity());
+                Point size = PhotoUtils.getBitmapSize(Uri.parse(mViewModel.getPath()), getActivity());
                 mBinding.iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 Config.imageEngine.loadLocalImage(getContext(), size.x, size.y, mBinding.iv, mViewModel.getPath());
             } else {

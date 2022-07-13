@@ -2,6 +2,7 @@ package net.csdn.davinci.core.engine;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -22,7 +23,7 @@ public class GlideEngine implements ImageEngine {
     @Override
     public void loadThumbnail(Context context, int resize, int placeResource, ImageView imageView, String path) {
         Glide.with(context)
-                .load(path)
+                .load(Uri.parse(path))
                 .apply(new RequestOptions()
                         .override(resize, resize)
                         .placeholder(placeResource)
@@ -30,27 +31,31 @@ public class GlideEngine implements ImageEngine {
                 .into(imageView);
     }
 
+
     /**
      * 读取缩略图（Drawable）
      */
     @Override
     public void loadThumbnail(Context context, int resize, Drawable placeDrawable, ImageView imageView, String path) {
         Glide.with(context)
-                .load(path)
+                .load(Uri.parse(path))
                 .apply(new RequestOptions()
                         .override(resize, resize)
                         .placeholder(placeDrawable)
                         .centerCrop())
                 .into(imageView);
+
+
     }
+
 
     /**
      * 读取本地图片
      */
     @Override
-    public void loadLocalImage(Context context, int resizeX, int resizeY, ImageView imageView, String path) {
+    public void loadLocalImage(Context context, int resizeX, int resizeY, ImageView imageView, String uriPath) {
         Glide.with(context)
-                .load(path)
+                .load(Uri.parse(uriPath))
                 .apply(new RequestOptions()
                         .override(resizeX, resizeY)
                         .priority(Priority.HIGH))
