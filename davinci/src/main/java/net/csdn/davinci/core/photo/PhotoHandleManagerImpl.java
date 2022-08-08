@@ -1,12 +1,11 @@
 package net.csdn.davinci.core.photo;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static com.bumptech.glide.request.target.Target.SIZE_ORIGINAL;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,6 +13,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -24,18 +24,20 @@ import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.target.Target;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.SavePath;
 import net.csdn.davinci.ui.dialog.PermissionsDialog;
-import net.csdn.davinci.utils.FileUtils;
 import net.csdn.davinci.utils.PermissionsUtils;
 import net.csdn.davinci.utils.SystemUtils;
 import net.csdn.davinci.utils.UrlUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 
 public class PhotoHandleManagerImpl implements PhotoHandleManager {
@@ -222,7 +224,7 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
         new DownloadAsyncTask(mActivity, downloadUrl).execute();
     }
 
-    private static class DownloadAsyncTask extends AsyncTask<Void, Integer, File> {
+    private static class DownloadAsyncTask extends AsyncTask<Void, Integer, Uri> {
 
         private final String mUrl;
         private WeakReference<Activity> mActivity;
@@ -233,40 +235,27 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
         }
 
         @Override
-        protected File doInBackground(Void... params) {
-            File file = null;
+        protected Uri doInBackground(Void... params) {
+            Uri uri = null;
             try {
                 Activity activity = mActivity.get();
                 if (activity == null) {
                     return null;
                 }
-
-                FutureTarget<File> future = Glide
-                        .with(activity)
+                Bitmap bitmap = Glide.with(activity)
+                        .asBitmap()
                         .load(mUrl)
-                        .downloadOnly(SIZE_ORIGINAL, SIZE_ORIGINAL);
-
-                file = future.get();
-                // 首先保存图片
-                File pictureFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsoluteFile();
-                File appDir = new File(pictureFolder, Config.saveFolderName);
-                if (!appDir.exists()) {
-                    appDir.mkdirs();
-                }
+                        .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                        .get();
                 String fileName = Config.saveFolderName + "_" + System.currentTimeMillis() + (mUrl.endsWith(".gif") || mUrl.endsWith("=gif") ? ".gif" : ".jpg");
-                File destFile = new File(appDir, fileName);
-                FileUtils.copy(file, destFile);
-                // 最后通知图库更新
-                activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                        Uri.fromFile(new File(destFile.getPath()))));
+                uri = saveBitmap(activity, bitmap, fileName);
             } catch (Exception e) {
                 Log.e("SAVE_PICTURE", e.getMessage());
             }
-            return file;
+            return uri;
         }
-
         @Override
-        protected void onPostExecute(File file) {
+        protected void onPostExecute(Uri file) {
             Activity activity = mActivity.get();
             if (activity == null) {
                 return;
@@ -275,6 +264,33 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
                 Toast.makeText(activity, activity.getResources().getString(R.string.davinci_save_fail), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(activity, activity.getResources().getString(R.string.davinci_save_success), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        public static Uri saveBitmap(Activity activity, Bitmap bm, String displayName) {
+            try {
+                displayName = displayName + ".jpg";
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
+                values.put(MediaStore.MediaColumns.TITLE, displayName);
+                values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    values.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/Camera");
+                } else {
+                    values.put(MediaStore.MediaColumns.DATA, Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Environment.DIRECTORY_DCIM + "/" + displayName);
+                }
+                Uri uri = activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                if (uri != null) {
+                    OutputStream outputStream = activity.getContentResolver().openOutputStream(uri);
+                    if (outputStream != null) {
+                        bm.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+                        outputStream.close();
+                    }
+                }
+                return uri;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
             }
         }
     }

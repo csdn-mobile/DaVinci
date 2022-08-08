@@ -37,13 +37,15 @@ public class GlideEngine implements ImageEngine {
      */
     @Override
     public void loadThumbnail(Context context, int resize, Drawable placeDrawable, ImageView imageView, String path) {
-        Glide.with(context)
-                .load(Uri.parse(path))
-                .apply(new RequestOptions()
-                        .override(resize, resize)
-                        .placeholder(placeDrawable)
-                        .centerCrop())
-                .into(imageView);
+        if (null != path) {
+            Glide.with(context)
+                    .load(Uri.parse(path))
+                    .apply(new RequestOptions()
+                            .override(resize, resize)
+                            .placeholder(placeDrawable)
+                            .centerCrop())
+                    .into(imageView);
+        }
 
 
     }

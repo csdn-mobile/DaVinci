@@ -132,6 +132,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
             public void onChanged(ArrayList<Album> albums) {
                 mBinding.album.setData(albums);
                 selectAlbum(albums.get(0));
+
             }
         });
     }

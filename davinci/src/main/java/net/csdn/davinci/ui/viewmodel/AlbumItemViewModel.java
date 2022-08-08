@@ -11,7 +11,7 @@ import net.csdn.mvvm_java.viewmodel.BaseAdapterViewModel;
 
 public class AlbumItemViewModel extends BaseAdapterViewModel<Album> {
 
-    protected AlbumItemViewModel(int position, Album data) {
+    public AlbumItemViewModel(int position, Album data) {
         super(position, data);
     }
 
