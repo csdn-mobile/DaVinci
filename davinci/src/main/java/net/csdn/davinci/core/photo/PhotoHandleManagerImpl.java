@@ -254,6 +254,7 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
             }
             return uri;
         }
+
         @Override
         protected void onPostExecute(Uri file) {
             Activity activity = mActivity.get();
@@ -269,7 +270,6 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
 
         public static Uri saveBitmap(Activity activity, Bitmap bm, String displayName) {
             try {
-                displayName = displayName + ".jpg";
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
                 values.put(MediaStore.MediaColumns.TITLE, displayName);
