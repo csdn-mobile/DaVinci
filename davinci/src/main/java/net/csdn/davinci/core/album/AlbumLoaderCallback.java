@@ -54,10 +54,11 @@ public class AlbumLoaderCallback implements LoaderManager.LoaderCallbacks<Cursor
         albumAll.name = mContext.getString(R.string.davinci_all_image);
         // 添加所有照片到头部
         albums.put(DIR_ALL_ID, albumAll);
-        Uri external = MediaStore.Files.getContentUri("external");
         while (data.moveToNext()) {
             int imageId = data.getInt(data.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
-            Uri uri = ContentUris.withAppendedId(external, imageId);
+//            Uri uri = ContentUris.withAppendedId(external, imageId);
+            Uri uri = ContentUris.withAppendedId(
+                    MediaStore.Images.Media.getContentUri("external"), imageId);
             String imagePath = data.getString(data.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
             String albumId = data.getString(data.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_ID));
             String albumName = data.getString(data.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));

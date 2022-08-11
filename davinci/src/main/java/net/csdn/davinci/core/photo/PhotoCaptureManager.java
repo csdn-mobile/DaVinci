@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import androidx.core.content.FileProvider;
 
@@ -45,26 +44,45 @@ public class PhotoCaptureManager {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + ".jpg";
-        File storageDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File dir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-        if (!storageDir.exists()) {
-            if (!storageDir.mkdir()) {
-                Log.e("TAG", "Throwing Errors....");
-                throw new IOException();
+        if (null == dir) {
+            dir = new File(Environment.getExternalStorageDirectory(),
+                    File.separator + "DCIM" + File.separator + "Camera" + File.separator);
+        }
+        if (!dir.isDirectory()) {
+            if (!dir.mkdirs()) {
+                dir = InstanceHolder.instance.mContext.getExternalFilesDir(null);
+                if (null == dir || !dir.exists()) {
+                    dir = InstanceHolder.instance.mContext.getFilesDir();
+                    if (null == dir || !dir.exists()) {
+                        dir = InstanceHolder.instance.mContext.getFilesDir();
+                        if (null == dir || !dir.exists()) {
+                            String cacheDirPath =
+                                    File.separator + "data" + File.separator + "data" + File.separator + InstanceHolder.instance.mContext.getPackageName() + File.separator + "cache" + File.separator;
+                            dir = new File(cacheDirPath);
+                            if (!dir.exists()) {
+                                dir.mkdirs();
+                            }
+                        }
+                    }
+                }
             }
         }
-        File image = new File(storageDir, imageFileName);
+        File image = new File(dir, imageFileName);
         return image;
     }
 
     private Uri createImageUri() {
-        String status = Environment.getExternalStorageState();
-        // 判断是否有SD卡,优先使用SD卡存储,当没有SD卡时使用手机存储
-        if (status.equals(Environment.MEDIA_MOUNTED)) {
-            return mContext.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
-        } else {
-            return mContext.getContentResolver().insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, new ContentValues());
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME,
+                String.valueOf(System.currentTimeMillis()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures");
         }
+        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/JPEG");
+        return InstanceHolder.instance.mContext.getContentResolver().insert(MediaStore.Images.Media.getContentUri("external"),
+                contentValues);
     }
 
     public Intent dispatchTakePictureIntent() throws IOException {
@@ -74,20 +92,25 @@ public class PhotoCaptureManager {
             // Create the File where the photo should go
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 mCurrentPhotoUri = createImageUri();
-            } else {
-                File file = createImageFile();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    String authority = mContext.getApplicationInfo().packageName + ".provider";
-                    mCurrentPhotoUri = FileProvider.getUriForFile(this.mContext.getApplicationContext(), authority, file);
-                } else {
-                    mCurrentPhotoUri = Uri.fromFile(file);
-                }
-
-            }
-            if (mCurrentPhotoUri != null) {
-                takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
+                takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                return takePictureIntent;
             }
+            File file = createImageFile();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                String authority = mContext.getApplicationInfo().packageName + ".provider";
+                mCurrentPhotoUri = FileProvider.getUriForFile(this.mContext.getApplicationContext(), authority, file);
+            } else {
+                mCurrentPhotoUri = Uri.fromFile(file);
+            }
+
+        }
+        if (mCurrentPhotoUri != null) {
+            takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
+            takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
         }
         return takePictureIntent;
     }
