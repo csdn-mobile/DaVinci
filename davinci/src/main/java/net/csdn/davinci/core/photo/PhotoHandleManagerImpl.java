@@ -242,13 +242,30 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
                 if (activity == null) {
                     return null;
                 }
+                // 获取文件类型
+                String ext = "jpg";
+                try {
+                    Uri parseUri = Uri.parse(mUrl);
+                    if (parseUri != null) {
+                        String fileName = parseUri.getLastPathSegment();
+                        if (!TextUtils.isEmpty(fileName)) {
+                            if (fileName.endsWith("png")) {
+                                ext = "png";
+                            }
+//                            else if (fileName.endsWith(".gif") || mUrl.endsWith("=gif")) {
+//                                ext = "gif";
+//                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 Bitmap bitmap = Glide.with(activity)
                         .asBitmap()
                         .load(mUrl)
                         .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                         .get();
-                String fileName = Config.saveFolderName + "_" + System.currentTimeMillis() + (mUrl.endsWith(".gif") || mUrl.endsWith("=gif") ? ".gif" : ".jpg");
-                uri = saveBitmap(activity, bitmap, fileName);
+                uri = saveBitmap(activity, bitmap, Config.saveFolderName + "_" + System.currentTimeMillis(), ext);
             } catch (Exception e) {
                 Log.e("SAVE_PICTURE", e.getMessage());
             }
@@ -268,12 +285,13 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
             }
         }
 
-        public static Uri saveBitmap(Activity activity, Bitmap bm, String displayName) {
+        public static Uri saveBitmap(Activity activity, Bitmap bm, String displayName, String ext) {
             try {
+                displayName = displayName + "." + ext;
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
                 values.put(MediaStore.MediaColumns.TITLE, displayName);
-                values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+                values.put(MediaStore.MediaColumns.MIME_TYPE, "png".equals(ext) ? "image/png" : "image/jpeg");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     values.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/Camera");
                 } else {
@@ -283,13 +301,13 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
                 if (uri != null) {
                     OutputStream outputStream = activity.getContentResolver().openOutputStream(uri);
                     if (outputStream != null) {
-                        bm.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+                        bm.compress("png".equals(ext) ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG, 100, outputStream);
                         outputStream.close();
                     }
                 }
                 return uri;
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException var6) {
+                var6.printStackTrace();
                 return null;
             }
         }
