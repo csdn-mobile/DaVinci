@@ -13,4 +13,24 @@
         <!--是否模糊-->
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+    <style name="AppTheme.Day" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="davinciBackgroundColor">@color/davinci_background</item>
+        <item name="davinciTextColor">@color/davinci_background_night</item>
+        <item name="davinciCamera">@drawable/davinci_camera</item>
+        <item name="davinciCameraBg">@color/davinci_camera_bg</item>
+        <item name="davinciCameraText">@color/davinci_camera_text</item>
+        <item name="davinciSelectTypeTextColor">@color/color_select_type_selector</item>
+    </style>
+
+    <style name="AppTheme.Night" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="davinciBackgroundColor">@color/davinci_background_night</item>
+        <item name="davinciTextColor">@color/davinci_text_night</item>
+        <item name="davinciCamera">@drawable/davinci_camera_night</item>
+        <item name="davinciCameraBg">@color/davinci_camera_bg_night</item>
+        <item name="davinciCameraText">@color/davinci_camera_text_night</item>
+        <item name="davinciSelectTypeTextColor">@color/color_select_type_night_selector</item>
+    </style>
+
+
 </resources>

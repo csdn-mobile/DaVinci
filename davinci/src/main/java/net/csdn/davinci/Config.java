@@ -18,6 +18,10 @@ public class Config {
      */
     public static int column;
     /**
+     * 选择类型（照片、照片+视频、视频）
+     */
+    public static int selectType;
+    /**
      * 是否显示GIF
      */
     public static boolean showGif;
@@ -29,6 +33,10 @@ public class Config {
      * 是否预览可选择
      */
     public static boolean previewSelectable;
+    /**
+     * 是否日间模式
+     */
+    public static boolean isDayStyle;
     /**
      * 图片加载引擎
      */
@@ -71,6 +79,8 @@ public class Config {
         showGif = false;
         showCamera = true;
         previewSelectable = false;
+        selectType = DaVinci.SELECT_IMAGE;
+        isDayStyle = true;
         selectedPhotos = new ArrayList<>();
         previewPhotos = new ArrayList<>();
         currentPath = "";

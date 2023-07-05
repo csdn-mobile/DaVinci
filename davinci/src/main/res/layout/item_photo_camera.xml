@@ -2,15 +2,31 @@
 <net.csdn.davinci.ui.view.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingEnd="1dp"
-    android:paddingBottom="1dp">
+    android:layout_marginEnd="1dp"
+    android:layout_marginBottom="1dp"
+    android:background="?davinciCameraBg">
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/davinci_camera" />
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="?davinciCamera" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拍摄"
+            android:textColor="?davinciTextColor"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
 
     <View
         android:id="@+id/view_shadow"

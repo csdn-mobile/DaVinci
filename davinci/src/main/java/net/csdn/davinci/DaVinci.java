@@ -3,7 +3,6 @@ package net.csdn.davinci;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import net.csdn.davinci.ui.activity.PhotoActivity;
 import net.csdn.davinci.ui.activity.PreviewActivity;
@@ -14,6 +13,10 @@ import java.util.ArrayList;
 public class DaVinci {
 
     public final static String KEY_SELECTED_PHOTOS = "SELECTED_PHOTOS";
+
+    public final static int SELECT_IMAGE = 1000;
+    public final static int SELECT_VIDEO = 1001;
+    public final static int SELECT_IMAGE_VIDEO = 1002;
 
     private DaVinci() {
     }
@@ -80,6 +83,25 @@ public class DaVinci {
          */
         public DaVinciSelectBuilder showCamera(boolean showCamera) {
             Config.showCamera = showCamera;
+            return this;
+        }
+
+        /**
+         * 选择类型（照片、照片+视频、视频）
+         * Davinci.SELECT_IMAGE
+         * Davinci.SELECT_VIDEO
+         * Davinci.SELECT_IMAGE_VIDEO
+         */
+        public DaVinciSelectBuilder selectType(int selectType) {
+            Config.selectType = selectType;
+            return this;
+        }
+
+        /**
+         * 是否日间/夜间模式
+         */
+        public DaVinciSelectBuilder isDayStyle(boolean isDayStyle) {
+            Config.isDayStyle = isDayStyle;
             return this;
         }
 

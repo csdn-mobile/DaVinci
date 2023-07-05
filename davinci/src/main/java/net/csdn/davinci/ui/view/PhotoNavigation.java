@@ -54,16 +54,16 @@ public class PhotoNavigation extends RelativeLayout {
      * 设置确定按钮可用
      */
     public void setDoEnable() {
-        mBinding.tvDo.setEnabled(true);
-        mBinding.tvDo.setTextColor(getResources().getColor(R.color.davinci_confirm));
+//        mBinding.tvDo.setEnabled(true);
+//        mBinding.tvDo.setTextColor(getResources().getColor(R.color.davinci_confirm));
     }
 
     /**
      * 设置确定按钮不可用
      */
     public void setDoUnEnable() {
-        mBinding.tvDo.setEnabled(false);
-        mBinding.tvDo.setTextColor(getResources().getColor(R.color.davinci_unenable));
+//        mBinding.tvDo.setEnabled(false);
+//        mBinding.tvDo.setTextColor(getResources().getColor(R.color.davinci_unenable));
     }
 
     /**

@@ -10,10 +10,19 @@
     <color name="davinci_line">#EEEEEE</color>
     <color name="davinci_place_holder">#F0F0F5</color>
     <color name="davinci_image_unenable">#B3FFFFFF</color>
-    <color name="davinci_background">#F0F0F0</color>
     <color name="davinci_preview_nav">#6606060D</color>
     <color name="davinci_page_gray">#989DAD</color>
     <color name="davinci_red">#FC5531</color>
     <color name="davinci_gray">#9999AA</color>
+
+    <color name="davinci_background">#FFFFFF</color>
+    <color name="davinci_background_night">#1C1C28</color>
+    <color name="davinci_text_night">#E8E8F0</color>
+    <color name="davinci_camera_text">#555570</color>
+    <color name="davinci_camera_text_night">#CCCCD8</color>
+    <color name="davinci_camera_bg">#FAFAFC</color>
+    <color name="davinci_camera_bg_night">#33333D</color>
+    <color name="davinci_select_type_normal">#8F8FA6</color>
+
 
 </resources>

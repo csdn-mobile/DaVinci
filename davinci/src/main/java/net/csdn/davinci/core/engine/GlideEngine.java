@@ -3,6 +3,7 @@ package net.csdn.davinci.core.engine;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -22,13 +23,19 @@ public class GlideEngine implements ImageEngine {
      */
     @Override
     public void loadThumbnail(Context context, int resize, int placeResource, ImageView imageView, String path) {
-        Glide.with(context)
-                .load(Uri.parse(path))
-                .apply(new RequestOptions()
-                        .override(resize, resize)
-                        .placeholder(placeResource)
-                        .centerCrop())
-                .into(imageView);
+        if (TextUtils.isEmpty(path)) {
+            return;
+        }
+        if (imageView.getTag() == null || !imageView.getTag().equals(path)) {
+            imageView.setTag(path);
+            Glide.with(context)
+                    .load(Uri.parse(path))
+                    .apply(new RequestOptions()
+                            .override(resize, resize)
+                            .placeholder(placeResource)
+                            .centerCrop())
+                    .into(imageView);
+        }
     }
 
 
@@ -37,7 +44,11 @@ public class GlideEngine implements ImageEngine {
      */
     @Override
     public void loadThumbnail(Context context, int resize, Drawable placeDrawable, ImageView imageView, String path) {
-        if (null != path) {
+        if (TextUtils.isEmpty(path)) {
+            return;
+        }
+        if (imageView.getTag() == null || !imageView.getTag().equals(path)) {
+            imageView.setTag(path);
             Glide.with(context)
                     .load(Uri.parse(path))
                     .apply(new RequestOptions()
@@ -46,8 +57,6 @@ public class GlideEngine implements ImageEngine {
                             .centerCrop())
                     .into(imageView);
         }
-
-
     }
 
 

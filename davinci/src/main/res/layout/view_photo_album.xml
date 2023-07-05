@@ -28,8 +28,8 @@
             android:id="@+id/rv_dirs"
             bind_adapter="@{adapter}"
             android:layout_width="match_parent"
-            android:layout_height="340dp"
-            android:background="@color/davinci_white"
+            android:layout_height="320dp"
+            android:background="?davinciBackgroundColor"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 

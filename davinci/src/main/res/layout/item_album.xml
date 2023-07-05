@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -15,30 +16,31 @@
         android:onClick="@{viewmodel.onClick()}"
         android:orientation="horizontal">
 
-        <ImageView
+        <net.csdn.roundview.RoundImageView
             davinci_thumbnail_path="@{null!=viewmodel.mData.uri ? viewmodel.mData.uri.toString():``}"
             davinci_thumbnail_place="@{@color/davinci_place_holder}"
             davinci_thumbnail_resize="@{viewmodel.imageResize}"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
             android:layout_marginStart="16dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            app:rRadius="5dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@{viewmodel.mData.name}"
-            android:textColor="@color/davinci_title"
-            android:textSize="16sp" />
+            android:textColor="?davinciTextColor"
+            android:textSize="15sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@{@string/davinci_image_count(viewmodel.photoCount)}"
-            android:textColor="@color/davinci_title"
-            android:textSize="16sp" />
+            android:textColor="?davinciTextColor"
+            android:textSize="15sp"/>
     </LinearLayout>
 </layout>
 

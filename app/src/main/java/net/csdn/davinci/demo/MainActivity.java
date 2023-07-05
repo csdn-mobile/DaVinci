@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
                         .maxSelectable(4)
                         .showGif(true)
                         .showCamera(true)
+                        .isDayStyle(false)
+                        .selectType(DaVinci.SELECT_IMAGE_VIDEO)
                         .column(4)
                         .start(MainActivity.this, 10000);
             }

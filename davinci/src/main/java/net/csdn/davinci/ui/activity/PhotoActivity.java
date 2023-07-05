@@ -22,6 +22,7 @@ import net.csdn.davinci.databinding.ActivityPhotoBinding;
 import net.csdn.davinci.ui.adapter.PhotoAdapter;
 import net.csdn.davinci.ui.viewmodel.PhotoViewModel;
 import net.csdn.davinci.utils.PermissionsUtils;
+import net.csdn.davinci.utils.ResourceUtils;
 import net.csdn.mvvm_java.bus.LiveDataBus;
 import net.csdn.mvvm_java.ui.activity.BaseBindingViewModelActivity;
 import net.csdn.statusbar.StatusBar;
@@ -46,11 +47,11 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(Config.isDayStyle ? R.style.AppTheme_Day : R.style.AppTheme_Night);
         super.onCreate(savedInstanceState);
-
         StatusBar.Builder()
-                .color(getResources().getColor(R.color.davinci_white))
-                .fontMode(FontMode.DARK)
+                .color(ResourceUtils.getColorFromAttr(this, R.attr.davinciBackgroundColor))
+                .fontMode(Config.isDayStyle ? FontMode.DARK : FontMode.LIGHT)
                 .change(this);
 
         setBinding();

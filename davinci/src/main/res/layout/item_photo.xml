@@ -16,22 +16,22 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:paddingStart="11dp"
-        android:paddingTop="11dp"
-        android:paddingEnd="6dp"
-        android:paddingBottom="6dp">
+        android:paddingStart="12dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="12dp">
 
         <TextView
             android:id="@+id/tv_selected"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:background="@drawable/davinci_selector_picker"
             android:gravity="center"
+            android:includeFontPadding="false"
             android:textColor="@color/davinci_white"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <View
