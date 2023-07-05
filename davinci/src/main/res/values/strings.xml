@@ -14,9 +14,7 @@
   <string name="davinci_save_fail">保存失败</string>
   <string name="davinci_photo">照片</string>
   <string name="davinci_video">视频</string>
-  <string name="davinci_most_photo">每次最多可添加%s张照片</string>
-  <string name="davinci_most_video">每次最多可添加1个视频</string>
-  <string name="davinci_most_photo_video">每次最多可添加%s张照片或1个视频</string>
+  <string name="davinci_next_step">下一步</string>
 
   <string name="davinci_permission_title_read">读取存储</string>
   <string name="davinci_permission_title_write">写入存储</string>

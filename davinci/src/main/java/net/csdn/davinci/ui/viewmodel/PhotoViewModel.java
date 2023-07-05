@@ -21,21 +21,27 @@ public class PhotoViewModel extends BaseViewModel {
     public final int typeVideo = 2;
 
     public int typeVisibility;
-    /**
-     * 相册数据源
-     */
+    public String selectLimitDesc;
     private AlbumHelper mAlbumHelper;
-    /**
-     * 相簿列表
-     */
-    public MutableLiveData<ArrayList<Album>> mAlbumList;
-    public MutableLiveData<Integer> mSelectType;
+
+    public MutableLiveData<ArrayList<Album>> albumList;
+    public MutableLiveData<Integer> selectType;
+
+    public MutableLiveData<Integer> selectImageVisibility;
 
     public PhotoViewModel() {
         super();
         typeVisibility = Config.selectType == DaVinci.SELECT_IMAGE_VIDEO ? View.VISIBLE : View.GONE;
-        mAlbumList = new MutableLiveData<>();
-        mSelectType = new MutableLiveData<>(typeImage);
+        albumList = new MutableLiveData<>();
+        selectType = new MutableLiveData<>(typeImage);
+        if (Config.selectType == DaVinci.SELECT_IMAGE_VIDEO) {
+            selectLimitDesc = "最多可添加" + Config.maxSelectable + "张照片或1个视频";
+        } else if (Config.selectType == DaVinci.SELECT_VIDEO) {
+            selectLimitDesc = "最多可添加1个视频";
+        } else {
+            selectLimitDesc = "最多可添加" + Config.maxSelectable + "张照片";
+        }
+        selectImageVisibility = new MutableLiveData<>(Config.selectedPhotos.size() > 0 ? View.VISIBLE : View.GONE);
     }
 
     public void loadAlbum(Activity activity) {
@@ -47,7 +53,7 @@ public class PhotoViewModel extends BaseViewModel {
             @Override
             public void onResult(ArrayList<Album> albums) {
                 Log.e("AlbumLoad", "onLoadFinished====" + albums.toString());
-                mAlbumList.setValue(albums);
+                albumList.setValue(albums);
             }
         });
     }
@@ -59,9 +65,9 @@ public class PhotoViewModel extends BaseViewModel {
     }
 
     public void onSelectType(int type) {
-        if (mSelectType.getValue() == null || mSelectType.getValue() == type) {
+        if (selectType.getValue() == null || selectType.getValue() == type) {
             return;
         }
-        mSelectType.setValue(type);
+        selectType.setValue(type);
     }
 }

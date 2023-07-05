@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.csdn.davinci.BR;
 import net.csdn.davinci.BusEvent;
@@ -20,6 +23,7 @@ import net.csdn.davinci.core.entity.Photo;
 import net.csdn.davinci.core.photo.PhotoCaptureManager;
 import net.csdn.davinci.databinding.ActivityPhotoBinding;
 import net.csdn.davinci.ui.adapter.PhotoAdapter;
+import net.csdn.davinci.ui.adapter.PhotoPreviewAdapter;
 import net.csdn.davinci.ui.viewmodel.PhotoViewModel;
 import net.csdn.davinci.utils.PermissionsUtils;
 import net.csdn.davinci.utils.ResourceUtils;
@@ -34,6 +38,7 @@ import java.util.ArrayList;
 public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBinding, PhotoViewModel> {
 
     private PhotoAdapter mAdapter;
+    private PhotoPreviewAdapter mPreviewAdapter;
 
     @Override
     public int getLayoutId() {
@@ -128,14 +133,63 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         });
         mBinding.setAdapter(mAdapter);
         // 监听相簿数据源变化
-        mViewModel.mAlbumList.observe(this, new Observer<ArrayList<Album>>() {
+        mViewModel.albumList.observe(this, new Observer<ArrayList<Album>>() {
             @Override
             public void onChanged(ArrayList<Album> albums) {
                 mBinding.album.setData(albums);
                 selectAlbum(albums.get(0));
-
             }
         });
+        // 预览Adapter
+        mPreviewAdapter = new PhotoPreviewAdapter(this, new PhotoPreviewAdapter.OnDeleteClickListener() {
+            @Override
+            public void onDelete(int position) {
+                Config.selectedPhotos.remove(position);
+                mAdapter.notifyDataSetChanged();
+                changeConfirmStatus();
+            }
+        });
+        mBinding.rvSelect.setAdapter(mPreviewAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            int oldPosition;
+            int newPosition;
+
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                return makeMovementFlags(ItemTouchHelper.DOWN | ItemTouchHelper.UP |
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int lastOldPosition = viewHolder.getBindingAdapterPosition();
+                if (oldPosition <= 0) {
+                    oldPosition = lastOldPosition;
+                }
+                newPosition = target.getBindingAdapterPosition();
+                mPreviewAdapter.notifyItemMoved(lastOldPosition, newPosition);
+                return true;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+
+            @Override
+            public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
+                    if (oldPosition != newPosition) {
+                        Config.selectedPhotos.add(newPosition, Config.selectedPhotos.remove(oldPosition));
+                        mAdapter.notifyDataSetChanged();
+                        oldPosition = 0;
+                        newPosition = 0;
+                    }
+                }
+                super.onSelectedChanged(viewHolder, actionState);
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(mBinding.rvSelect);
     }
 
     private void setListener() {
@@ -199,11 +253,9 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
     }
 
     private void changeConfirmStatus() {
-        if (Config.selectedPhotos.size() <= 0) {
-            mBinding.navigation.setDoUnEnable();
-        } else {
-            mBinding.navigation.setDoEnable();
-        }
+        mBinding.tvConfirm.setEnabled(Config.selectedPhotos.size() > 0);
+        mViewModel.selectImageVisibility.setValue(Config.selectedPhotos.size() > 0 ? View.VISIBLE : View.GONE);
+        mPreviewAdapter.setDatas(Config.selectedPhotos);
     }
 
     private void finishAndSetResult() {

@@ -7,5 +7,7 @@
         <attr name="davinciCameraBg" format="reference" />
         <attr name="davinciCameraText" format="reference" />
         <attr name="davinciSelectTypeTextColor" format="reference" />
+        <attr name="davinciConfirmBgColor" format="reference" />
+        <attr name="davinciConfirmTextColor" format="reference" />
     </declare-styleable>
 </resources>
