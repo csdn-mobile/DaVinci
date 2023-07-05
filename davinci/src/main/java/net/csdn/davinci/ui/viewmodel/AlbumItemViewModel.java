@@ -16,7 +16,14 @@ public class AlbumItemViewModel extends BaseAdapterViewModel<Album> {
     }
 
     public int getPhotoCount() {
-        return mData.photoList == null ? 0 : mData.photoList.size();
+        int count = 0;
+        if (mData.photoList != null) {
+            count += mData.photoList.size();
+        }
+        if (mData.videoList != null) {
+            count += mData.videoList.size();
+        }
+        return count;
     }
 
     public int getImageResize() {

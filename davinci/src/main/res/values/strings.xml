@@ -15,6 +15,7 @@
   <string name="davinci_photo">照片</string>
   <string name="davinci_video">视频</string>
   <string name="davinci_next_step">下一步</string>
+  <string name="davinci_photo_video_cant_same_choice">照片与视频不可同时选择</string>
 
   <string name="davinci_permission_title_read">读取存储</string>
   <string name="davinci_permission_title_write">写入存储</string>

@@ -46,9 +46,17 @@ public class Config {
      */
     public static ArrayList<String> selectedPhotos;
     /**
+     * 已选中的视频
+     */
+    public static ArrayList<String> selectedVideos;
+    /**
      * 当前预览的图片地址
      */
     public static ArrayList<String> previewPhotos;
+    /**
+     * 当前预览的视频地址
+     */
+    public static ArrayList<String> previewVideos;
     /**
      * 当前选中的照片地址
      */
@@ -82,6 +90,7 @@ public class Config {
         selectType = DaVinci.SELECT_IMAGE;
         isDayStyle = true;
         selectedPhotos = new ArrayList<>();
+        selectedVideos = new ArrayList<>();
         previewPhotos = new ArrayList<>();
         currentPath = "";
         imageEngine = new GlideEngine();

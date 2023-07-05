@@ -9,10 +9,6 @@
         <variable
             name="viewmodel"
             type="net.csdn.davinci.ui.viewmodel.PhotoViewModel" />
-
-        <variable
-            name="adapter"
-            type="androidx.recyclerview.widget.RecyclerView.Adapter" />
     </data>
 
     <LinearLayout
@@ -43,30 +39,26 @@
                     android:visibility="@{viewmodel.typeVisibility}">
 
                     <TextView
+                        android:id="@+id/tv_photo"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:onClick="@{() -> viewmodel.onSelectType(viewmodel.typeImage)}"
                         android:paddingStart="12dp"
                         android:paddingEnd="12dp"
                         android:text="@string/davinci_photo"
                         android:textColor="?davinciSelectTypeTextColor"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:bind_isSelected="@{viewmodel.selectType == viewmodel.typeImage}" />
+                        android:textSize="15sp" />
 
                     <TextView
+                        android:id="@+id/tv_video"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:onClick="@{() -> viewmodel.onSelectType(viewmodel.typeVideo)}"
                         android:paddingStart="12dp"
                         android:paddingEnd="12dp"
                         android:text="@string/davinci_video"
                         android:textColor="?davinciSelectTypeTextColor"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:bind_isSelected="@{viewmodel.selectType == viewmodel.typeVideo}" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -75,9 +67,9 @@
                     android:layout_weight="1">
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:bind_adapter="@{adapter}"
                         app:bind_column="@{Config.column}" />
 
                     <net.csdn.davinci.ui.view.EmptyView

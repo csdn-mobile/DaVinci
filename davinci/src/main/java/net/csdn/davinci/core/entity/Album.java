@@ -11,4 +11,5 @@ public class Album {
     public Uri uri;
     public String name;
     public List<Photo> photoList = new ArrayList<>();
+    public List<Video> videoList = new ArrayList<>();
 }
