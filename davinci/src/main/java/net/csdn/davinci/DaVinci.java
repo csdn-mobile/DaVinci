@@ -2,8 +2,8 @@ package net.csdn.davinci;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.text.TextUtils;
 
+import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.ui.activity.PhotoActivity;
 import net.csdn.davinci.ui.activity.PreviewActivity;
 import net.csdn.davinci.utils.PermissionsUtils;
@@ -156,7 +156,11 @@ public class DaVinci {
          * 预览的的图片
          */
         public DaVinciPreviewBuilder previewPhotos(ArrayList<String> previewPhotos) {
-            Config.previewPhotos = createNewArray(previewPhotos);
+            ArrayList<Object> newList = new ArrayList<>();
+            if (previewPhotos != null && previewPhotos.size() > 0) {
+                newList.addAll(previewPhotos);
+            }
+            Config.previewMedias = newList;
             return this;
         }
 
@@ -191,22 +195,26 @@ public class DaVinci {
             if (activity == null) {
                 return;
             }
-            if (Config.previewPhotos == null || Config.previewPhotos.size() <= 0) {
+            if (Config.previewMedias == null || Config.previewMedias.size() <= 0) {
                 throw new IllegalArgumentException("Please set previewPhotos before preview");
             } else {
-                start(activity, Config.previewPhotos.get(0));
+                start(activity, Config.previewMedias.get(0));
             }
         }
 
         /**
          * 预览相册
-         * currentUri：当前浏览的图片地址
+         * media：当前浏览的图片地址 或者 视频的DavinciVideo
          */
-        public void start(Activity activity, String currentUri) {
-            if (activity == null) {
+        public void start(Activity activity, Object media) {
+            if (activity == null || media == null) {
                 return;
             }
-            Config.currentPath = TextUtils.isEmpty(currentUri) ? "" : currentUri;
+            if (media instanceof DavinciVideo) {
+                Config.currentMedia = (DavinciVideo) media;
+            } else if (media instanceof String) {
+                Config.currentMedia = (String) media;
+            }
             Intent intent = new Intent(activity, PreviewActivity.class);
             activity.startActivityForResult(intent, PreviewActivity.RESULT_PREVIEW);
         }

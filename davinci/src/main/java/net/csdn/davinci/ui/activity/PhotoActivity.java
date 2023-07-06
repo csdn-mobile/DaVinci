@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,10 +25,11 @@ import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.core.photo.PhotoCaptureManager;
 import net.csdn.davinci.databinding.ActivityPhotoBinding;
-import net.csdn.davinci.ui.adapter.PhotoAdapter;
 import net.csdn.davinci.ui.adapter.MediaPreviewAdapter;
+import net.csdn.davinci.ui.adapter.PhotoAdapter;
 import net.csdn.davinci.ui.adapter.VideoAdapter;
 import net.csdn.davinci.ui.viewmodel.PhotoViewModel;
+import net.csdn.davinci.utils.DavinciToastUtils;
 import net.csdn.davinci.utils.PermissionsUtils;
 import net.csdn.davinci.utils.ResourceUtils;
 import net.csdn.mvvm_java.bus.LiveDataBus;
@@ -86,6 +85,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         } else if (mViewModel.selectType == TYPE_VIDEO && mVideoAdapter != null) {
             mVideoAdapter.notifyDataSetChanged();
         }
+        changeConfirmStatus();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
                 PhotoCaptureManager.getInstance(getApplication()).galleryAddPic();
                 Uri uri = PhotoCaptureManager.getInstance(getApplication()).getCurrentPhotoUri();
                 Config.selectedPhotos.add(uri.toString());
-                Config.previewPhotos.add(uri.toString());
+                Config.previewMedias.add(uri.toString());
                 changeConfirmStatus();
                 mPhotoAdapter.getDatas().add(0, new DavinciPhoto(uri));
                 mPhotoAdapter.notifyDataSetChanged();
@@ -129,26 +129,55 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
 
     private void setBinding() {
         // 设置照片Adapter
-        mPhotoAdapter = new PhotoAdapter(this, new PhotoAdapter.OnPhotoSelectChangeListener() {
-            @Override
-            public void onChange() {
-                changeConfirmStatus();
-            }
-        }, new PhotoAdapter.OnCameraClickListener() {
-            @Override
-            public void onClick() {
-                if (!PermissionsUtils.checkCameraPermission(PhotoActivity.this)) {
-                    return;
-                }
-                openCamera();
-            }
-        });
-        mVideoAdapter = new VideoAdapter(this, new VideoAdapter.OnVideoSelectChangeListener() {
-            @Override
-            public void onChange() {
-                changeConfirmStatus();
-            }
-        });
+        mPhotoAdapter = new PhotoAdapter(this,
+                new PhotoAdapter.OnPhotoSelectChangeListener() {
+                    @Override
+                    public void onChange() {
+                        changeConfirmStatus();
+                    }
+                },
+                new PhotoAdapter.OnCameraClickListener() {
+                    @Override
+                    public void onClick() {
+                        if (!PermissionsUtils.checkCameraPermission(PhotoActivity.this)) {
+                            return;
+                        }
+                        openCamera();
+                    }
+                },
+                new PhotoAdapter.OnImageClickListener() {
+                    @Override
+                    public void onClick(String path) {
+                        // 更新预览数据
+                        ArrayList<Object> list = new ArrayList<>();
+                        for (DavinciPhoto photo : mPhotoAdapter.getDatas()) {
+                            list.add(photo.uri.toString());
+                        }
+                        Config.previewMedias = list;
+                        // 打开预览
+                        DaVinci.preview(false)
+                                .previewSelectable(true)
+                                .start(PhotoActivity.this, path);
+                    }
+                });
+        mVideoAdapter = new VideoAdapter(this,
+                new VideoAdapter.OnVideoSelectChangeListener() {
+                    @Override
+                    public void onChange() {
+                        changeConfirmStatus();
+                    }
+                },
+                new VideoAdapter.OnVideoClickListener() {
+                    @Override
+                    public void onClick(DavinciVideo video) {
+                        // 更新预览视频数据
+                        Config.previewMedias = new ArrayList<>(mVideoAdapter.getDatas());
+                        // 打开预览
+                        DaVinci.preview(false)
+                                .previewSelectable(true)
+                                .start(PhotoActivity.this, video);
+                    }
+                });
         onSelectType(TYPE_IMAGE);
         // 监听相簿数据源变化
         mViewModel.albumList.observe(this, new Observer<ArrayList<Album>>() {
@@ -231,6 +260,12 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         }, v -> finishAndSetResult());
         mBinding.tvPhoto.setOnClickListener(v -> onSelectType(TYPE_IMAGE));
         mBinding.tvVideo.setOnClickListener(v -> onSelectType(TYPE_VIDEO));
+        mBinding.tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void registerBus() {
@@ -265,13 +300,6 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         mBinding.navigation.setTitle(album.name);
         mPhotoAdapter.setDatas(album.photoList);
         mVideoAdapter.setDatas(album.videoList);
-
-        ArrayList<String> list = new ArrayList<>();
-        for (DavinciPhoto photo : album.photoList) {
-            list.add(photo.uri.toString());
-        }
-        Config.previewPhotos = list;
-        Config.previewVideos = new ArrayList<>(album.videoList);
     }
 
     private void closeAlbum() {
@@ -294,12 +322,12 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         if (mViewModel.selectType == TYPE_IMAGE) {
             mBinding.tvConfirm.setEnabled(Config.selectedPhotos.size() > 0);
             mViewModel.selectImageVisibility.setValue(Config.selectedPhotos.size() > 0 ? View.VISIBLE : View.GONE);
-            mPreviewAdapter.setDatas(Config.selectedPhotos,false);
+            mPreviewAdapter.setDatas(Config.selectedPhotos, false);
         } else {
             mBinding.tvConfirm.setEnabled(Config.selectedVideos.size() > 0);
             mViewModel.selectImageVisibility.setValue(Config.selectedVideos.size() > 0 ? View.VISIBLE : View.GONE);
             List<String> selectedVideos = new ArrayList<>();
-            for (DavinciVideo video : Config.selectedVideos){
+            for (DavinciVideo video : Config.selectedVideos) {
                 selectedVideos.add(video.uri.toString());
             }
             mPreviewAdapter.setDatas(selectedVideos, true);
@@ -318,7 +346,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
             return;
         }
         if (type == TYPE_IMAGE && Config.selectedVideos.size() > 0 || type == TYPE_VIDEO && Config.selectedPhotos.size() > 0) {
-            Toast.makeText(this, getResources().getString(R.string.davinci_photo_video_cant_same_choice), Toast.LENGTH_SHORT).show();
+            DavinciToastUtils.showToast(this, getResources().getString(R.string.davinci_photo_video_cant_same_choice));
             return;
         }
         mViewModel.selectType = type;

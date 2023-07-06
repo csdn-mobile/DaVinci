@@ -27,6 +27,11 @@ public interface ImageEngine {
     void loadLocalImage(Context context, int resizeX, int resizeY, ImageView imageView, String path);
 
     /**
+     * 读取本地图片
+     */
+    void loadLocalImage(Context context, ImageView imageView, String path);
+
+    /**
      * 读取本地图片（SubsamplingScaleImageView）
      */
     void loadLocalLongImage(SubsamplingScaleImageView imageView, String path);

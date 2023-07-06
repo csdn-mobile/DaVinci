@@ -1,6 +1,5 @@
 package net.csdn.davinci.ui.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,15 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.csdn.davinci.Config;
-import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.DavinciPhoto;
+import net.csdn.davinci.utils.DavinciToastUtils;
 import net.csdn.davinci.utils.DensityUtils;
+import net.csdn.davinci.utils.ImageShowUtils;
 import net.csdn.davinci.utils.SystemUtils;
 
 import java.util.List;
@@ -32,6 +31,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private OnPhotoSelectChangeListener mListener;
     private OnCameraClickListener mOnCameraClickListener;
+    private OnImageClickListener mOnImageClickListener;
 
     public interface OnPhotoSelectChangeListener {
         void onChange();
@@ -41,10 +41,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         void onClick();
     }
 
-    public PhotoAdapter(Context context, OnPhotoSelectChangeListener listener, OnCameraClickListener onCameraClickListener) {
+    public interface OnImageClickListener {
+        void onClick(String path);
+    }
+
+    public PhotoAdapter(Context context, OnPhotoSelectChangeListener listener, OnCameraClickListener onCameraClickListener, OnImageClickListener onImageClickListener) {
         this.mContext = context;
         this.mListener = listener;
         this.mOnCameraClickListener = onCameraClickListener;
+        this.mOnImageClickListener = onImageClickListener;
         this.mImageWidth = (SystemUtils.getScreenWidth(context) - DensityUtils.dp2px(context, Config.column)) / 4;
     }
 
@@ -94,7 +99,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     if (!canClick) {
-                        Toast.makeText(mContext, mContext.getString(R.string.davinci_over_max_count_tips, Config.maxSelectable), Toast.LENGTH_SHORT).show();
+                        DavinciToastUtils.showToast(mContext, mContext.getResources().getString(R.string.davinci_over_max_count_tips, Config.maxSelectable));
                         return;
                     }
                     if (mOnCameraClickListener != null) {
@@ -113,8 +118,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             photo = mDatas.get(position);
         }
         String uriPath = photo.uri.toString();
-        Config.imageEngine.loadThumbnail(mContext, mImageWidth, R.color.davinci_place_holder, holder.ivPhoto, uriPath);
-
+        ImageShowUtils.loadThumbnail(mContext, mImageWidth, holder.ivPhoto, uriPath);
         // 图片选中状态
         boolean isSelected = Config.selectedPhotos.contains(uriPath);
         holder.rlSelected.setSelected(isSelected);
@@ -124,9 +128,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DaVinci.preview(false)
-                        .previewSelectable(true)
-                        .start((Activity) mContext, uriPath);
+                if (mOnImageClickListener != null) {
+                    mOnImageClickListener.onClick(uriPath);
+                }
             }
         });
         holder.rlSelected.setOnClickListener(new View.OnClickListener() {

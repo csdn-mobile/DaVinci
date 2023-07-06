@@ -21,7 +21,6 @@
 
         <ImageView
             davinci_thumbnail_path="@{viewmodel.mData}"
-            davinci_thumbnail_place="@{@color/davinci_black}"
             davinci_thumbnail_resize="@{viewmodel.imageResize}"
             android:layout_width="80dp"
             android:layout_height="80dp"

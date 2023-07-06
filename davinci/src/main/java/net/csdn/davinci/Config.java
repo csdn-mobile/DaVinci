@@ -51,17 +51,13 @@ public class Config {
      */
     public static ArrayList<DavinciVideo> selectedVideos;
     /**
-     * 当前预览的图片地址
+     * 当前预览的图片/视频地址
      */
-    public static ArrayList<String> previewPhotos;
+    public static ArrayList<Object> previewMedias;
     /**
-     * 当前预览的视频地址
+     * 当前选中的照片/视频地址
      */
-    public static ArrayList<DavinciVideo> previewVideos;
-    /**
-     * 当前选中的照片地址
-     */
-    public static String currentPath;
+    public static Object currentMedia;
     /**
      * 是否需要长按识别二维码
      */
@@ -92,8 +88,8 @@ public class Config {
         isDayStyle = true;
         selectedPhotos = new ArrayList<>();
         selectedVideos = new ArrayList<>();
-        previewPhotos = new ArrayList<>();
-        currentPath = "";
+        previewMedias = new ArrayList<>();
+        currentMedia = null;
         imageEngine = new GlideEngine();
         needQrScan = true;
         qrScanCallback = null;

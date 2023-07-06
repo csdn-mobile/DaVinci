@@ -6,6 +6,7 @@
   <string name="davinci_all_image">所有图片</string>
   <string name="davinci_image_count">(%1$d)</string>
   <string name="davinci_over_max_count_tips">你最多可以选择%1$d张图片</string>
+  <string name="davinci_over_max_count_tips_video">你最多可以选择%1$d张图片</string>
   <string name="davinci_pager_page">%1$d / %2$d</string>
   <string name="davinci_no_permission_read">请开启相册读取权限</string>
   <string name="davinci_no_permission_camera">请开启相机及内存写入权限</string>
@@ -15,6 +16,7 @@
   <string name="davinci_photo">照片</string>
   <string name="davinci_video">视频</string>
   <string name="davinci_next_step">下一步</string>
+  <string name="davinci_select">选择</string>
   <string name="davinci_photo_video_cant_same_choice">照片与视频不可同时选择</string>
 
   <string name="davinci_permission_title_read">读取存储</string>

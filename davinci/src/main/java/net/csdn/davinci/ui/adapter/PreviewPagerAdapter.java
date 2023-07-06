@@ -11,9 +11,9 @@ import java.util.List;
 
 public class PreviewPagerAdapter extends FragmentPagerAdapter {
 
-    private List<String> mDatas;
+    private List<Object> mDatas;
 
-    public PreviewPagerAdapter(FragmentManager fm, List<String> datas) {
+    public PreviewPagerAdapter(FragmentManager fm, List<Object> datas) {
         super(fm);
         this.mDatas = datas;
         if (this.mDatas == null) {

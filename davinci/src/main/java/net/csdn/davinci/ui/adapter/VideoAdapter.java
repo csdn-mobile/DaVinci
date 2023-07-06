@@ -1,6 +1,5 @@
 package net.csdn.davinci.ui.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +11,10 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.csdn.davinci.Config;
-import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.utils.DensityUtils;
+import net.csdn.davinci.utils.ImageShowUtils;
 import net.csdn.davinci.utils.SystemUtils;
 import net.csdn.davinci.utils.TimeUtils;
 
@@ -30,14 +29,20 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoHolder>
     private final int mImageWidth;
 
     private OnVideoSelectChangeListener mListener;
+    private OnVideoClickListener mOnVideoClickListener;
 
     public interface OnVideoSelectChangeListener {
         void onChange();
     }
 
-    public VideoAdapter(Context context, OnVideoSelectChangeListener listener) {
+    public interface OnVideoClickListener {
+        void onClick(DavinciVideo video);
+    }
+
+    public VideoAdapter(Context context, OnVideoSelectChangeListener listener, OnVideoClickListener onVideoClickListener) {
         this.mContext = context;
         this.mListener = listener;
+        this.mOnVideoClickListener = onVideoClickListener;
         this.mImageWidth = (SystemUtils.getScreenWidth(context) - DensityUtils.dp2px(context, Config.column)) / 4;
     }
 
@@ -64,7 +69,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoHolder>
     public void onBindViewHolder(VideoHolder holder, int position) {
         DavinciVideo video = mDatas.get(position);
         String uriPath = video.uri.toString();
-        Config.imageEngine.loadThumbnail(mContext, mImageWidth, R.color.davinci_place_holder, holder.ivPhoto, uriPath);
+        ImageShowUtils.loadThumbnail(mContext, mImageWidth, holder.ivPhoto, uriPath);
 
         // 视频选中状态
         boolean isSelected = Config.selectedVideos.contains(video);
@@ -76,9 +81,9 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoHolder>
         holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DaVinci.preview(false)
-                        .previewSelectable(true)
-                        .start((Activity) mContext, uriPath);
+                if (mOnVideoClickListener != null) {
+                    mOnVideoClickListener.onClick(video);
+                }
             }
         });
         holder.rlSelected.setOnClickListener(new View.OnClickListener() {

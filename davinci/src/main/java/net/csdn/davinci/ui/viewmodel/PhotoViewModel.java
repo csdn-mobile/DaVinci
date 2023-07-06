@@ -1,13 +1,11 @@
 package net.csdn.davinci.ui.viewmodel;
 
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
 import net.csdn.davinci.Config;
 import net.csdn.davinci.DaVinci;
-import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.Album;
 import net.csdn.mvvm_java.viewmodel.BaseViewModel;
 

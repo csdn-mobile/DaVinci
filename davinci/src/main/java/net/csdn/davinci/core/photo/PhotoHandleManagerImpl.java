@@ -16,7 +16,6 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -31,6 +30,7 @@ import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.SavePath;
 import net.csdn.davinci.ui.dialog.PermissionsDialog;
+import net.csdn.davinci.utils.DavinciToastUtils;
 import net.csdn.davinci.utils.PermissionsUtils;
 import net.csdn.davinci.utils.SystemUtils;
 import net.csdn.davinci.utils.UrlUtils;
@@ -279,9 +279,9 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
                 return;
             }
             if (file == null) {
-                Toast.makeText(activity, activity.getResources().getString(R.string.davinci_save_fail), Toast.LENGTH_SHORT).show();
+                DavinciToastUtils.showToast(activity, activity.getResources().getString(R.string.davinci_save_fail));
             } else {
-                Toast.makeText(activity, activity.getResources().getString(R.string.davinci_save_success), Toast.LENGTH_SHORT).show();
+                DavinciToastUtils.showToast(activity, activity.getResources().getString(R.string.davinci_save_success));
             }
         }
 

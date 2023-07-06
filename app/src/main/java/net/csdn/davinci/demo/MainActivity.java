@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import net.csdn.davinci.DaVinci;
+import net.csdn.davinci.utils.DavinciToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                         .maxSelectable(4)
                         .showGif(true)
                         .showCamera(true)
-                        .isDayStyle(false)
+                        .isDayStyle(true)
                         .selectType(DaVinci.SELECT_IMAGE_VIDEO)
                         .column(4)
                         .start(MainActivity.this, 10000);
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         .qrScanCallback(new DaVinci.QrScanCallback() {
                             @Override
                             public void onResult(String result) {
-                                Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
+                                DavinciToastUtils.showToast(MainActivity.this, result);
                             }
                         })
                         .start(MainActivity.this);

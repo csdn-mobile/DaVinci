@@ -16,8 +16,10 @@ import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.utils.DensityUtils;
+import net.csdn.davinci.utils.ImageShowUtils;
 import net.csdn.davinci.utils.TimeUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapter.PhotoPreviewHolder> {
@@ -62,10 +64,12 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
     @Override
     public void onBindViewHolder(PhotoPreviewHolder holder, int position) {
         String uriPath = mDatas.get(position);
+        DavinciVideo videoData = null;
         if (isVideo) {
             holder.tvTime.setVisibility(View.VISIBLE);
             for (DavinciVideo video : Config.selectedVideos) {
                 if (uriPath.equals(video.uri.toString())) {
+                    videoData = video;
                     holder.tvTime.setVisibility(View.VISIBLE);
                     holder.tvTime.setText(TimeUtils.formatMillisecond(video.duration));
                     break;
@@ -74,13 +78,30 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
         } else {
             holder.tvTime.setVisibility(View.GONE);
         }
-        Config.imageEngine.loadThumbnail(mContext, mImageWidth, R.color.davinci_place_holder, holder.ivPhoto, uriPath);
+        ImageShowUtils.loadThumbnail(mContext, mImageWidth, holder.ivPhoto, uriPath);
+        DavinciVideo finalVideoData = videoData;
         holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DaVinci.preview(false)
-                        .previewSelectable(true)
-                        .start((Activity) mContext, uriPath);
+                if (isVideo) {
+                    if (finalVideoData != null) {
+                        // 更新预览视频数据
+                        ArrayList<Object> previes = new ArrayList<>();
+                        previes.add(finalVideoData);
+                        Config.previewMedias = previes;
+                        // 打开预览
+                        DaVinci.preview(false)
+                                .previewSelectable(true)
+                                .start((Activity) mContext, finalVideoData);
+                    }
+                } else {
+                    // 更新预览数据
+                    Config.previewMedias = new ArrayList<>(mDatas);
+                    // 打开预览
+                    DaVinci.preview(false)
+                            .previewSelectable(true)
+                            .start((Activity) mContext, uriPath);
+                }
             }
         });
         holder.rlDelete.setOnClickListener(new View.OnClickListener() {

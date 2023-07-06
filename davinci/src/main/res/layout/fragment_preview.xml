@@ -12,18 +12,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:id="@+id/rl_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <VideoView
+                android:id="@+id/video_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+            <RelativeLayout
+                android:id="@+id/rl_play"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.2"
+                    android:background="@android:color/black" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/davinci_video_play" />
+            </RelativeLayout>
+        </RelativeLayout>
+
         <net.csdn.davinci.core.photoview.PhotoView
             android:id="@+id/iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="@{viewmodel.onClickListener}"
             android:onLongClick="@{viewmodel.onLongClickListener}" />
 
         <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
             android:id="@+id/iv_long"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="@{viewmodel.onClickListener}"
             android:onLongClick="@{viewmodel.onLongClickListener}"
             android:visibility="gone" />
 

@@ -19,19 +19,67 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <net.csdn.davinci.ui.view.PreviewNavigation
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <net.csdn.davinci.ui.view.PreviewBottomBar
-            android:id="@+id/bottom_bar"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
+            android:background="@color/davinci_preview_nav"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/view_status_bar"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_centerVertical="true"
+                    android:paddingStart="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="10dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/davinci_back_white" />
+
+                <LinearLayout
+                    android:id="@+id/ll_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_selected"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/davinci_selector_picker"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/davinci_white"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/davinci_select"
+                        android:textColor="@color/davinci_white"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_page"
+            bind_isGone="@{viewmodel.pageGone}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -40,7 +88,6 @@
             android:text="@string/davinci_pager_page"
             android:textColor="@color/davinci_page_gray"
             android:textSize="14sp"
-            android:visibility="gone"
-            bind_isGone="@{viewmodel.pageGone}"/>
+            android:visibility="gone" />
     </RelativeLayout>
 </layout>

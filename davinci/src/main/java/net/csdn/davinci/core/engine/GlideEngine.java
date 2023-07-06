@@ -73,6 +73,18 @@ public class GlideEngine implements ImageEngine {
                 .into(imageView);
     }
 
+    /**
+     * 读取本地图片
+     */
+    @Override
+    public void loadLocalImage(Context context, ImageView imageView, String uriPath) {
+        Glide.with(context)
+                .load(Uri.parse(uriPath))
+                .apply(new RequestOptions()
+                        .priority(Priority.HIGH))
+                .into(imageView);
+    }
+
     @Override
     public void loadLocalLongImage(SubsamplingScaleImageView imageView, String path) {
         if (imageView == null) {
