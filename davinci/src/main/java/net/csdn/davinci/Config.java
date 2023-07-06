@@ -2,6 +2,7 @@ package net.csdn.davinci;
 
 import net.csdn.davinci.core.engine.GlideEngine;
 import net.csdn.davinci.core.engine.ImageEngine;
+import net.csdn.davinci.core.entity.DavinciVideo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +49,7 @@ public class Config {
     /**
      * 已选中的视频
      */
-    public static ArrayList<String> selectedVideos;
+    public static ArrayList<DavinciVideo> selectedVideos;
     /**
      * 当前预览的图片地址
      */
@@ -56,7 +57,7 @@ public class Config {
     /**
      * 当前预览的视频地址
      */
-    public static ArrayList<String> previewVideos;
+    public static ArrayList<DavinciVideo> previewVideos;
     /**
      * 当前选中的照片地址
      */

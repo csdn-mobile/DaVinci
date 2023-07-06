@@ -8,8 +8,8 @@ import java.util.List;
 public class Album {
     public String id;
     public String coverPath;
-    public Uri uri;
     public String name;
-    public List<Photo> photoList = new ArrayList<>();
-    public List<Video> videoList = new ArrayList<>();
+    public Uri uri;
+    public List<DavinciPhoto> photoList = new ArrayList<>();
+    public List<DavinciVideo> videoList = new ArrayList<>();
 }

@@ -2,12 +2,10 @@ package net.csdn.davinci.core.entity;
 
 import android.net.Uri;
 
-public class Video {
+public abstract class DavinciMedia {
     public String id;
     public String path;
-    public int duration;
     public Uri uri;
 
-    public Video() {
-    }
+
 }

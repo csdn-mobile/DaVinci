@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -22,12 +23,12 @@ import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.album.AlbumHelper;
 import net.csdn.davinci.core.entity.Album;
-import net.csdn.davinci.core.entity.Photo;
-import net.csdn.davinci.core.entity.Video;
+import net.csdn.davinci.core.entity.DavinciPhoto;
+import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.core.photo.PhotoCaptureManager;
 import net.csdn.davinci.databinding.ActivityPhotoBinding;
 import net.csdn.davinci.ui.adapter.PhotoAdapter;
-import net.csdn.davinci.ui.adapter.PhotoPreviewAdapter;
+import net.csdn.davinci.ui.adapter.MediaPreviewAdapter;
 import net.csdn.davinci.ui.adapter.VideoAdapter;
 import net.csdn.davinci.ui.viewmodel.PhotoViewModel;
 import net.csdn.davinci.utils.PermissionsUtils;
@@ -39,6 +40,7 @@ import net.csdn.statusbar.annotation.FontMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBinding, PhotoViewModel> {
 
@@ -47,7 +49,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
 
     private PhotoAdapter mPhotoAdapter;
     private VideoAdapter mVideoAdapter;
-    private PhotoPreviewAdapter mPreviewAdapter;
+    private MediaPreviewAdapter mPreviewAdapter;
 
     @Override
     public int getLayoutId() {
@@ -114,7 +116,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
                 Config.selectedPhotos.add(uri.toString());
                 Config.previewPhotos.add(uri.toString());
                 changeConfirmStatus();
-                mPhotoAdapter.getDatas().add(0, new Photo(uri));
+                mPhotoAdapter.getDatas().add(0, new DavinciPhoto(uri));
                 mPhotoAdapter.notifyDataSetChanged();
             }
             break;
@@ -157,13 +159,13 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
             }
         });
         // 预览Adapter
-        mPreviewAdapter = new PhotoPreviewAdapter(this, new PhotoPreviewAdapter.OnDeleteClickListener() {
+        mPreviewAdapter = new MediaPreviewAdapter(this, new MediaPreviewAdapter.OnDeleteClickListener() {
             @Override
             public void onDelete(int position) {
-                if (mViewModel.selectType == TYPE_IMAGE){
+                if (mViewModel.selectType == TYPE_IMAGE) {
                     Config.selectedPhotos.remove(position);
                     mPhotoAdapter.notifyDataSetChanged();
-                }else if (mViewModel.selectType == TYPE_VIDEO){
+                } else if (mViewModel.selectType == TYPE_VIDEO) {
                     Config.selectedVideos.remove(position);
                     mVideoAdapter.notifyDataSetChanged();
                 }
@@ -201,10 +203,10 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
             public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
                 if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
                     if (oldPosition != newPosition) {
-                        if (mViewModel.selectType == TYPE_IMAGE){
+                        if (mViewModel.selectType == TYPE_IMAGE) {
                             Config.selectedPhotos.add(newPosition, Config.selectedPhotos.remove(oldPosition));
                             mPhotoAdapter.notifyDataSetChanged();
-                        }else if (mViewModel.selectType == TYPE_VIDEO){
+                        } else if (mViewModel.selectType == TYPE_VIDEO) {
                             Config.selectedVideos.add(newPosition, Config.selectedVideos.remove(oldPosition));
                             mVideoAdapter.notifyDataSetChanged();
                         }
@@ -265,16 +267,11 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         mVideoAdapter.setDatas(album.videoList);
 
         ArrayList<String> list = new ArrayList<>();
-        for (Photo photo : album.photoList) {
+        for (DavinciPhoto photo : album.photoList) {
             list.add(photo.uri.toString());
         }
         Config.previewPhotos = list;
-
-        ArrayList<String> videoList = new ArrayList<>();
-        for (Video video : album.videoList) {
-            videoList.add(video.uri.toString());
-        }
-        Config.previewVideos = videoList;
+        Config.previewVideos = new ArrayList<>(album.videoList);
     }
 
     private void closeAlbum() {
@@ -297,11 +294,15 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         if (mViewModel.selectType == TYPE_IMAGE) {
             mBinding.tvConfirm.setEnabled(Config.selectedPhotos.size() > 0);
             mViewModel.selectImageVisibility.setValue(Config.selectedPhotos.size() > 0 ? View.VISIBLE : View.GONE);
-            mPreviewAdapter.setDatas(Config.selectedPhotos);
+            mPreviewAdapter.setDatas(Config.selectedPhotos,false);
         } else {
             mBinding.tvConfirm.setEnabled(Config.selectedVideos.size() > 0);
             mViewModel.selectImageVisibility.setValue(Config.selectedVideos.size() > 0 ? View.VISIBLE : View.GONE);
-            mPreviewAdapter.setDatas(Config.selectedVideos);
+            List<String> selectedVideos = new ArrayList<>();
+            for (DavinciVideo video : Config.selectedVideos){
+                selectedVideos.add(video.uri.toString());
+            }
+            mPreviewAdapter.setDatas(selectedVideos, true);
         }
     }
 

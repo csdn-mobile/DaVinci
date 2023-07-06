@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
-import net.csdn.davinci.core.entity.Photo;
+import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.utils.DensityUtils;
 import net.csdn.davinci.utils.SystemUtils;
 
@@ -28,7 +28,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private int mImageWidth;
     private Context mContext;
-    private List<Photo> mDatas;
+    private List<DavinciPhoto> mDatas;
 
     private OnPhotoSelectChangeListener mListener;
     private OnCameraClickListener mOnCameraClickListener;
@@ -48,12 +48,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mImageWidth = (SystemUtils.getScreenWidth(context) - DensityUtils.dp2px(context, Config.column)) / 4;
     }
 
-    public void setDatas(List<Photo> datas) {
+    public void setDatas(List<DavinciPhoto> datas) {
         this.mDatas = datas;
         notifyDataSetChanged();
     }
 
-    public List<Photo> getDatas() {
+    public List<DavinciPhoto> getDatas() {
         return mDatas;
     }
 
@@ -106,7 +106,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         // 图片
         PhotoHolder holder = (PhotoHolder) viewHolder;
-        Photo photo;
+        DavinciPhoto photo;
         if (Config.showCamera) {
             photo = mDatas.get(position - 1);
         } else {

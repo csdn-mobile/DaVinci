@@ -21,6 +21,25 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
 
+        <net.csdn.roundview.RoundTextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="#66000000"
+            android:includeFontPadding="false"
+            android:paddingStart="4dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="4dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/davinci_white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:rRadius="2dp" />
+
         <RelativeLayout
             android:id="@+id/rl_delete"
             android:layout_width="23dp"

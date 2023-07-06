@@ -10,8 +10,8 @@ import net.csdn.davinci.Config;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.Album;
-import net.csdn.davinci.core.entity.Photo;
-import net.csdn.davinci.core.entity.Video;
+import net.csdn.davinci.core.entity.DavinciPhoto;
+import net.csdn.davinci.core.entity.DavinciVideo;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -104,16 +104,16 @@ public class AlbumHelper {
                 }
                 if (duration <= 0) {
                     // 创建照片对象
-                    Photo photo = new Photo();
+                    DavinciPhoto photo = new DavinciPhoto();
                     photo.id = String.valueOf(imageId);
-                    photo.imgPath = imagePath;
+                    photo.path = imagePath;
                     photo.uri = uri;
                     // 在当前相册和全部相册都添加照片
                     album.photoList.add(photo);
                     albumAll.photoList.add(photo);
                 } else {
                     // 创建视频对象
-                    Video video = new Video();
+                    DavinciVideo video = new DavinciVideo();
                     video.id = String.valueOf(imageId);
                     video.path = imagePath;
                     video.uri = uri;

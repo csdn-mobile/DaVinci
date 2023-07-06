@@ -14,8 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.R;
-import net.csdn.davinci.core.entity.Photo;
-import net.csdn.davinci.core.entity.Video;
+import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.utils.DensityUtils;
 import net.csdn.davinci.utils.SystemUtils;
 import net.csdn.davinci.utils.TimeUtils;
@@ -27,7 +26,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoHolder>
     private static final int MAX_VIDEO_COUNT = 1;
 
     private final Context mContext;
-    private List<Video> mDatas;
+    private List<DavinciVideo> mDatas;
     private final int mImageWidth;
 
     private OnVideoSelectChangeListener mListener;
@@ -42,12 +41,12 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoHolder>
         this.mImageWidth = (SystemUtils.getScreenWidth(context) - DensityUtils.dp2px(context, Config.column)) / 4;
     }
 
-    public void setDatas(List<Video> datas) {
+    public void setDatas(List<DavinciVideo> datas) {
         this.mDatas = datas;
         notifyDataSetChanged();
     }
 
-    public List<Video> getDatas() {
+    public List<DavinciVideo> getDatas() {
         return mDatas;
     }
 
@@ -63,14 +62,14 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoHolder>
 
     @Override
     public void onBindViewHolder(VideoHolder holder, int position) {
-        Video video = mDatas.get(position);
+        DavinciVideo video = mDatas.get(position);
         String uriPath = video.uri.toString();
         Config.imageEngine.loadThumbnail(mContext, mImageWidth, R.color.davinci_place_holder, holder.ivPhoto, uriPath);
 
-        // 图片选中状态
-        boolean isSelected = Config.selectedVideos.contains(uriPath);
+        // 视频选中状态
+        boolean isSelected = Config.selectedVideos.contains(video);
         holder.rlSelected.setSelected(isSelected);
-        holder.tvSelected.setText(isSelected ? Config.selectedVideos.indexOf(uriPath) + 1 + "" : "");
+        holder.tvSelected.setText(isSelected ? Config.selectedVideos.indexOf(video) + 1 + "" : "");
         holder.viewShadow.setVisibility(Config.selectedVideos.size() >= MAX_VIDEO_COUNT && !isSelected ? View.VISIBLE : View.GONE);
         holder.tvTime.setText(TimeUtils.formatMillisecond(video.duration));
 
@@ -90,16 +89,16 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoHolder>
                 }
                 view.setSelected(!view.isSelected());
                 if (view.isSelected()) {
-                    // 选中图片
-                    Config.selectedVideos.add(uriPath);
+                    // 选中视频
+                    Config.selectedVideos.add(video);
                     if (Config.selectedVideos.size() < MAX_VIDEO_COUNT) {
-                        holder.tvSelected.setText(view.isSelected() ? Config.selectedVideos.indexOf(uriPath) + 1 + "" : "");
+                        holder.tvSelected.setText(view.isSelected() ? Config.selectedVideos.indexOf(video) + 1 + "" : "");
                     } else {
                         notifyDataSetChanged();
                     }
                 } else {
                     // 取消选中
-                    Config.selectedVideos.remove(uriPath);
+                    Config.selectedVideos.remove(video);
                     notifyDataSetChanged();
                 }
                 if (mListener != null) {
