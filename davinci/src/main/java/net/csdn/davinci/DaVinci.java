@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class DaVinci {
 
     public final static String KEY_SELECTED_PHOTOS = "SELECTED_PHOTOS";
+    public final static String KEY_SELECTED_VIDEOS = "SELECTED_VIDEOS";
 
     public final static int SELECT_IMAGE = 1000;
     public final static int SELECT_VIDEO = 1001;
@@ -110,6 +111,16 @@ public class DaVinci {
          */
         public DaVinciSelectBuilder selectedPhotos(ArrayList<String> selectedPhotos) {
             Config.selectedPhotos = createNewArray(selectedPhotos);
+            Config.selectedVideos = new ArrayList<>();
+            return this;
+        }
+
+        /**
+         * 已选中的视频
+         */
+        public DaVinciSelectBuilder selectedVideos(ArrayList<DavinciVideo> selectedVideos) {
+            Config.selectedVideos = createNewArray(selectedVideos);
+            Config.selectedPhotos = new ArrayList<>();
             return this;
         }
 
@@ -216,7 +227,7 @@ public class DaVinci {
                 Config.currentMedia = (String) media;
             }
             Intent intent = new Intent(activity, PreviewActivity.class);
-            activity.startActivityForResult(intent, PreviewActivity.RESULT_PREVIEW);
+            activity.startActivity(intent);
         }
     }
 
@@ -230,8 +241,8 @@ public class DaVinci {
     /**
      * 创建新ArrayList，避免传入数据被改变
      */
-    private static ArrayList<String> createNewArray(ArrayList<String> oldList) {
-        ArrayList<String> newList = new ArrayList<>();
+    private static <T> ArrayList<T> createNewArray(ArrayList<T> oldList) {
+        ArrayList<T> newList = new ArrayList<>();
         if (oldList != null && oldList.size() > 0) {
             newList.addAll(oldList);
         }

@@ -30,8 +30,6 @@ import net.csdn.statusbar.annotation.FontMode;
 
 public class PreviewActivity extends BaseBindingViewModelActivity<ActivityPreviewBinding, PreviewViewModel> {
 
-    public static final int RESULT_PREVIEW = 2048;
-
     private PhotoHandleManager mHandleManager;
 
     @Override

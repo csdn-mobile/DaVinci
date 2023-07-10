@@ -15,10 +15,6 @@
         <variable
             name="onTitleClick"
             type="android.view.View.OnClickListener" />
-
-        <variable
-            name="onConfirmClick"
-            type="android.view.View.OnClickListener" />
     </data>
 
     <RelativeLayout

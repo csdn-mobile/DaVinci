@@ -109,21 +109,14 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         if (resultCode != RESULT_OK) {
             return;
         }
-        switch (requestCode) {
-            case PhotoCaptureManager.REQUEST_TAKE_PHOTO: {
-                PhotoCaptureManager.getInstance(getApplication()).galleryAddPic();
-                Uri uri = PhotoCaptureManager.getInstance(getApplication()).getCurrentPhotoUri();
-                Config.selectedPhotos.add(uri.toString());
-                Config.previewMedias.add(uri.toString());
-                changeConfirmStatus();
-                mPhotoAdapter.getDatas().add(0, new DavinciPhoto(uri));
-                mPhotoAdapter.notifyDataSetChanged();
-            }
-            break;
-            case PreviewActivity.RESULT_PREVIEW: {
-                finishAndSetResult();
-            }
-            break;
+        if (requestCode == PhotoCaptureManager.REQUEST_TAKE_PHOTO) {
+            PhotoCaptureManager.getInstance(getApplication()).galleryAddPic();
+            Uri uri = PhotoCaptureManager.getInstance(getApplication()).getCurrentPhotoUri();
+            Config.selectedPhotos.add(uri.toString());
+            Config.previewMedias.add(uri.toString());
+            changeConfirmStatus();
+            mPhotoAdapter.getDatas().add(0, new DavinciPhoto(uri));
+            mPhotoAdapter.notifyDataSetChanged();
         }
     }
 
@@ -257,15 +250,10 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
             } else {
                 closeAlbum();
             }
-        }, v -> finishAndSetResult());
+        });
         mBinding.tvPhoto.setOnClickListener(v -> onSelectType(TYPE_IMAGE));
         mBinding.tvVideo.setOnClickListener(v -> onSelectType(TYPE_VIDEO));
-        mBinding.tvConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        mBinding.tvConfirm.setOnClickListener(v -> finishAndSetResult());
     }
 
     private void registerBus() {
@@ -337,6 +325,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
     private void finishAndSetResult() {
         Intent intent = new Intent();
         intent.putStringArrayListExtra(DaVinci.KEY_SELECTED_PHOTOS, Config.selectedPhotos);
+        intent.putParcelableArrayListExtra(DaVinci.KEY_SELECTED_VIDEOS, Config.selectedVideos);
         setResult(RESULT_OK, intent);
         finish();
     }

@@ -53,9 +53,8 @@ public class PhotoNavigation extends RelativeLayout {
     /**
      * 设置点击事件
      */
-    public void setListener(OnClickListener onBackClick, OnClickListener onTitleClick, OnClickListener onConfirmClick) {
+    public void setListener(OnClickListener onBackClick, OnClickListener onTitleClick) {
         mBinding.setOnBackClick(onBackClick);
         mBinding.setOnTitleClick(onTitleClick);
-        mBinding.setOnConfirmClick(onConfirmClick);
     }
 }

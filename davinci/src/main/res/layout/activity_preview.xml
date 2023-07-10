@@ -3,6 +3,10 @@
 
     <data>
 
+        <import type="net.csdn.davinci.Config" />
+
+        <import type="android.view.View" />
+
         <variable
             name="viewmodel"
             type="net.csdn.davinci.ui.viewmodel.PreviewViewModel" />
@@ -54,7 +58,8 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                    android:paddingEnd="16dp"
+                    android:visibility="@{Config.previewSelectable ? View.VISIBLE : View.GONE}">
 
                     <TextView
                         android:id="@+id/tv_selected"

@@ -38,7 +38,7 @@ public class PreviewFragment extends BaseBindingViewModelFragment<FragmentPrevie
         if (media instanceof String) {
             bundle.putString(IMAGE_ITEM, (String) media);
         } else if (media instanceof DavinciVideo) {
-            bundle.putSerializable(VIDEO_ITEM, (DavinciVideo) media);
+            bundle.putParcelable(VIDEO_ITEM, (DavinciVideo) media);
         }
         fragment.setArguments(bundle);
         return fragment;
@@ -66,7 +66,7 @@ public class PreviewFragment extends BaseBindingViewModelFragment<FragmentPrevie
                 mViewModel.imagePath = getArguments().getString(IMAGE_ITEM);
             } else if (getArguments().containsKey(VIDEO_ITEM)) {
                 mViewModel.isVideo = true;
-                mViewModel.video = (DavinciVideo) getArguments().getSerializable(VIDEO_ITEM);
+                mViewModel.video = (DavinciVideo) getArguments().getParcelable(VIDEO_ITEM);
             }
         } catch (Exception e) {
             e.printStackTrace();

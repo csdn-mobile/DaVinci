@@ -1,13 +1,11 @@
 package net.csdn.davinci.core.entity;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import java.io.Serializable;
-
-public abstract class DavinciMedia implements Serializable {
+public abstract class DavinciMedia {
     public String id;
     public String path;
     public Uri uri;
-
-
 }

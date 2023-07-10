@@ -1,6 +1,7 @@
 package net.csdn.davinci.demo;
 
 import static net.csdn.davinci.DaVinci.KEY_SELECTED_PHOTOS;
+import static net.csdn.davinci.DaVinci.KEY_SELECTED_VIDEOS;
 
 import android.Manifest;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import net.csdn.davinci.DaVinci;
+import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.utils.DavinciToastUtils;
 
 import java.util.ArrayList;
@@ -84,9 +86,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 10000 && resultCode == RESULT_OK) {
+        if (data != null && requestCode == 10000 && resultCode == RESULT_OK) {
             List<String> photos = data.getStringArrayListExtra(KEY_SELECTED_PHOTOS);
-            Log.e("DaVinci", "========" + photos.toString());
+            List<DavinciVideo> videos = data.getParcelableArrayListExtra(KEY_SELECTED_VIDEOS);
+            Log.e("DaVinci", "photos========" + photos.toString());
+            Log.e("DaVinci", "videos========" + videos.toString());
         }
     }
 }
