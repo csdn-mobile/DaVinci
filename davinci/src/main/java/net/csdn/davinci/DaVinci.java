@@ -149,7 +149,7 @@ public class DaVinci {
             if (activity == null) {
                 return;
             }
-            if (!PermissionsUtils.checkReadStoragePermission(activity)) {
+            if (Config.permissionHandler == null && !PermissionsUtils.checkReadStoragePermission(activity)) {
                 return;
             }
             Intent intent = new Intent(activity, PhotoActivity.class);
