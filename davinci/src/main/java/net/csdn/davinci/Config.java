@@ -3,6 +3,7 @@ package net.csdn.davinci;
 import net.csdn.davinci.core.engine.GlideEngine;
 import net.csdn.davinci.core.engine.ImageEngine;
 import net.csdn.davinci.core.entity.DavinciVideo;
+import net.csdn.davinci.core.permission.DavinciPermissionHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,6 +75,10 @@ public class Config {
      * 文件夹名称
      */
     public static String saveFolderName;
+    /**
+     * 权限请求相关
+     */
+    public static DavinciPermissionHandler permissionHandler;
 
     /**
      * 重置
@@ -84,7 +89,7 @@ public class Config {
         showGif = false;
         showCamera = true;
         previewSelectable = false;
-        selectType = DaVinci.SELECT_IMAGE;
+        selectType = DaVinci.SelectType.IMAGE;
         isDayStyle = true;
         selectedPhotos = new ArrayList<>();
         selectedVideos = new ArrayList<>();
@@ -95,5 +100,6 @@ public class Config {
         qrScanCallback = null;
         absolutePathMap = new HashMap<>();
         saveFolderName = "CSDN";
+        permissionHandler = null;
     }
 }

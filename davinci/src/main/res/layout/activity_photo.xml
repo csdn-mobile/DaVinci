@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <import type="net.csdn.davinci.Config" />
 
         <variable
@@ -70,12 +72,40 @@
                         android:id="@+id/rv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:visibility="@{viewmodel.permissionVisibility == View.VISIBLE ? View.GONE : View.VISIBLE}"
                         app:bind_column="@{Config.column}" />
 
-                    <net.csdn.davinci.ui.view.EmptyView
-                        android:id="@+id/empty"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="@{viewmodel.permissionVisibility}">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/davinci_permission_not_allow_desc"
+                            android:textColor="?davinciTextColor"
+                            android:textSize="13sp" />
+
+                        <net.csdn.roundview.RoundTextView
+                            android:id="@+id/tv_open_permission"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:includeFontPadding="false"
+                            android:paddingStart="10dp"
+                            android:paddingTop="7dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="7dp"
+                            android:text="@string/davinci_permission_go_open"
+                            android:textColor="@color/davinci_confirm"
+                            android:textSize="14sp"
+                            app:rRadius="6dp"
+                            app:rStrokeColor="@color/davinci_confirm"
+                            app:rStrokeWidth="1dp" />
+                    </LinearLayout>
                 </RelativeLayout>
 
                 <LinearLayout

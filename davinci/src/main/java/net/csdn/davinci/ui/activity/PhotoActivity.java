@@ -73,8 +73,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         setListener();
         registerBus();
 
-        loadAlbum();
-        changeConfirmStatus();
+        loadAlbumWithPermission();
     }
 
     @Override
@@ -132,10 +131,16 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
                 new PhotoAdapter.OnCameraClickListener() {
                     @Override
                     public void onClick() {
-                        if (!PermissionsUtils.checkCameraPermission(PhotoActivity.this)) {
-                            return;
+                        if (Config.permissionHandler != null) {
+                            if (Config.permissionHandler.requestPermission(DaVinci.PermissionType.CAMERA)) {
+                                openCamera();
+                            }
+                        } else {
+                            if (!PermissionsUtils.checkCameraPermission(PhotoActivity.this)) {
+                                return;
+                            }
+                            openCamera();
                         }
-                        openCamera();
                     }
                 },
                 new PhotoAdapter.OnImageClickListener() {
@@ -244,6 +249,9 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
 
     private void setListener() {
         mBinding.navigation.setListener(v -> onBackPressed(), v -> {
+            if (mViewModel.albumList.getValue() == null || mViewModel.albumList.getValue().size() <= 0) {
+                return;
+            }
             if (mBinding.album.getVisibility() == View.GONE) {
                 mBinding.album.openAlbum();
                 mBinding.navigation.setArrowUp();
@@ -251,9 +259,24 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
                 closeAlbum();
             }
         });
-        mBinding.tvPhoto.setOnClickListener(v -> onSelectType(TYPE_IMAGE));
-        mBinding.tvVideo.setOnClickListener(v -> onSelectType(TYPE_VIDEO));
+        mBinding.tvPhoto.setOnClickListener(v -> {
+            if (mViewModel.albumList.getValue() == null || mViewModel.albumList.getValue().size() <= 0) {
+                return;
+            }
+            onSelectType(TYPE_IMAGE);
+        });
+        mBinding.tvVideo.setOnClickListener(v -> {
+            if (mViewModel.albumList.getValue() == null || mViewModel.albumList.getValue().size() <= 0) {
+                return;
+            }
+            onSelectType(TYPE_VIDEO);
+        });
         mBinding.tvConfirm.setOnClickListener(v -> finishAndSetResult());
+        mBinding.tvOpenPermission.setOnClickListener(v -> {
+            if (Config.permissionHandler != null && Config.permissionHandler.requestPermission(DaVinci.PermissionType.PHOTO)) {
+                loadAlbum();
+            }
+        });
     }
 
     private void registerBus() {
@@ -274,10 +297,22 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         });
     }
 
+    private void loadAlbumWithPermission() {
+        if (Config.permissionHandler != null) {
+            if (Config.permissionHandler.requestPermission(DaVinci.PermissionType.PHOTO)) {
+                loadAlbum();
+            }
+        } else {
+            loadAlbum();
+        }
+    }
+
     private void loadAlbum() {
+        mViewModel.permissionVisibility.setValue(View.GONE);
         AlbumHelper.loadAlbums(this, albums -> {
             Log.e("AlbumLoad", "onLoadFinished====" + albums.toString());
             mViewModel.albumList.setValue(albums);
+            changeConfirmStatus();
         });
     }
 
@@ -324,8 +359,8 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
 
     private void finishAndSetResult() {
         Intent intent = new Intent();
-        intent.putStringArrayListExtra(DaVinci.KEY_SELECTED_PHOTOS, Config.selectedPhotos);
-        intent.putParcelableArrayListExtra(DaVinci.KEY_SELECTED_VIDEOS, Config.selectedVideos);
+        intent.putStringArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_PHOTOS, Config.selectedPhotos);
+        intent.putParcelableArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_VIDEOS, Config.selectedVideos);
         setResult(RESULT_OK, intent);
         finish();
     }

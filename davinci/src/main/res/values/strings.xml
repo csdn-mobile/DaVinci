@@ -3,7 +3,7 @@
 
   <string name="davinci_title">标题</string>
   <string name="davinci_confirm">确定</string>
-  <string name="davinci_all_image">所有图片</string>
+  <string name="davinci_all">全部</string>
   <string name="davinci_image_count">(%1$d)</string>
   <string name="davinci_over_max_count_tips">你最多可以选择%1$d张图片</string>
   <string name="davinci_over_max_count_tips_video">你最多可以选择%1$d张图片</string>
@@ -27,5 +27,7 @@
   <string name="davinci_permission_desc_camera">是否允许%s使用你的相机/存储权限？用于正常使用拍照功能。</string>
   <string name="davinci_permission_not_allow">不允许</string>
   <string name="davinci_permission_allow">好</string>
+  <string name="davinci_permission_not_allow_desc">你还没有开启存储权限，开启后即可查看相册</string>
+  <string name="davinci_permission_go_open">去开启权限</string>
 
 </resources>

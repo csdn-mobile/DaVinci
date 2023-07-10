@@ -1,8 +1,5 @@
 package net.csdn.davinci.demo;
 
-import static net.csdn.davinci.DaVinci.KEY_SELECTED_PHOTOS;
-import static net.csdn.davinci.DaVinci.KEY_SELECTED_VIDEOS;
-
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +13,7 @@ import androidx.core.app.ActivityCompat;
 
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.core.entity.DavinciVideo;
+import net.csdn.davinci.core.permission.DavinciPermissionHandler;
 import net.csdn.davinci.utils.DavinciToastUtils;
 
 import java.util.ArrayList;
@@ -45,7 +43,13 @@ public class MainActivity extends AppCompatActivity {
                         .showGif(true)
                         .showCamera(true)
                         .isDayStyle(true)
-                        .selectType(DaVinci.SELECT_IMAGE_VIDEO)
+                        .permissionHandler(new DavinciPermissionHandler() {
+                            @Override
+                            public boolean requestPermission(int type) {
+                                return false;
+                            }
+                        })
+                        .selectType(DaVinci.SelectType.IMAGE_VIDEO)
                         .column(4)
                         .start(MainActivity.this, 10000);
             }
@@ -87,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null && requestCode == 10000 && resultCode == RESULT_OK) {
-            List<String> photos = data.getStringArrayListExtra(KEY_SELECTED_PHOTOS);
-            List<DavinciVideo> videos = data.getParcelableArrayListExtra(KEY_SELECTED_VIDEOS);
+            List<String> photos = data.getStringArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_PHOTOS);
+            List<DavinciVideo> videos = data.getParcelableArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_VIDEOS);
             Log.e("DaVinci", "photos========" + photos.toString());
             Log.e("DaVinci", "videos========" + videos.toString());
         }

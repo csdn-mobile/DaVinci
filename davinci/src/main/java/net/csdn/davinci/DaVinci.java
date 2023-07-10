@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import net.csdn.davinci.core.entity.DavinciVideo;
+import net.csdn.davinci.core.permission.DavinciPermissionHandler;
 import net.csdn.davinci.ui.activity.PhotoActivity;
 import net.csdn.davinci.ui.activity.PreviewActivity;
 import net.csdn.davinci.utils.PermissionsUtils;
@@ -12,12 +13,21 @@ import java.util.ArrayList;
 
 public class DaVinci {
 
-    public final static String KEY_SELECTED_PHOTOS = "SELECTED_PHOTOS";
-    public final static String KEY_SELECTED_VIDEOS = "SELECTED_VIDEOS";
+    public static class ResultKey {
+        public final static String KEY_SELECTED_PHOTOS = "SELECTED_PHOTOS";
+        public final static String KEY_SELECTED_VIDEOS = "SELECTED_VIDEOS";
+    }
 
-    public final static int SELECT_IMAGE = 1000;
-    public final static int SELECT_VIDEO = 1001;
-    public final static int SELECT_IMAGE_VIDEO = 1002;
+    public static class SelectType {
+        public final static int IMAGE = 1000;
+        public final static int VIDEO = 1001;
+        public final static int IMAGE_VIDEO = 1002;
+    }
+
+    public static class PermissionType {
+        public final static int PHOTO = 1000;
+        public final static int CAMERA = 1001;
+    }
 
     private DaVinci() {
     }
@@ -121,6 +131,14 @@ public class DaVinci {
         public DaVinciSelectBuilder selectedVideos(ArrayList<DavinciVideo> selectedVideos) {
             Config.selectedVideos = createNewArray(selectedVideos);
             Config.selectedPhotos = new ArrayList<>();
+            return this;
+        }
+
+        /**
+         * 权限请求
+         */
+        public DaVinciSelectBuilder permissionHandler(DavinciPermissionHandler permissionHandler) {
+            Config.permissionHandler = permissionHandler;
             return this;
         }
 

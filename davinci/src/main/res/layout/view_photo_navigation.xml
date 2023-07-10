@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.text.TextUtils" />
+
         <variable
             name="title"
             type="String" />
@@ -49,7 +51,7 @@
                 android:gravity="center"
                 android:maxWidth="160dp"
                 android:maxLines="1"
-                android:text="@{title}"
+                android:text="@{TextUtils.isEmpty(title) ? @string/davinci_all : title}"
                 android:textColor="?davinciTextColor"
                 android:textSize="16sp"
                 android:textStyle="bold" />

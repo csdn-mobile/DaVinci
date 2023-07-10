@@ -36,12 +36,12 @@ public class AlbumHelper {
         String selection;
         String[] selectionArgs;
         switch (Config.selectType) {
-            case DaVinci.SELECT_VIDEO: {
+            case DaVinci.SelectType.VIDEO: {
                 selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=? AND " + MediaStore.MediaColumns.SIZE + ">0";
                 selectionArgs = new String[]{String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)};
             }
             break;
-            case DaVinci.SELECT_IMAGE_VIDEO: {
+            case DaVinci.SelectType.IMAGE_VIDEO: {
                 selection = "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)"
                         + (Config.showGif ? "" : " AND " + MediaStore.MediaColumns.MIME_TYPE + "!=?")
                         + " AND " + MediaStore.MediaColumns.SIZE + ">0";
@@ -52,7 +52,7 @@ public class AlbumHelper {
                 }
             }
             break;
-            case DaVinci.SELECT_IMAGE:
+            case DaVinci.SelectType.IMAGE:
             default: {
                 selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                         + (Config.showGif ? "" : " AND " + MediaStore.MediaColumns.MIME_TYPE + "!=?")
@@ -76,7 +76,7 @@ public class AlbumHelper {
             // 自定义相册所有照片
             albumAll = new Album();
             albumAll.id = DIR_ALL_ID;
-            albumAll.name = context.getString(R.string.davinci_all_image);
+            albumAll.name = context.getString(R.string.davinci_all);
             // 添加所有照片到头部
             albums.put(DIR_ALL_ID, albumAll);
             while (cursor.moveToNext()) {

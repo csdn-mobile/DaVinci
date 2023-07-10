@@ -20,18 +20,20 @@ public class PhotoViewModel extends BaseViewModel {
     public MutableLiveData<ArrayList<Album>> albumList;
 
     public MutableLiveData<Integer> selectImageVisibility;
+    public MutableLiveData<Integer> permissionVisibility;
 
     public PhotoViewModel() {
         super();
-        typeVisibility = Config.selectType == DaVinci.SELECT_IMAGE_VIDEO ? View.VISIBLE : View.GONE;
+        typeVisibility = Config.selectType == DaVinci.SelectType.IMAGE_VIDEO ? View.VISIBLE : View.GONE;
         albumList = new MutableLiveData<>();
-        if (Config.selectType == DaVinci.SELECT_IMAGE_VIDEO) {
+        if (Config.selectType == DaVinci.SelectType.IMAGE_VIDEO) {
             selectLimitDesc = "最多可添加" + Config.maxSelectable + "张照片或1个视频";
-        } else if (Config.selectType == DaVinci.SELECT_VIDEO) {
+        } else if (Config.selectType == DaVinci.SelectType.VIDEO) {
             selectLimitDesc = "最多可添加1个视频";
         } else {
             selectLimitDesc = "最多可添加" + Config.maxSelectable + "张照片";
         }
         selectImageVisibility = new MutableLiveData<>(Config.selectedPhotos.size() > 0 ? View.VISIBLE : View.GONE);
+        permissionVisibility = new MutableLiveData<>(View.VISIBLE);
     }
 }
