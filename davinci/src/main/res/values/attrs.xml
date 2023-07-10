@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="Theme">
+    <declare-styleable name="DavinciTheme">
         <attr name="davinciBackgroundColor" format="reference" />
         <attr name="davinciTextColor" format="reference" />
         <attr name="davinciCamera" format="reference" />

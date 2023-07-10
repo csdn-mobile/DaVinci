@@ -62,7 +62,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(Config.isDayStyle ? R.style.AppTheme_Day : R.style.AppTheme_Night);
+        setTheme(Config.isDayStyle ? R.style.DavinciTheme_Day : R.style.DavinciTheme_Night);
         super.onCreate(savedInstanceState);
         StatusBar.Builder()
                 .color(ResourceUtils.getColorFromAttr(this, R.attr.davinciBackgroundColor))

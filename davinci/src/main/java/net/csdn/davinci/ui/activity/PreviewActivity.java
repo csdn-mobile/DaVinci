@@ -44,7 +44,7 @@ public class PreviewActivity extends BaseBindingViewModelActivity<ActivityPrevie
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(Config.isDayStyle ? R.style.AppTheme_Day : R.style.AppTheme_Night);
+        setTheme(Config.isDayStyle ? R.style.DavinciTheme_Day : R.style.DavinciTheme_Night);
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.davinci_fade_in, R.anim.davinci_fade_out);
         initStatusBar();

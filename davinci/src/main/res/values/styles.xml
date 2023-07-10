@@ -14,7 +14,7 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <style name="AppTheme.Day" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="DavinciTheme.Day" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="davinciBackgroundColor">@color/davinci_background</item>
         <item name="davinciTextColor">@color/davinci_background_night</item>
         <item name="davinciCamera">@drawable/davinci_camera</item>
@@ -25,7 +25,7 @@
         <item name="davinciConfirmTextColor">@color/color_confirm_text_selector</item>
     </style>
 
-    <style name="AppTheme.Night" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="DavinciTheme.Night" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="davinciBackgroundColor">@color/davinci_background_night</item>
         <item name="davinciTextColor">@color/davinci_text_night</item>
         <item name="davinciCamera">@drawable/davinci_camera_night</item>

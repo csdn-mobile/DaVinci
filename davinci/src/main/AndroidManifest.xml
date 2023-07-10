@@ -21,13 +21,13 @@
         <activity
             android:name=".ui.activity.PhotoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Day"
+            android:theme="@style/DavinciTheme.Day"
             android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".ui.activity.PreviewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Day"
+            android:theme="@style/DavinciTheme.Day"
             android:windowSoftInputMode="stateHidden" />
     </application>
 </manifest>
