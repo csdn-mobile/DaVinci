@@ -24,6 +24,7 @@ public class DavinciVideo extends DavinciMedia implements Parcelable {
     protected DavinciVideo(Parcel in) {
         this.id = in.readString();
         this.path = in.readString();
+        this.duration = in.readInt();
         this.uri = in.readParcelable(Uri.class.getClassLoader());
     }
 
@@ -36,6 +37,7 @@ public class DavinciVideo extends DavinciMedia implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
         dest.writeString(path);
+        dest.writeInt(duration);
         dest.writeParcelable(uri, flags);
     }
 
