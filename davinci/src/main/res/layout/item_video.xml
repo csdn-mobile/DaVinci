@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <net.csdn.davinci.ui.view.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingEnd="1dp"
@@ -12,7 +11,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
-    <net.csdn.roundview.RoundTextView
+    <TextView
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,15 +19,14 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"
-        android:background="#66000000"
+        android:background="@drawable/davinci_video_schedule_background"
         android:includeFontPadding="false"
         android:paddingStart="4dp"
         android:paddingTop="2dp"
         android:paddingEnd="4dp"
         android:paddingBottom="2dp"
         android:textColor="@color/davinci_white"
-        android:textSize="12sp"
-        app:rRadius="2dp" />
+        android:textSize="12sp" />
 
     <RelativeLayout
         android:id="@+id/rl_selected"
