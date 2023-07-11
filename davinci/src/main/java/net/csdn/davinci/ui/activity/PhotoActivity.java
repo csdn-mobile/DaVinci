@@ -178,7 +178,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
                                 .start(PhotoActivity.this, video);
                     }
                 });
-        onSelectType(TYPE_IMAGE);
+        onSelectType(Config.selectedVideos != null && Config.selectedVideos.size() > 0 ? TYPE_VIDEO : TYPE_IMAGE);
         // 监听相簿数据源变化
         mViewModel.albumList.observe(this, new Observer<ArrayList<Album>>() {
             @Override
