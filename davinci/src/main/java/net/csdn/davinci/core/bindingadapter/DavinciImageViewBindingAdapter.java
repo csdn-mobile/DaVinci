@@ -14,7 +14,7 @@ import net.csdn.davinci.utils.ImageShowUtils;
  *
  * @author by KG on 2022/05/16
  */
-public class ImageViewBindingAdapter {
+public class DavinciImageViewBindingAdapter {
 
     /**
      * 读取缩略图
@@ -23,17 +23,4 @@ public class ImageViewBindingAdapter {
     public static void loadThumbnail(ImageView imageView, int resize, String path) {
         ImageShowUtils.loadThumbnail(imageView.getContext(), resize, imageView, path);
     }
-
-    /**
-     * Glide展示网络图片
-     */
-    @BindingAdapter(value = {"bind_imageUrl", "bind_placeholder", "bind_error"}, requireAll = false)
-    public static void loadNetImage(ImageView imageView, String imageUrl, Drawable placeholder, Drawable error) {
-        Glide.with(imageView.getContext())
-                .load(imageUrl)
-                .placeholder(placeholder)
-                .error(error)
-                .into(imageView);
-    }
-
 }

@@ -58,7 +58,7 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
 
     @Override
     public PhotoPreviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PhotoPreviewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo_preview, parent, false));
+        return new PhotoPreviewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.davinci_item_photo_preview, parent, false));
     }
 
     @Override

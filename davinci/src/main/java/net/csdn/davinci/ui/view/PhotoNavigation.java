@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
 import net.csdn.davinci.R;
-import net.csdn.davinci.databinding.ViewPhotoNavigationBinding;
+import net.csdn.davinci.databinding.DavinciViewPhotoNavigationBinding;
 
 public class PhotoNavigation extends RelativeLayout {
 
-    private ViewPhotoNavigationBinding mBinding;
+    private DavinciViewPhotoNavigationBinding mBinding;
 
     public PhotoNavigation(Context context) {
         this(context, null);
@@ -26,7 +26,7 @@ public class PhotoNavigation extends RelativeLayout {
     }
 
     private void init(Context context) {
-        mBinding = ViewPhotoNavigationBinding.inflate(LayoutInflater.from(context), this, true);
+        mBinding = DavinciViewPhotoNavigationBinding.inflate(LayoutInflater.from(context), this, true);
     }
 
     /**

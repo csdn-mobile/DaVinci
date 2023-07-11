@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.core.permission.DavinciPermissionHandler;
+import net.csdn.davinci.core.permission.OnPermissionResultListener;
 import net.csdn.davinci.utils.DavinciToastUtils;
 
 import java.util.ArrayList;
@@ -43,12 +44,6 @@ public class MainActivity extends AppCompatActivity {
                         .showGif(true)
                         .showCamera(true)
                         .isDayStyle(true)
-                        .permissionHandler(new DavinciPermissionHandler() {
-                            @Override
-                            public boolean requestPermission(int type) {
-                                return false;
-                            }
-                        })
                         .selectType(DaVinci.SelectType.IMAGE_VIDEO)
                         .column(4)
                         .start(MainActivity.this, 10000);

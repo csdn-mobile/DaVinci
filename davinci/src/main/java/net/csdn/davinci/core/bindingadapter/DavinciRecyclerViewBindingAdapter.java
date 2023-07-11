@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
  *
  * @author by KG on 2022/05/16
  */
-public class RecyclerViewBindingAdapter {
+public class DavinciRecyclerViewBindingAdapter {
 
     /**
      * 设置Adapter

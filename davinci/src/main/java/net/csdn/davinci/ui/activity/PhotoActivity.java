@@ -23,8 +23,9 @@ import net.csdn.davinci.core.album.AlbumHelper;
 import net.csdn.davinci.core.entity.Album;
 import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
+import net.csdn.davinci.core.permission.OnPermissionResultListener;
 import net.csdn.davinci.core.photo.PhotoCaptureManager;
-import net.csdn.davinci.databinding.ActivityPhotoBinding;
+import net.csdn.davinci.databinding.DavinciActivityPhotoBinding;
 import net.csdn.davinci.ui.adapter.MediaPreviewAdapter;
 import net.csdn.davinci.ui.adapter.PhotoAdapter;
 import net.csdn.davinci.ui.adapter.VideoAdapter;
@@ -41,7 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBinding, PhotoViewModel> {
+public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityPhotoBinding, PhotoViewModel> {
 
     private static final int TYPE_IMAGE = 1;
     private static final int TYPE_VIDEO = 2;
@@ -49,10 +50,11 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
     private PhotoAdapter mPhotoAdapter;
     private VideoAdapter mVideoAdapter;
     private MediaPreviewAdapter mPreviewAdapter;
+    private OnPermissionResultListener mOnPermissionResultListener;
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_photo;
+        return R.layout.davinci_activity_photo;
     }
 
     @Override
@@ -132,7 +134,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
                     @Override
                     public void onClick() {
                         if (Config.permissionHandler != null) {
-                            if (Config.permissionHandler.requestPermission(DaVinci.PermissionType.CAMERA)) {
+                            if (Config.permissionHandler.requestPermission(DaVinci.PermissionType.CAMERA, mOnPermissionResultListener)) {
                                 openCamera();
                             }
                         } else {
@@ -245,6 +247,24 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
             }
         });
         itemTouchHelper.attachToRecyclerView(mBinding.rvSelect);
+        // 权限请求结果监听
+        mOnPermissionResultListener = new OnPermissionResultListener() {
+            @Override
+            public void onPhotoPermissionSuccess() {
+                if (isDestroyed() || isFinishing()) {
+                    return;
+                }
+                loadAlbum();
+            }
+
+            @Override
+            public void onCameraPermissionSuccess() {
+                if (isDestroyed() || isFinishing()) {
+                    return;
+                }
+                openCamera();
+            }
+        };
     }
 
     private void setListener() {
@@ -273,7 +293,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
         });
         mBinding.tvConfirm.setOnClickListener(v -> finishAndSetResult());
         mBinding.tvOpenPermission.setOnClickListener(v -> {
-            if (Config.permissionHandler != null && Config.permissionHandler.requestPermission(DaVinci.PermissionType.PHOTO)) {
+            if (Config.permissionHandler != null && Config.permissionHandler.requestPermission(DaVinci.PermissionType.PHOTO, mOnPermissionResultListener)) {
                 loadAlbum();
             }
         });
@@ -299,7 +319,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<ActivityPhotoBin
 
     private void loadAlbumWithPermission() {
         if (Config.permissionHandler != null) {
-            if (Config.permissionHandler.requestPermission(DaVinci.PermissionType.PHOTO)) {
+            if (Config.permissionHandler.requestPermission(DaVinci.PermissionType.PHOTO, mOnPermissionResultListener)) {
                 loadAlbum();
             }
         } else {

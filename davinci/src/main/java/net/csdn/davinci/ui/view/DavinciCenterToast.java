@@ -25,7 +25,7 @@ public class DavinciCenterToast extends Toast {
 
     private void init() {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.view_davinci_center_toast, null);
+        View view = inflater.inflate(R.layout.davinci_view_davinci_center_toast, null);
         tvContent = view.findViewById(R.id.tv_content);
         setDuration(Toast.LENGTH_SHORT);
         setGravity(Gravity.CENTER, 0, 0);

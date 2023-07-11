@@ -18,7 +18,7 @@ import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.core.photo.PhotoHandleManager;
 import net.csdn.davinci.core.photo.PhotoHandleManagerImpl;
-import net.csdn.davinci.databinding.ActivityPreviewBinding;
+import net.csdn.davinci.databinding.DavinciActivityPreviewBinding;
 import net.csdn.davinci.ui.adapter.PreviewPagerAdapter;
 import net.csdn.davinci.ui.viewmodel.PreviewViewModel;
 import net.csdn.davinci.utils.DavinciToastUtils;
@@ -28,7 +28,7 @@ import net.csdn.mvvm_java.ui.activity.BaseBindingViewModelActivity;
 import net.csdn.statusbar.StatusBar;
 import net.csdn.statusbar.annotation.FontMode;
 
-public class PreviewActivity extends BaseBindingViewModelActivity<ActivityPreviewBinding, PreviewViewModel> {
+public class PreviewActivity extends BaseBindingViewModelActivity<DavinciActivityPreviewBinding, PreviewViewModel> {
 
     private PhotoHandleManager mHandleManager;
 
@@ -39,7 +39,7 @@ public class PreviewActivity extends BaseBindingViewModelActivity<ActivityPrevie
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_preview;
+        return R.layout.davinci_activity_preview;
     }
 
     @Override

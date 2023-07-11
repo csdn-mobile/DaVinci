@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -84,7 +85,6 @@
 
         <TextView
             android:id="@+id/tv_page"
-            bind_isGone="@{viewmodel.pageGone}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -93,6 +93,7 @@
             android:text="@string/davinci_pager_page"
             android:textColor="@color/davinci_page_gray"
             android:textSize="14sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:davinci_bind_isGone="@{viewmodel.pageGone}" />
     </RelativeLayout>
 </layout>

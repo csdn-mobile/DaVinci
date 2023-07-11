@@ -48,7 +48,7 @@ public class PermissionsDialog extends Dialog {
     }
 
     private void init() {
-        setContentView(R.layout.dialog_permissions);
+        setContentView(R.layout.davinci_dialog_permissions);
         setCancelable(false);
         setCanceledOnTouchOutside(false);
 

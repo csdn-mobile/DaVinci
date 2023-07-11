@@ -8,5 +8,5 @@ public interface DavinciPermissionHandler {
      * @param type 请求权限的类型(Davinci.PermissionType.PHOTO | Davinci.PermissionType.CAMERA)
      * @return 是否权限允许
      */
-    boolean requestPermission(int type);
+    boolean requestPermission(int type, OnPermissionResultListener listener);
 }

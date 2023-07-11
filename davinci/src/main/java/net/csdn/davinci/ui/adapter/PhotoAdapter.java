@@ -79,9 +79,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_CAMERA) {
-            return new CameraHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo_camera, parent, false));
+            return new CameraHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.davinci_item_photo_camera, parent, false));
         }
-        return new PhotoHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo, parent, false));
+        return new PhotoHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.davinci_item_photo, parent, false));
     }
 
     @Override

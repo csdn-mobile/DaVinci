@@ -21,12 +21,12 @@ import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.engine.PhotoViewTarget;
 import net.csdn.davinci.core.entity.DavinciVideo;
-import net.csdn.davinci.databinding.FragmentPreviewBinding;
+import net.csdn.davinci.databinding.DavinciFragmentPreviewBinding;
 import net.csdn.davinci.ui.viewmodel.PreviewFragmentViewModel;
 import net.csdn.davinci.utils.PhotoUtils;
 import net.csdn.mvvm_java.ui.fragment.BaseBindingViewModelFragment;
 
-public class PreviewFragment extends BaseBindingViewModelFragment<FragmentPreviewBinding, PreviewFragmentViewModel> {
+public class PreviewFragment extends BaseBindingViewModelFragment<DavinciFragmentPreviewBinding, PreviewFragmentViewModel> {
 
     private static final String IMAGE_ITEM = "image_item";
     private static final String VIDEO_ITEM = "video_item";
@@ -46,7 +46,7 @@ public class PreviewFragment extends BaseBindingViewModelFragment<FragmentPrevie
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_preview;
+        return R.layout.davinci_fragment_preview;
     }
 
     @Override

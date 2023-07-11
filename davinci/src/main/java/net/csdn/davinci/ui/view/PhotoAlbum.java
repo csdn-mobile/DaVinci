@@ -12,18 +12,18 @@ import net.csdn.davinci.BR;
 import net.csdn.davinci.BusEvent;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.Album;
-import net.csdn.davinci.databinding.ItemAlbumBinding;
-import net.csdn.davinci.databinding.ViewPhotoAlbumBinding;
-import net.csdn.mvvm_java.ui.adapter.BindingViewModelAdapter;
+import net.csdn.davinci.databinding.DavinciItemAlbumBinding;
+import net.csdn.davinci.databinding.DavinciViewPhotoAlbumBinding;
 import net.csdn.davinci.ui.viewmodel.AlbumItemViewModel;
 import net.csdn.mvvm_java.bus.LiveDataBus;
+import net.csdn.mvvm_java.ui.adapter.BindingViewModelAdapter;
 
 import java.util.ArrayList;
 
 public class PhotoAlbum extends RelativeLayout {
 
-    private ViewPhotoAlbumBinding mBinding;
-    private BindingViewModelAdapter<Album, ItemAlbumBinding> mAdapter;
+    private DavinciViewPhotoAlbumBinding mBinding;
+    private BindingViewModelAdapter<Album, DavinciItemAlbumBinding> mAdapter;
 
     public PhotoAlbum(Context context) {
         this(context, null);
@@ -39,8 +39,8 @@ public class PhotoAlbum extends RelativeLayout {
     }
 
     private void init(Context context) {
-        mBinding = ViewPhotoAlbumBinding.inflate(LayoutInflater.from(context), this, true);
-        mAdapter = new BindingViewModelAdapter<>(R.layout.item_album, BR.viewmodel, AlbumItemViewModel.class, null);
+        mBinding = DavinciViewPhotoAlbumBinding.inflate(LayoutInflater.from(context), this, true);
+        mAdapter = new BindingViewModelAdapter<>(R.layout.davinci_item_album, BR.viewmodel, AlbumItemViewModel.class, null);
         mBinding.setAdapter(mAdapter);
         mBinding.setOnBlankClick(new OnClickListener() {
             @Override
