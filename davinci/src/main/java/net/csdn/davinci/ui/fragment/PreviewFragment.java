@@ -26,7 +26,7 @@ import net.csdn.davinci.ui.viewmodel.PreviewFragmentViewModel;
 import net.csdn.davinci.utils.PhotoUtils;
 import net.csdn.mvvm_java.ui.fragment.BaseBindingViewModelFragment;
 
-public class PreviewFragment<T extends DavinciMedia> extends BaseBindingViewModelFragment<DavinciFragmentPreviewBinding, PreviewFragmentViewModel> {
+public class PreviewFragment extends BaseBindingViewModelFragment<DavinciFragmentPreviewBinding, PreviewFragmentViewModel> {
 
     private static final String IMAGE_ITEM = "image_item";
     private static final String VIDEO_ITEM = "video_item";

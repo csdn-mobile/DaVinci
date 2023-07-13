@@ -53,12 +53,14 @@
             android:id="@+id/iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:onClick="@{viewmodel.onClickListener}"
             android:onLongClick="@{viewmodel.onLongClickListener}" />
 
         <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
             android:id="@+id/iv_long"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:onClick="@{viewmodel.onClickListener}"
             android:onLongClick="@{viewmodel.onLongClickListener}"
             android:visibility="gone" />
 

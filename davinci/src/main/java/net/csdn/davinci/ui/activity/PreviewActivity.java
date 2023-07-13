@@ -91,6 +91,14 @@ public class PreviewActivity extends BaseBindingViewModelActivity<DavinciActivit
     }
 
     private void setListener() {
+        LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_CLICK).observe(this, new Observer<Object>() {
+            @Override
+            public void onChanged(Object o) {
+                if (!Config.previewSelectable) {
+                    finish();
+                }
+            }
+        });
         LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_LONG_CLICK, DavinciMedia.class).observe(this, new Observer<DavinciMedia>() {
             @Override
             public void onChanged(DavinciMedia media) {

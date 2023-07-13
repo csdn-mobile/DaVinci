@@ -27,6 +27,15 @@ public class PreviewFragmentViewModel extends BaseViewModel {
         return imageHeight / imageWidth >= 3;
     }
 
+    public View.OnClickListener getOnClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_CLICK).setValue(null);
+            }
+        };
+    }
+
     public View.OnLongClickListener getOnLongClickListener() {
         return new View.OnLongClickListener() {
             @Override
