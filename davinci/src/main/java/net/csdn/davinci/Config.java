@@ -2,6 +2,8 @@ package net.csdn.davinci;
 
 import net.csdn.davinci.core.engine.GlideEngine;
 import net.csdn.davinci.core.engine.ImageEngine;
+import net.csdn.davinci.core.entity.DavinciMedia;
+import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.core.permission.DavinciPermissionHandler;
 
@@ -46,7 +48,7 @@ public class Config {
     /**
      * 已选中的照片
      */
-    public static ArrayList<String> selectedPhotos;
+    public static ArrayList<DavinciPhoto> selectedPhotos;
     /**
      * 已选中的视频
      */
@@ -54,11 +56,11 @@ public class Config {
     /**
      * 当前预览的图片/视频地址
      */
-    public static ArrayList<Object> previewMedias;
+    public static ArrayList<? super DavinciMedia> previewMedias;
     /**
      * 当前选中的照片/视频地址
      */
-    public static Object currentMedia;
+    public static DavinciMedia currentMedia;
     /**
      * 是否需要长按识别二维码
      */

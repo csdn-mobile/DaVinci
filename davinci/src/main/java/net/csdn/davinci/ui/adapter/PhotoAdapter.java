@@ -25,13 +25,13 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int TYPE_CAMERA = 1000;
     private static final int TYPE_PHOTO = 1001;
 
-    private int mImageWidth;
-    private Context mContext;
+    private final int mImageWidth;
+    private final Context mContext;
     private List<DavinciPhoto> mDatas;
 
-    private OnPhotoSelectChangeListener mListener;
-    private OnCameraClickListener mOnCameraClickListener;
-    private OnImageClickListener mOnImageClickListener;
+    private final OnPhotoSelectChangeListener mListener;
+    private final OnCameraClickListener mOnCameraClickListener;
+    private final OnImageClickListener mOnImageClickListener;
 
     public interface OnPhotoSelectChangeListener {
         void onChange();
@@ -42,7 +42,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public interface OnImageClickListener {
-        void onClick(String path);
+        void onClick(DavinciPhoto photo);
     }
 
     public PhotoAdapter(Context context, OnPhotoSelectChangeListener listener, OnCameraClickListener onCameraClickListener, OnImageClickListener onImageClickListener) {
@@ -117,19 +117,18 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else {
             photo = mDatas.get(position);
         }
-        String uriPath = photo.uri.toString();
-        ImageShowUtils.loadThumbnail(mContext, mImageWidth, holder.ivPhoto, uriPath);
+        ImageShowUtils.loadThumbnail(mContext, mImageWidth, holder.ivPhoto, photo.uri.toString());
         // 图片选中状态
-        boolean isSelected = Config.selectedPhotos.contains(uriPath);
+        boolean isSelected = Config.selectedPhotos.contains(photo);
         holder.rlSelected.setSelected(isSelected);
-        holder.tvSelected.setText(isSelected ? Config.selectedPhotos.indexOf(uriPath) + 1 + "" : "");
+        holder.tvSelected.setText(isSelected ? Config.selectedPhotos.indexOf(photo) + 1 + "" : "");
         holder.viewShadow.setVisibility(Config.selectedPhotos.size() >= Config.maxSelectable && !isSelected ? View.VISIBLE : View.GONE);
 
         holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mOnImageClickListener != null) {
-                    mOnImageClickListener.onClick(uriPath);
+                    mOnImageClickListener.onClick(photo);
                 }
             }
         });
@@ -142,15 +141,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 view.setSelected(!view.isSelected());
                 if (view.isSelected()) {
                     // 选中图片
-                    Config.selectedPhotos.add(uriPath);
+                    Config.selectedPhotos.add(photo);
                     if (Config.selectedPhotos.size() < Config.maxSelectable) {
-                        holder.tvSelected.setText(view.isSelected() ? Config.selectedPhotos.indexOf(uriPath) + 1 + "" : "");
+                        holder.tvSelected.setText(view.isSelected() ? Config.selectedPhotos.indexOf(photo) + 1 + "" : "");
                     } else {
                         notifyDataSetChanged();
                     }
                 } else {
                     // 取消选中
-                    Config.selectedPhotos.remove(uriPath);
+                    Config.selectedPhotos.remove(photo);
                     notifyDataSetChanged();
                 }
                 if (mListener != null) {

@@ -38,28 +38,6 @@ public class GlideEngine implements ImageEngine {
         }
     }
 
-
-    /**
-     * 读取缩略图（Drawable）
-     */
-    @Override
-    public void loadThumbnail(Context context, int resize, Drawable placeDrawable, ImageView imageView, String path) {
-        if (TextUtils.isEmpty(path)) {
-            return;
-        }
-        if (imageView.getTag() == null || !imageView.getTag().equals(path)) {
-            imageView.setTag(path);
-            Glide.with(context)
-                    .load(Uri.parse(path))
-                    .apply(new RequestOptions()
-                            .override(resize, resize)
-                            .placeholder(placeDrawable)
-                            .centerCrop())
-                    .into(imageView);
-        }
-    }
-
-
     /**
      * 读取本地图片
      */

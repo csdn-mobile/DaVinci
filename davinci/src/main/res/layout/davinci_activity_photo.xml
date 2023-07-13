@@ -73,7 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:visibility="@{viewmodel.permissionVisibility == View.VISIBLE ? View.GONE : View.VISIBLE}"
-                        app:bind_column="@{Config.column}" />
+                        app:davinci_bind_column="@{Config.column}" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

@@ -14,7 +14,7 @@ public class DavinciRecyclerViewBindingAdapter {
     /**
      * 设置Adapter
      */
-    @BindingAdapter("bind_adapter")
+    @BindingAdapter("davinci_bind_adapter")
     public static void setAdapter(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
         recyclerView.setAdapter(adapter);
     }
@@ -22,7 +22,7 @@ public class DavinciRecyclerViewBindingAdapter {
     /**
      * 设置RecyclerView为GridLayoutManager
      */
-    @BindingAdapter("bind_column")
+    @BindingAdapter("davinci_bind_column")
     public static void setColumnCount(RecyclerView recyclerView, int count) {
         recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(), count));
     }

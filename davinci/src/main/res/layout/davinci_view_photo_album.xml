@@ -26,11 +26,11 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_dirs"
-            bind_adapter="@{adapter}"
             android:layout_width="match_parent"
             android:layout_height="320dp"
             android:background="?davinciBackgroundColor"
             android:orientation="vertical"
+            app:davinci_bind_adapter="@{adapter}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </RelativeLayout>

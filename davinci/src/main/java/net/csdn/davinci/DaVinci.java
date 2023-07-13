@@ -3,6 +3,8 @@ package net.csdn.davinci;
 import android.app.Activity;
 import android.content.Intent;
 
+import net.csdn.davinci.core.entity.DavinciMedia;
+import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.core.permission.DavinciPermissionHandler;
 import net.csdn.davinci.ui.activity.PhotoActivity;
@@ -117,16 +119,16 @@ public class DaVinci {
         }
 
         /**
-         * 已选中的图片
+         * 已选中的图片（与视频互斥）
          */
-        public DaVinciSelectBuilder selectedPhotos(ArrayList<String> selectedPhotos) {
+        public DaVinciSelectBuilder selectedPhotos(ArrayList<DavinciPhoto> selectedPhotos) {
             Config.selectedPhotos = createNewArray(selectedPhotos);
             Config.selectedVideos = new ArrayList<>();
             return this;
         }
 
         /**
-         * 已选中的视频
+         * 已选中的视频（与图片互斥）
          */
         public DaVinciSelectBuilder selectedVideos(ArrayList<DavinciVideo> selectedVideos) {
             Config.selectedVideos = createNewArray(selectedVideos);
@@ -176,7 +178,7 @@ public class DaVinci {
         /**
          * 已选中的图片
          */
-        public DaVinciPreviewBuilder selectedPhotos(ArrayList<String> selectedPhotos) {
+        public DaVinciPreviewBuilder selectedPhotos(ArrayList<DavinciPhoto> selectedPhotos) {
             Config.selectedPhotos = createNewArray(selectedPhotos);
             return this;
         }
@@ -185,9 +187,11 @@ public class DaVinci {
          * 预览的的图片
          */
         public DaVinciPreviewBuilder previewPhotos(ArrayList<String> previewPhotos) {
-            ArrayList<Object> newList = new ArrayList<>();
+            ArrayList<? super DavinciMedia> newList = new ArrayList<>();
             if (previewPhotos != null && previewPhotos.size() > 0) {
-                newList.addAll(previewPhotos);
+                for (String photoUrl : previewPhotos) {
+                    newList.add(new DavinciPhoto(photoUrl));
+                }
             }
             Config.previewMedias = newList;
             return this;
@@ -227,7 +231,7 @@ public class DaVinci {
             if (Config.previewMedias == null || Config.previewMedias.size() <= 0) {
                 throw new IllegalArgumentException("Please set previewPhotos before preview");
             } else {
-                start(activity, Config.previewMedias.get(0));
+                start(activity, (DavinciMedia) Config.previewMedias.get(0));
             }
         }
 
@@ -235,14 +239,12 @@ public class DaVinci {
          * 预览相册
          * media：当前浏览的图片地址 或者 视频的DavinciVideo
          */
-        public void start(Activity activity, Object media) {
+        public void start(Activity activity, DavinciMedia media) {
             if (activity == null || media == null) {
                 return;
             }
-            if (media instanceof DavinciVideo) {
-                Config.currentMedia = (DavinciVideo) media;
-            } else if (media instanceof String) {
-                Config.currentMedia = (String) media;
+            if (media instanceof DavinciVideo || media instanceof DavinciPhoto) {
+                Config.currentMedia = media;
             }
             Intent intent = new Intent(activity, PreviewActivity.class);
             activity.startActivity(intent);

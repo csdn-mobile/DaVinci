@@ -12,9 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import net.csdn.davinci.DaVinci;
+import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
-import net.csdn.davinci.core.permission.DavinciPermissionHandler;
-import net.csdn.davinci.core.permission.OnPermissionResultListener;
 import net.csdn.davinci.utils.DavinciToastUtils;
 
 import java.util.ArrayList;
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null && requestCode == 10000 && resultCode == RESULT_OK) {
-            List<String> photos = data.getStringArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_PHOTOS);
+            List<DavinciPhoto> photos = data.getParcelableArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_PHOTOS);
             List<DavinciVideo> videos = data.getParcelableArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_VIDEOS);
             Log.e("DaVinci", "photos========" + photos.toString());
             Log.e("DaVinci", "videos========" + videos.toString());

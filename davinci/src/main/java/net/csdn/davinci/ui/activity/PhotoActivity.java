@@ -40,7 +40,6 @@ import net.csdn.statusbar.annotation.FontMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityPhotoBinding, PhotoViewModel> {
 
@@ -113,10 +112,11 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
         if (requestCode == PhotoCaptureManager.REQUEST_TAKE_PHOTO) {
             PhotoCaptureManager.getInstance(getApplication()).galleryAddPic();
             Uri uri = PhotoCaptureManager.getInstance(getApplication()).getCurrentPhotoUri();
-            Config.selectedPhotos.add(uri.toString());
-            Config.previewMedias.add(uri.toString());
+            DavinciPhoto photo = new DavinciPhoto(uri);
+            Config.selectedPhotos.add(photo);
+            Config.previewMedias.add(photo);
             changeConfirmStatus();
-            mPhotoAdapter.getDatas().add(0, new DavinciPhoto(uri));
+            mPhotoAdapter.getDatas().add(0, photo);
             mPhotoAdapter.notifyDataSetChanged();
         }
     }
@@ -147,17 +147,13 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
                 },
                 new PhotoAdapter.OnImageClickListener() {
                     @Override
-                    public void onClick(String path) {
+                    public void onClick(DavinciPhoto selectPhoto) {
                         // 更新预览数据
-                        ArrayList<Object> list = new ArrayList<>();
-                        for (DavinciPhoto photo : mPhotoAdapter.getDatas()) {
-                            list.add(photo.uri.toString());
-                        }
-                        Config.previewMedias = list;
+                        Config.previewMedias = new ArrayList<>(mPhotoAdapter.getDatas());
                         // 打开预览
                         DaVinci.preview(false)
                                 .previewSelectable(true)
-                                .start(PhotoActivity.this, path);
+                                .start(PhotoActivity.this, selectPhoto);
                     }
                 });
         mVideoAdapter = new VideoAdapter(this,
@@ -365,21 +361,17 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
         if (mViewModel.selectType == TYPE_IMAGE) {
             mBinding.tvConfirm.setEnabled(Config.selectedPhotos.size() > 0);
             mViewModel.selectImageVisibility.setValue(Config.selectedPhotos.size() > 0 ? View.VISIBLE : View.GONE);
-            mPreviewAdapter.setDatas(Config.selectedPhotos, false);
+            mPreviewAdapter.setDatas(Config.selectedPhotos);
         } else {
             mBinding.tvConfirm.setEnabled(Config.selectedVideos.size() > 0);
             mViewModel.selectImageVisibility.setValue(Config.selectedVideos.size() > 0 ? View.VISIBLE : View.GONE);
-            List<String> selectedVideos = new ArrayList<>();
-            for (DavinciVideo video : Config.selectedVideos) {
-                selectedVideos.add(video.uri.toString());
-            }
-            mPreviewAdapter.setDatas(selectedVideos, true);
+            mPreviewAdapter.setDatas(Config.selectedVideos);
         }
     }
 
     private void finishAndSetResult() {
         Intent intent = new Intent();
-        intent.putStringArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_PHOTOS, Config.selectedPhotos);
+        intent.putParcelableArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_PHOTOS, Config.selectedPhotos);
         intent.putParcelableArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_VIDEOS, Config.selectedVideos);
         setResult(RESULT_OK, intent);
         finish();

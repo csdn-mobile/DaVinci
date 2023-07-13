@@ -1,11 +1,8 @@
 package net.csdn.davinci.core.bindingadapter;
 
-import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import androidx.databinding.BindingAdapter;
-
-import com.bumptech.glide.Glide;
 
 import net.csdn.davinci.utils.ImageShowUtils;
 

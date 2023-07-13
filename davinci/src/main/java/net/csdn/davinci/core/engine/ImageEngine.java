@@ -17,11 +17,6 @@ public interface ImageEngine {
     void loadThumbnail(Context context, int resize, int placeResource, ImageView imageView, String uriPath);
 
     /**
-     * 读取缩略图（path）
-     */
-    void loadThumbnail(Context context, int resize, Drawable placeDrawable, ImageView imageView, String path);
-
-    /**
      * 读取本地图片
      */
     void loadLocalImage(Context context, int resizeX, int resizeY, ImageView imageView, String path);

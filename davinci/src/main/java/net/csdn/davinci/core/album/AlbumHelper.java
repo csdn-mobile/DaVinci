@@ -105,7 +105,6 @@ public class AlbumHelper {
                 if (duration <= 0) {
                     // 创建照片对象
                     DavinciPhoto photo = new DavinciPhoto();
-                    photo.id = String.valueOf(imageId);
                     photo.path = imagePath;
                     photo.uri = uri;
                     // 在当前相册和全部相册都添加照片
@@ -114,7 +113,6 @@ public class AlbumHelper {
                 } else {
                     // 创建视频对象
                     DavinciVideo video = new DavinciVideo();
-                    video.id = String.valueOf(imageId);
                     video.path = imagePath;
                     video.uri = uri;
                     video.duration = duration;

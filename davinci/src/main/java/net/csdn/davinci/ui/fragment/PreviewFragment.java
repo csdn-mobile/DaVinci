@@ -3,9 +3,7 @@ package net.csdn.davinci.ui.fragment;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -20,13 +18,15 @@ import net.csdn.davinci.BR;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.engine.PhotoViewTarget;
+import net.csdn.davinci.core.entity.DavinciMedia;
+import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.databinding.DavinciFragmentPreviewBinding;
 import net.csdn.davinci.ui.viewmodel.PreviewFragmentViewModel;
 import net.csdn.davinci.utils.PhotoUtils;
 import net.csdn.mvvm_java.ui.fragment.BaseBindingViewModelFragment;
 
-public class PreviewFragment extends BaseBindingViewModelFragment<DavinciFragmentPreviewBinding, PreviewFragmentViewModel> {
+public class PreviewFragment<T extends DavinciMedia> extends BaseBindingViewModelFragment<DavinciFragmentPreviewBinding, PreviewFragmentViewModel> {
 
     private static final String IMAGE_ITEM = "image_item";
     private static final String VIDEO_ITEM = "video_item";
@@ -35,8 +35,8 @@ public class PreviewFragment extends BaseBindingViewModelFragment<DavinciFragmen
     public static PreviewFragment newInstance(Object media) {
         PreviewFragment fragment = new PreviewFragment();
         Bundle bundle = new Bundle();
-        if (media instanceof String) {
-            bundle.putString(IMAGE_ITEM, (String) media);
+        if (media instanceof DavinciPhoto) {
+            bundle.putParcelable(IMAGE_ITEM, (DavinciPhoto) media);
         } else if (media instanceof DavinciVideo) {
             bundle.putParcelable(VIDEO_ITEM, (DavinciVideo) media);
         }
@@ -63,17 +63,17 @@ public class PreviewFragment extends BaseBindingViewModelFragment<DavinciFragmen
         try {
             if (getArguments().containsKey(IMAGE_ITEM)) {
                 mViewModel.isVideo = false;
-                mViewModel.imagePath = getArguments().getString(IMAGE_ITEM);
+                mViewModel.image = getArguments().getParcelable(IMAGE_ITEM);
             } else if (getArguments().containsKey(VIDEO_ITEM)) {
                 mViewModel.isVideo = true;
-                mViewModel.video = (DavinciVideo) getArguments().getParcelable(VIDEO_ITEM);
+                mViewModel.video = getArguments().getParcelable(VIDEO_ITEM);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         if (mViewModel.isVideo && mViewModel.video == null ||
-                !mViewModel.isVideo && TextUtils.isEmpty(mViewModel.imagePath)) {
+                !mViewModel.isVideo && mViewModel.image == null) {
             return;
         }
 
@@ -108,9 +108,9 @@ public class PreviewFragment extends BaseBindingViewModelFragment<DavinciFragmen
             mBinding.rlVideo.setVisibility(View.GONE);
             mBinding.ivLong.setMaxScale(20f);
 
-            if (mViewModel.imagePath.startsWith("http")) {
+            if (mViewModel.image.path.startsWith("http")) {
                 mBinding.progressBar.setVisibility(View.VISIBLE);
-                Config.imageEngine.loadNetImage(getContext(), mBinding.iv, mViewModel.imagePath, new RequestListener<Drawable>() {
+                Config.imageEngine.loadNetImage(getContext(), mBinding.iv, mViewModel.image.path, new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         mBinding.progressBar.setVisibility(View.GONE);
@@ -132,22 +132,21 @@ public class PreviewFragment extends BaseBindingViewModelFragment<DavinciFragmen
                         // 设置长图缩放
                         mBinding.iv.setVisibility(View.GONE);
                         mBinding.ivLong.setVisibility(View.VISIBLE);
-                        Config.imageEngine.loadNetLongImage(getContext(), mViewModel.imagePath, new PhotoViewTarget(mBinding.ivLong, mBinding.progressBar));
+                        Config.imageEngine.loadNetLongImage(getContext(), mViewModel.image.path, new PhotoViewTarget(mBinding.ivLong, mBinding.progressBar));
                         return true;
                     }
                 });
             } else {
                 mBinding.progressBar.setVisibility(View.GONE);
-                Point originSize = PhotoUtils.getOriginSize(mViewModel.imagePath, getActivity());
-                if (!mViewModel.isLongerImage(originSize.x, originSize.y)) {
-                    Point size = PhotoUtils.getBitmapSize(Uri.parse(mViewModel.imagePath), getActivity());
+                Point size = PhotoUtils.getBitmapSize(mViewModel.image.uri, getActivity());
+                if (!mViewModel.isLongerImage(size.x, size.y)) {
                     mBinding.iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    Config.imageEngine.loadLocalImage(getContext(), size.x, size.y, mBinding.iv, mViewModel.imagePath);
+                    Config.imageEngine.loadLocalImage(getContext(), size.x, size.y, mBinding.iv, mViewModel.image.uri.toString());
                 } else {
                     mBinding.iv.setVisibility(View.GONE);
                     mBinding.ivLong.setVisibility(View.VISIBLE);
                     mBinding.iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    Config.imageEngine.loadLocalLongImage(mBinding.ivLong, mViewModel.imagePath);
+                    Config.imageEngine.loadLocalLongImage(mBinding.ivLong, mViewModel.image.path);
                 }
             }
         }

@@ -15,6 +15,8 @@ import net.csdn.davinci.BR;
 import net.csdn.davinci.BusEvent;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
+import net.csdn.davinci.core.entity.DavinciMedia;
+import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.core.photo.PhotoHandleManager;
 import net.csdn.davinci.core.photo.PhotoHandleManagerImpl;
@@ -89,19 +91,13 @@ public class PreviewActivity extends BaseBindingViewModelActivity<DavinciActivit
     }
 
     private void setListener() {
-        LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_SELECTED_CLICK, String.class).observe(this, new Observer<String>() {
+        LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_LONG_CLICK, DavinciMedia.class).observe(this, new Observer<DavinciMedia>() {
             @Override
-            public void onChanged(String path) {
-                mBinding.viewPager.setCurrentItem(Config.previewMedias.indexOf(path), false);
-            }
-        });
-        LiveDataBus.getInstance().with(BusEvent.Preview.PREVIEW_LONG_CLICK, String.class).observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String url) {
-                if (!url.startsWith("http")) {
+            public void onChanged(DavinciMedia media) {
+                if (media == null || !media.path.startsWith("http")) {
                     return;
                 }
-                mHandleManager.showLongClickDialog(url);
+                mHandleManager.showLongClickDialog(media.path);
             }
         });
         mBinding.ivBack.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +118,7 @@ public class PreviewActivity extends BaseBindingViewModelActivity<DavinciActivit
                     }
                     canSelected = true;
                     isVideo = true;
-                } else if (Config.currentMedia instanceof String) {
+                } else if (Config.currentMedia instanceof DavinciPhoto) {
                     if (!mBinding.tvSelected.isSelected() && Config.selectedPhotos.size() >= Config.maxSelectable) {
                         DavinciToastUtils.showToast(PreviewActivity.this, getResources().getString(R.string.davinci_over_max_count_tips, Config.maxSelectable));
                         return;
@@ -138,7 +134,7 @@ public class PreviewActivity extends BaseBindingViewModelActivity<DavinciActivit
                         if (isVideo) {
                             Config.selectedVideos.remove((DavinciVideo) Config.currentMedia);
                         } else {
-                            Config.selectedPhotos.remove((String) Config.currentMedia);
+                            Config.selectedPhotos.remove((DavinciPhoto) Config.currentMedia);
                         }
                         mBinding.tvSelected.setText("");
                         view.setSelected(false);
@@ -148,8 +144,8 @@ public class PreviewActivity extends BaseBindingViewModelActivity<DavinciActivit
                             Config.selectedVideos.add((DavinciVideo) Config.currentMedia);
                             mBinding.tvSelected.setText(String.valueOf(Config.selectedVideos.indexOf((DavinciVideo) Config.currentMedia) + 1));
                         } else {
-                            Config.selectedPhotos.add((String) Config.currentMedia);
-                            mBinding.tvSelected.setText(String.valueOf(Config.selectedPhotos.indexOf((String) Config.currentMedia) + 1));
+                            Config.selectedPhotos.add((DavinciPhoto) Config.currentMedia);
+                            mBinding.tvSelected.setText(String.valueOf(Config.selectedPhotos.indexOf((DavinciPhoto) Config.currentMedia) + 1));
                         }
                         view.setSelected(true);
                         finish();
@@ -172,9 +168,12 @@ public class PreviewActivity extends BaseBindingViewModelActivity<DavinciActivit
 
             @Override
             public void onPageSelected(int position) {
-                Config.currentMedia = Config.previewMedias.get(position);
-                setSelectStatus();
-                setPage();
+                Object object = Config.previewMedias.get(position);
+                if (object instanceof DavinciMedia) {
+                    Config.currentMedia = (DavinciMedia) object;
+                    setSelectStatus();
+                    setPage();
+                }
             }
 
             @Override
@@ -194,10 +193,10 @@ public class PreviewActivity extends BaseBindingViewModelActivity<DavinciActivit
                 isSelected = true;
                 mBinding.tvSelected.setText(String.valueOf(Config.selectedVideos.indexOf((DavinciVideo) Config.currentMedia) + 1));
             }
-        } else if (Config.currentMedia instanceof String) {
-            if (Config.selectedPhotos.contains((String) Config.currentMedia)) {
+        } else if (Config.currentMedia instanceof DavinciPhoto) {
+            if (Config.selectedPhotos.contains((DavinciPhoto) Config.currentMedia)) {
                 isSelected = true;
-                mBinding.tvSelected.setText(String.valueOf(Config.selectedPhotos.indexOf((String) Config.currentMedia) + 1));
+                mBinding.tvSelected.setText(String.valueOf(Config.selectedPhotos.indexOf((DavinciPhoto) Config.currentMedia) + 1));
             }
         }
         mBinding.llSelected.setSelected(isSelected);
