@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -29,11 +30,13 @@ public class GlideEngine implements ImageEngine {
         if (imageView.getTag() == null || !imageView.getTag().equals(path)) {
             imageView.setTag(path);
             Glide.with(context)
+                    .asBitmap()
                     .load(Uri.parse(path))
                     .apply(new RequestOptions()
                             .override(resize, resize)
                             .placeholder(placeResource)
-                            .centerCrop())
+                            .centerCrop()
+                            .priority(Priority.LOW))
                     .into(imageView);
         }
     }
@@ -42,24 +45,18 @@ public class GlideEngine implements ImageEngine {
      * 读取本地图片
      */
     @Override
-    public void loadLocalImage(Context context, int resizeX, int resizeY, ImageView imageView, String uriPath) {
-        Glide.with(context)
+    public void loadLocalImage(Context context, int resizeX, int resizeY, ImageView imageView, String uriPath, boolean isGif) {
+        RequestBuilder requestBuilder;
+        if (isGif) {
+            requestBuilder = Glide.with(context).asGif();
+        } else {
+            requestBuilder = Glide.with(context).asBitmap();
+        }
+        requestBuilder
                 .load(Uri.parse(uriPath))
                 .apply(new RequestOptions()
                         .override(resizeX, resizeY)
-                        .priority(Priority.HIGH))
-                .into(imageView);
-    }
-
-    /**
-     * 读取本地图片
-     */
-    @Override
-    public void loadLocalImage(Context context, ImageView imageView, String uriPath) {
-        Glide.with(context)
-                .load(Uri.parse(uriPath))
-                .apply(new RequestOptions()
-                        .priority(Priority.HIGH))
+                        .priority(Priority.LOW))
                 .into(imageView);
     }
 

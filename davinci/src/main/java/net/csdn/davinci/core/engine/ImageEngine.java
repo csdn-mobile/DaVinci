@@ -19,12 +19,7 @@ public interface ImageEngine {
     /**
      * 读取本地图片
      */
-    void loadLocalImage(Context context, int resizeX, int resizeY, ImageView imageView, String path);
-
-    /**
-     * 读取本地图片
-     */
-    void loadLocalImage(Context context, ImageView imageView, String path);
+    void loadLocalImage(Context context, int resizeX, int resizeY, ImageView imageView, String path, boolean isGif);
 
     /**
      * 读取本地图片（SubsamplingScaleImageView）

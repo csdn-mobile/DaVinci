@@ -69,6 +69,9 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
                 .color(ResourceUtils.getColorFromAttr(this, R.attr.davinciBackgroundColor))
                 .fontMode(Config.isDayStyle ? FontMode.DARK : FontMode.LIGHT)
                 .change(this);
+//        int cpuNum = GlideExecutor.calculateBestThreadCount();
+//        ExecutorService executorService = Executors.newFixedThreadPool(cpuNum *2);
+//        Glide.get(this).getRegistry().replace(GlideExecutor.class, new DefaultExecutorSupplier(executorService));
 
         setBinding();
         setListener();

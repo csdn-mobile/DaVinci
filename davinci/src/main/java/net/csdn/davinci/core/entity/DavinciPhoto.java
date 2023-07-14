@@ -41,6 +41,8 @@ public class DavinciPhoto extends DavinciMedia implements Parcelable {
         this.path = in.readString();
         this.uri = in.readParcelable(Uri.class.getClassLoader());
         this.isNetworkPhoto = in.readInt() == 1;
+        this.width = in.readInt();
+        this.height = in.readInt();
     }
 
     @Override
@@ -53,6 +55,8 @@ public class DavinciPhoto extends DavinciMedia implements Parcelable {
         dest.writeString(path);
         dest.writeParcelable(uri, flags);
         dest.writeInt(isNetworkPhoto ? 1 : 0);
+        dest.writeInt(width);
+        dest.writeInt(height);
     }
 
     public static final Parcelable.Creator<DavinciPhoto> CREATOR = new Parcelable.Creator<DavinciPhoto>() {

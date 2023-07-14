@@ -33,7 +33,7 @@ public class PhotoViewModel extends BaseViewModel {
         } else {
             selectLimitDesc = "最多可添加" + Config.maxSelectable + "张照片";
         }
-        selectImageVisibility = new MutableLiveData<>(Config.selectedPhotos.size() > 0 ? View.VISIBLE : View.GONE);
+        selectImageVisibility = new MutableLiveData<>(Config.selectedPhotos != null && Config.selectedPhotos.size() > 0 ? View.VISIBLE : View.GONE);
         permissionVisibility = new MutableLiveData<>(View.VISIBLE);
     }
 }

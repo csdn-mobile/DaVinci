@@ -25,6 +25,8 @@ public class AlbumHelper {
             MediaStore.Images.Media.DATA,
             MediaStore.Images.Media.BUCKET_ID,
             MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+            MediaStore.Images.Media.WIDTH,
+            MediaStore.Images.Media.HEIGHT,
             MediaStore.Video.Media.DURATION
     };
 
@@ -85,6 +87,8 @@ public class AlbumHelper {
                 String imagePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
                 String albumId = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_ID));
                 String albumName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
+                int width = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.WIDTH));
+                int height = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.HEIGHT));
                 int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
                 // 如果没创建相册对象就创建，创建过就获取
                 Album album;
@@ -107,6 +111,8 @@ public class AlbumHelper {
                     DavinciPhoto photo = new DavinciPhoto();
                     photo.path = imagePath;
                     photo.uri = uri;
+                    photo.width = width;
+                    photo.height = height;
                     // 在当前相册和全部相册都添加照片
                     album.photoList.add(photo);
                     albumAll.photoList.add(photo);
@@ -115,6 +121,8 @@ public class AlbumHelper {
                     DavinciVideo video = new DavinciVideo();
                     video.path = imagePath;
                     video.uri = uri;
+                    video.width = width;
+                    video.height = height;
                     video.duration = duration;
                     // 在当前相册和全部相册都添加照片
                     album.videoList.add(video);

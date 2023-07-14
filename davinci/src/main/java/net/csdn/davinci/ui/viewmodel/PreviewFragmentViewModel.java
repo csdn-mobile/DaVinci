@@ -14,6 +14,7 @@ public class PreviewFragmentViewModel extends BaseViewModel {
     public boolean isVideo;
     public DavinciPhoto image;
     public DavinciVideo video;
+    public int screenWidth;
 
     public PreviewFragmentViewModel() {
         super();

@@ -25,6 +25,8 @@ public class DavinciVideo extends DavinciMedia implements Parcelable {
         this.path = in.readString();
         this.duration = in.readInt();
         this.uri = in.readParcelable(Uri.class.getClassLoader());
+        this.width = in.readInt();
+        this.height = in.readInt();
     }
 
     @Override
@@ -37,6 +39,8 @@ public class DavinciVideo extends DavinciMedia implements Parcelable {
         dest.writeString(path);
         dest.writeInt(duration);
         dest.writeParcelable(uri, flags);
+        dest.writeInt(width);
+        dest.writeInt(height);
     }
 
     public static final Parcelable.Creator<DavinciVideo> CREATOR = new Parcelable.Creator<DavinciVideo>() {
