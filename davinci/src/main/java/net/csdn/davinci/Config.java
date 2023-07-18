@@ -5,6 +5,7 @@ import net.csdn.davinci.core.engine.ImageEngine;
 import net.csdn.davinci.core.entity.DavinciMedia;
 import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
+import net.csdn.davinci.core.interceptor.DavinciOnBackPressedInterceptor;
 import net.csdn.davinci.core.permission.DavinciPermissionHandler;
 
 import java.util.ArrayList;
@@ -81,6 +82,10 @@ public class Config {
      * 权限请求相关
      */
     public static DavinciPermissionHandler permissionHandler;
+    /**
+     * 是否图库可返回
+     */
+    public static DavinciOnBackPressedInterceptor onBackPressedInterceptor;
 
     /**
      * 重置
@@ -103,5 +108,6 @@ public class Config {
         absolutePathMap = new HashMap<>();
         saveFolderName = "CSDN";
         permissionHandler = null;
+        onBackPressedInterceptor = null;
     }
 }

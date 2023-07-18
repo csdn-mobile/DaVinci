@@ -6,6 +6,7 @@ import android.content.Intent;
 import net.csdn.davinci.core.entity.DavinciMedia;
 import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
+import net.csdn.davinci.core.interceptor.DavinciOnBackPressedInterceptor;
 import net.csdn.davinci.core.permission.DavinciPermissionHandler;
 import net.csdn.davinci.ui.activity.PhotoActivity;
 import net.csdn.davinci.ui.activity.PreviewActivity;
@@ -141,6 +142,14 @@ public class DaVinci {
          */
         public DaVinciSelectBuilder permissionHandler(DavinciPermissionHandler permissionHandler) {
             Config.permissionHandler = permissionHandler;
+            return this;
+        }
+
+        /**
+         * 返回键判定
+         */
+        public DaVinciSelectBuilder onBackPressedInterceptor(DavinciOnBackPressedInterceptor backHandler) {
+            Config.onBackPressedInterceptor = backHandler;
             return this;
         }
 

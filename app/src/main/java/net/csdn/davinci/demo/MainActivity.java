@@ -1,6 +1,7 @@
 package net.csdn.davinci.demo;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,8 @@ import androidx.core.app.ActivityCompat;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
+import net.csdn.davinci.core.interceptor.DavinciOnBackPressedInterceptor;
+import net.csdn.davinci.ui.activity.PhotoActivity;
 import net.csdn.davinci.utils.DavinciToastUtils;
 
 import java.util.ArrayList;
