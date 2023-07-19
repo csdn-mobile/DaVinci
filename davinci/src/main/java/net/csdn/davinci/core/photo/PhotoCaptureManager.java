@@ -1,8 +1,10 @@
 package net.csdn.davinci.core.photo;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +12,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 
 import androidx.core.content.FileProvider;
+
+import net.csdn.davinci.core.entity.DavinciPhoto;
+import net.csdn.davinci.utils.FilePathUtils;
+import net.csdn.davinci.utils.PhotoUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -126,8 +132,13 @@ public class PhotoCaptureManager {
         mContext.sendBroadcast(mediaScanIntent);
     }
 
-    public Uri getCurrentPhotoUri() {
-        return mCurrentPhotoUri;
+    public DavinciPhoto getCurrentPhoto(Activity activity) {
+        DavinciPhoto photo = new DavinciPhoto(mCurrentPhotoUri);
+        photo.path = FilePathUtils.getFileAbsolutePath(activity, mCurrentPhotoUri);
+        Point originSize = PhotoUtils.getBitmapSize(mCurrentPhotoUri, activity);
+        photo.width = originSize.x;
+        photo.height = originSize.y;
+        return photo;
     }
 
     public void onSaveInstanceState(Bundle savedInstanceState) {

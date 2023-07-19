@@ -3,7 +3,6 @@ package net.csdn.davinci.ui.activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -117,8 +116,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
         }
         if (requestCode == PhotoCaptureManager.REQUEST_TAKE_PHOTO) {
             PhotoCaptureManager.getInstance(getApplication()).galleryAddPic();
-            Uri uri = PhotoCaptureManager.getInstance(getApplication()).getCurrentPhotoUri();
-            DavinciPhoto photo = new DavinciPhoto(uri);
+            DavinciPhoto photo = PhotoCaptureManager.getInstance(getApplication()).getCurrentPhoto(this);
             Config.selectedPhotos.add(photo);
             Config.previewMedias.add(photo);
             changeConfirmStatus();

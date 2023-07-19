@@ -1,5 +1,6 @@
 package net.csdn.davinci.ui.fragment;
 
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.databinding.DavinciFragmentPreviewBinding;
 import net.csdn.davinci.ui.viewmodel.PreviewFragmentViewModel;
+import net.csdn.davinci.utils.PhotoUtils;
 import net.csdn.davinci.utils.SystemUtils;
 import net.csdn.mvvm_java.ui.fragment.BaseBindingViewModelFragment;
 
@@ -143,9 +145,20 @@ public class PreviewFragment extends BaseBindingViewModelFragment<DavinciFragmen
                 });
             } else {
                 mBinding.progressBar.setVisibility(View.GONE);
-                if (!mViewModel.isLongerImage(mViewModel.image.width, mViewModel.image.height)) {
+
+                int imageOriginWidth = mViewModel.image.width;
+                int imageOriginHeight = mViewModel.image.height;
+                // 异常处理，如果图片没有宽高
+                if (imageOriginWidth == 0 || imageOriginHeight == 0) {
+                    Point originSize = PhotoUtils.getBitmapSize(mViewModel.image.uri, getActivity());
+                    imageOriginWidth = originSize.x;
+                    imageOriginHeight = originSize.y;
+                    mViewModel.image.width = imageOriginWidth;
+                    mViewModel.image.height = imageOriginHeight;
+                }
+                if (!mViewModel.isLongerImage(imageOriginWidth, imageOriginHeight)) {
                     mBinding.iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    BigDecimal decimal = BigDecimal.valueOf(mViewModel.image.height).multiply(BigDecimal.valueOf(mViewModel.screenWidth)).divide(BigDecimal.valueOf(mViewModel.image.width), 2, BigDecimal.ROUND_HALF_UP);
+                    BigDecimal decimal = BigDecimal.valueOf(imageOriginHeight).multiply(BigDecimal.valueOf(mViewModel.screenWidth)).divide(BigDecimal.valueOf(imageOriginWidth), 2, BigDecimal.ROUND_HALF_UP);
                     Config.imageEngine.loadLocalImage(getContext(), mViewModel.screenWidth, decimal.intValue(), mBinding.iv, mViewModel.image.uri.toString(), mViewModel.image.path.endsWith(".gif"));
                 } else {
                     mBinding.iv.setVisibility(View.GONE);
