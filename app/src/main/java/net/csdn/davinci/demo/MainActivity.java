@@ -1,7 +1,6 @@
 package net.csdn.davinci.demo;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,14 +14,13 @@ import androidx.core.app.ActivityCompat;
 import net.csdn.davinci.DaVinci;
 import net.csdn.davinci.core.entity.DavinciPhoto;
 import net.csdn.davinci.core.entity.DavinciVideo;
-import net.csdn.davinci.core.interceptor.DavinciOnBackPressedInterceptor;
-import net.csdn.davinci.ui.activity.PhotoActivity;
 import net.csdn.davinci.utils.DavinciToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    ArrayList<DavinciPhoto> selPhotos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                         .isDayStyle(true)
                         .selectType(DaVinci.SelectType.IMAGE_VIDEO)
                         .column(4)
+                        .selectedPhotos(selPhotos)
                         .start(MainActivity.this, 10000);
             }
         });
@@ -88,9 +87,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null && requestCode == 10000 && resultCode == RESULT_OK) {
-            List<DavinciPhoto> photos = data.getParcelableArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_PHOTOS);
+            selPhotos = data.getParcelableArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_PHOTOS);
             List<DavinciVideo> videos = data.getParcelableArrayListExtra(DaVinci.ResultKey.KEY_SELECTED_VIDEOS);
-            Log.e("DaVinci", "photos========" + photos.toString());
+            Log.e("DaVinci", "photos========" + selPhotos.toString());
             Log.e("DaVinci", "videos========" + videos.toString());
         }
     }

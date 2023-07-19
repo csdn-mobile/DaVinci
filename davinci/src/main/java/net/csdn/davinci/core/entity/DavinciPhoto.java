@@ -9,6 +9,9 @@ public class DavinciPhoto extends DavinciMedia implements Parcelable {
 
     public boolean isNetworkPhoto;
 
+    private static final String MEDIA_CONTENT = "content://media/external/images/media/";
+    private static final String FILE_CONTENT = "content://media/external/file/";
+
     public DavinciPhoto() {
     }
 
@@ -27,7 +30,15 @@ public class DavinciPhoto extends DavinciMedia implements Parcelable {
         if (!(o instanceof DavinciPhoto)) return false;
         DavinciPhoto that = (DavinciPhoto) o;
         if (uri != null && !TextUtils.isEmpty(uri.toString())) {
-            return uri.toString().equals(that.uri.toString());
+            String uriStr = uri.toString();
+            String thatUriStr = that.uri.toString();
+            if (uriStr.startsWith(MEDIA_CONTENT)) {
+                uriStr = uriStr.replace(MEDIA_CONTENT, FILE_CONTENT);
+            }
+            if (thatUriStr.startsWith(MEDIA_CONTENT)) {
+                thatUriStr = thatUriStr.replace(MEDIA_CONTENT, FILE_CONTENT);
+            }
+            return uriStr.equals(thatUriStr);
         } else if (path != null && !TextUtils.isEmpty(path)) {
             return path.equals(that.path);
         }
