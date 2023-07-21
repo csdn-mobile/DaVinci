@@ -190,7 +190,9 @@ public class PreviewActivity extends BaseBindingViewModelActivity<DavinciActivit
             }
         });
 
-        mBinding.viewPager.setCurrentItem(Config.previewMedias.indexOf(Config.currentMedia), false);
+        if (Config.previewMedias != null && Config.currentMedia != null) {
+            mBinding.viewPager.setCurrentItem(Config.previewMedias.indexOf(Config.currentMedia), false);
+        }
         setSelectStatus();
     }
 
