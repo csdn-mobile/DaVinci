@@ -96,7 +96,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
     public void onBackPressed() {
         if (mBinding.album.getVisibility() == View.VISIBLE) {
             mBinding.album.closeAlbum();
-            mBinding.navigation.setArrowDown();
+            mBinding.ivArrow.setImageResource(R.drawable.davinci_arrow_down);
         } else {
             if (Config.onBackPressedInterceptor != null) {
                 if (Config.onBackPressedInterceptor.onBackPressed(this)) {
@@ -268,15 +268,24 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
     }
 
     private void setListener() {
-        mBinding.navigation.setListener(v -> onBackPressed(), v -> {
-            if (mViewModel.albumList.getValue() == null || mViewModel.albumList.getValue().size() <= 0) {
-                return;
+        mBinding.ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
-            if (mBinding.album.getVisibility() == View.GONE) {
-                mBinding.album.openAlbum();
-                mBinding.navigation.setArrowUp();
-            } else {
-                closeAlbum();
+        });
+        mBinding.llTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mViewModel.albumList.getValue() == null || mViewModel.albumList.getValue().size() <= 0) {
+                    return;
+                }
+                if (mBinding.album.getVisibility() == View.GONE) {
+                    mBinding.album.openAlbum();
+                    mBinding.ivArrow.setImageResource(R.drawable.davinci_arrow_up);
+                } else {
+                    closeAlbum();
+                }
             }
         });
         mBinding.tvPhoto.setOnClickListener(v -> {
@@ -340,14 +349,14 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
         if (album == null) {
             return;
         }
-        mBinding.navigation.setTitle(album.name);
+        mBinding.tvTitle.setText(album.name);
         mPhotoAdapter.setDatas(album.photoList);
         mVideoAdapter.setDatas(album.videoList);
     }
 
     private void closeAlbum() {
         mBinding.album.closeAlbum();
-        mBinding.navigation.setArrowDown();
+        mBinding.ivArrow.setImageResource(R.drawable.davinci_arrow_down);
     }
 
     private void openCamera() {
@@ -400,4 +409,5 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
             mBinding.rv.setAdapter(mVideoAdapter);
         }
     }
+
 }
