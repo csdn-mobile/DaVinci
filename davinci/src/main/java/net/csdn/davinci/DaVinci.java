@@ -2,6 +2,7 @@ package net.csdn.davinci;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 
 import net.csdn.davinci.core.entity.DavinciMedia;
 import net.csdn.davinci.core.entity.DavinciPhoto;
@@ -199,7 +200,15 @@ public class DaVinci {
             ArrayList<? super DavinciMedia> newList = new ArrayList<>();
             if (previewPhotos != null && previewPhotos.size() > 0) {
                 for (String photoUrl : previewPhotos) {
-                    newList.add(new DavinciPhoto(photoUrl));
+                    DavinciPhoto photo;
+                    if (photoUrl.startsWith("http")) {
+                        photo = new DavinciPhoto(photoUrl);
+                    } else {
+                        Uri uri = Uri.parse(photoUrl);
+                        photo = new DavinciPhoto(uri);
+                        photo.path = uri.toString();
+                    }
+                    newList.add(photo);
                 }
             }
             Config.previewMedias = newList;

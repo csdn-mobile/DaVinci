@@ -85,8 +85,10 @@ public class PreviewFragment extends BaseBindingViewModelFragment<DavinciFragmen
         }
         if (mViewModel.isVideo) {
             mBinding.rlVideo.setVisibility(View.VISIBLE);
-            BigDecimal decimal = BigDecimal.valueOf(mViewModel.video.height).multiply(BigDecimal.valueOf(mViewModel.screenWidth)).divide(BigDecimal.valueOf(mViewModel.video.width), 2, BigDecimal.ROUND_HALF_UP);
-            Config.imageEngine.loadLocalImage(getContext(), mViewModel.screenWidth, decimal.intValue(), mBinding.ivCover, mViewModel.video.uri.toString(), false);
+            if (mViewModel.video.width > 0 && mViewModel.video.height > 0) {
+                BigDecimal decimal = BigDecimal.valueOf(mViewModel.video.height).multiply(BigDecimal.valueOf(mViewModel.screenWidth)).divide(BigDecimal.valueOf(mViewModel.video.width), 2, BigDecimal.ROUND_HALF_UP);
+                Config.imageEngine.loadLocalImage(getContext(), mViewModel.screenWidth, decimal.intValue(), mBinding.ivCover, mViewModel.video.uri.toString(), false);
+            }
             mBinding.videoView.setVideoPath(mViewModel.video.uri.toString());
             mBinding.rlPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
