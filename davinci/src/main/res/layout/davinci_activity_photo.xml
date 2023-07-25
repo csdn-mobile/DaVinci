@@ -203,11 +203,28 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <net.csdn.davinci.ui.view.PhotoAlbum
-                android:id="@+id/album"
+            <RelativeLayout
+                android:id="@+id/rl_album"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:visibility="gone">
+
+                <View
+                    android:id="@+id/view_album_blank"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.4"
+                    android:background="@color/davinci_album_back" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_dirs"
+                    android:layout_width="match_parent"
+                    android:layout_height="320dp"
+                    android:background="?davinciBackgroundColor"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
 </layout>

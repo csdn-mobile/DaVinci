@@ -6,6 +6,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,15 +27,18 @@ import net.csdn.davinci.core.entity.DavinciVideo;
 import net.csdn.davinci.core.permission.OnPermissionResultListener;
 import net.csdn.davinci.core.photo.PhotoCaptureManager;
 import net.csdn.davinci.databinding.DavinciActivityPhotoBinding;
+import net.csdn.davinci.databinding.DavinciItemAlbumBinding;
 import net.csdn.davinci.ui.adapter.MediaPreviewAdapter;
 import net.csdn.davinci.ui.adapter.PhotoAdapter;
 import net.csdn.davinci.ui.adapter.VideoAdapter;
+import net.csdn.davinci.ui.viewmodel.AlbumItemViewModel;
 import net.csdn.davinci.ui.viewmodel.PhotoViewModel;
 import net.csdn.davinci.utils.DavinciToastUtils;
 import net.csdn.davinci.utils.PermissionsUtils;
 import net.csdn.davinci.utils.ResourceUtils;
 import net.csdn.mvvm_java.bus.LiveDataBus;
 import net.csdn.mvvm_java.ui.activity.BaseBindingViewModelActivity;
+import net.csdn.mvvm_java.ui.adapter.BindingViewModelAdapter;
 import net.csdn.statusbar.StatusBar;
 import net.csdn.statusbar.annotation.FontMode;
 
@@ -49,6 +54,7 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
     private VideoAdapter mVideoAdapter;
     private MediaPreviewAdapter mPreviewAdapter;
     private OnPermissionResultListener mOnPermissionResultListener;
+    private BindingViewModelAdapter<Album, DavinciItemAlbumBinding> mAdapter;
 
     @Override
     public int getLayoutId() {
@@ -72,8 +78,14 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
         setBinding();
         setListener();
         registerBus();
+        initialize();
 
         loadAlbumWithPermission();
+    }
+
+    private void initialize() {
+        mAdapter = new BindingViewModelAdapter<>(R.layout.davinci_item_album, BR.viewmodel, AlbumItemViewModel.class, null);
+        mBinding.rvDirs.setAdapter(mAdapter);
     }
 
     @Override
@@ -94,8 +106,8 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
 
     @Override
     public void onBackPressed() {
-        if (mBinding.album.getVisibility() == View.VISIBLE) {
-            mBinding.album.closeAlbum();
+        if (mBinding.rlAlbum.getVisibility() == View.VISIBLE) {
+            closeAlbum();
             mBinding.ivArrow.setImageResource(R.drawable.davinci_arrow_down);
         } else {
             if (Config.onBackPressedInterceptor != null) {
@@ -183,7 +195,9 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
         mViewModel.albumList.observe(this, new Observer<ArrayList<Album>>() {
             @Override
             public void onChanged(ArrayList<Album> albums) {
-                mBinding.album.setData(albums);
+                if (mAdapter != null) {
+                    mAdapter.setDatas(albums);
+                }
                 selectAlbum(albums.get(0));
             }
         });
@@ -280,8 +294,8 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
                 if (mViewModel.albumList.getValue() == null || mViewModel.albumList.getValue().size() <= 0) {
                     return;
                 }
-                if (mBinding.album.getVisibility() == View.GONE) {
-                    mBinding.album.openAlbum();
+                if (mBinding.rlAlbum.getVisibility() == View.GONE) {
+                    openAlbum();
                     mBinding.ivArrow.setImageResource(R.drawable.davinci_arrow_up);
                 } else {
                     closeAlbum();
@@ -304,6 +318,12 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
         mBinding.tvOpenPermission.setOnClickListener(v -> {
             if (Config.permissionHandler != null && Config.permissionHandler.requestPermission(DaVinci.PermissionType.PHOTO, mOnPermissionResultListener)) {
                 loadAlbum();
+            }
+        });
+        mBinding.viewAlbumBlank.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LiveDataBus.getInstance().with(BusEvent.Photo.ALBUM_BLANK_CLICK).setValue(null);
             }
         });
     }
@@ -352,11 +372,6 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
         mBinding.tvTitle.setText(album.name);
         mPhotoAdapter.setDatas(album.photoList);
         mVideoAdapter.setDatas(album.videoList);
-    }
-
-    private void closeAlbum() {
-        mBinding.album.closeAlbum();
-        mBinding.ivArrow.setImageResource(R.drawable.davinci_arrow_down);
     }
 
     private void openCamera() {
@@ -408,6 +423,55 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
         } else if (mViewModel.selectType == TYPE_VIDEO) {
             mBinding.rv.setAdapter(mVideoAdapter);
         }
+    }
+
+
+    /**
+     * 打开相簿
+     */
+    public void openAlbum() {
+        if (mBinding.rlAlbum.getVisibility() == View.VISIBLE) {
+            return;
+        }
+        mBinding.rlAlbum.setVisibility(View.VISIBLE);
+        Animation translateAnimation = new TranslateAnimation(1, 0, 1, 0, 1, -1, 1, 0);//平移动画
+        translateAnimation.setDuration(150);//动画持续的时间为300ms
+        translateAnimation.setFillEnabled(true);//使其可以填充效果从而不回到原地
+        translateAnimation.setFillAfter(true);//不回到起始位置
+        //如果不添加setFillEnabled和setFillAfter则动画执行结束后会自动回到远点
+        mBinding.rvDirs.startAnimation(translateAnimation);//给imageView添加的动画效果
+    }
+
+    /**
+     * 关上相簿
+     */
+    public void closeAlbum() {
+        if (mBinding.rlAlbum.getVisibility() == View.GONE) {
+            return;
+        }
+        Animation translateAnimation = new TranslateAnimation(1, 0, 1, 0, 1, 0, 1, -1);//平移动画
+        translateAnimation.setDuration(150);//动画持续的时间为200ms
+        translateAnimation.setFillEnabled(true);//使其可以填充效果从而不回到原地
+        translateAnimation.setFillAfter(true);//不回到起始位置
+        //如果不添加setFillEnabled和setFillAfter则动画执行结束后会自动回到远点
+        translateAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mBinding.rlAlbum.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        mBinding.rvDirs.startAnimation(translateAnimation);//给imageView添加的动画效果
+        mBinding.ivArrow.setImageResource(R.drawable.davinci_arrow_down);
     }
 
 }
