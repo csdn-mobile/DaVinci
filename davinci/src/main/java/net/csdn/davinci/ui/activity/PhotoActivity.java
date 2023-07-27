@@ -84,6 +84,8 @@ public class PhotoActivity extends BaseBindingViewModelActivity<DavinciActivityP
     }
 
     private void initialize() {
+        mBinding.ivBack.setColorFilter(getResources().getColor(Config.isDayStyle ? R.color.davinci_background_night : R.color.davinci_text_night));
+        mBinding.ivArrow.setColorFilter(getResources().getColor(Config.isDayStyle ? R.color.davinci_background_night : R.color.davinci_text_night));
         mAdapter = new BindingViewModelAdapter<>(R.layout.davinci_item_album, BR.viewmodel, AlbumItemViewModel.class, null);
         mBinding.rvDirs.setAdapter(mAdapter);
     }

@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                         .maxSelectable(4)
                         .showGif(true)
                         .showCamera(true)
-                        .isDayStyle(true)
+                        .isDayStyle(false)
                         .selectType(DaVinci.SelectType.IMAGE_VIDEO)
                         .column(4)
                         .selectedPhotos(selPhotos)

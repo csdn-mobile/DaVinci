@@ -32,8 +32,7 @@
                 android:paddingEnd="16dp"
                 android:paddingBottom="12dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/davinci_back"
-                app:tint="?davinciTextColor" />
+                android:src="@drawable/davinci_back" />
 
             <LinearLayout
                 android:id="@+id/ll_title"
@@ -60,8 +59,7 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginStart="4dp"
-                    android:src="@drawable/davinci_arrow_down"
-                    app:tint="?davinciTextColor" />
+                    android:src="@drawable/davinci_arrow_down" />
             </LinearLayout>
         </RelativeLayout>
 
