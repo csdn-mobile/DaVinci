@@ -21,7 +21,7 @@
         <item name="davinciCameraBg">@color/davinci_camera_bg</item>
         <item name="davinciCameraText">@color/davinci_camera_text</item>
         <item name="davinciSelectTypeTextColor">@color/color_select_type_selector</item>
-        <item name="davinciConfirmBgColor">@color/color_confirm_selector</item>
+        <item name="davinciConfirmBgColor">@drawable/color_confirm_selector</item>
         <item name="davinciConfirmTextColor">@color/color_confirm_text_selector</item>
     </style>
 
@@ -32,7 +32,7 @@
         <item name="davinciCameraBg">@color/davinci_camera_bg_night</item>
         <item name="davinciCameraText">@color/davinci_camera_text_night</item>
         <item name="davinciSelectTypeTextColor">@color/color_select_type_night_selector</item>
-        <item name="davinciConfirmBgColor">@color/color_confirm_night_selector</item>
+        <item name="davinciConfirmBgColor">@drawable/color_confirm_night_selector</item>
         <item name="davinciConfirmTextColor">@color/color_confirm_text_night_selector</item>
     </style>
 
