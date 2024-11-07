@@ -2,6 +2,8 @@ package net.csdn.davinci.utils;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_IMAGES;
+import static android.Manifest.permission.READ_MEDIA_VIDEO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.Manifest;
@@ -29,21 +31,37 @@ public class PermissionsUtils {
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    public static final String[] PERMISSIONS_EXTERNAL_WRITE = {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
+    public static final String[] PERMISSIONS_EXTERNAL_WRITE =
+            Build.VERSION.SDK_INT >= 33 ? new String[]{
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                    Manifest.permission.READ_MEDIA_VIDEO} : new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public static final String[] PERMISSIONS_EXTERNAL_READ = {
-            Manifest.permission.READ_EXTERNAL_STORAGE
-    };
+    public static final String[] PERMISSIONS_EXTERNAL_READ = Build.VERSION.SDK_INT >= 33 ? new String[]{
+            Manifest.permission.READ_MEDIA_IMAGES,
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.READ_MEDIA_VIDEO} : new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     /**
      * 检测读权限
      */
     public static boolean checkReadStoragePermission(Activity activity) {
-        int readStoragePermissionState = ContextCompat.checkSelfPermission(activity, READ_EXTERNAL_STORAGE);
-        boolean readStoragePermissionGranted = readStoragePermissionState == PackageManager.PERMISSION_GRANTED;
+        boolean readStoragePermissionGranted = false;
+        if (Build.VERSION.SDK_INT >= 33) {
+            if (ContextCompat.checkSelfPermission(activity, READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+                    && (ContextCompat.checkSelfPermission(activity, READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED)) {
+                readStoragePermissionGranted = true;
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(activity, READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                readStoragePermissionGranted = true;
+            }
+        }
         if (!readStoragePermissionGranted) {
             PermissionsDialog dialog = new PermissionsDialog(PermissionsDialog.TYPE_STORAGE_READ, activity, new PermissionsDialog.OnButtonClickListener() {
                 @Override
@@ -70,12 +88,15 @@ public class PermissionsUtils {
      * 检测写权限
      */
     public static boolean checkWriteStoragePermission(Activity activity, boolean isRequest) {
+        if (Build.VERSION.SDK_INT < 33) {
         int writeStoragePermissionState = ContextCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE);
         boolean writeStoragePermissionGranted = writeStoragePermissionState == PackageManager.PERMISSION_GRANTED;
         if (!writeStoragePermissionGranted && isRequest) {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_EXTERNAL_WRITE, REQUEST_EXTERNAL_WRITE);
         }
-        return writeStoragePermissionGranted;
+            return writeStoragePermissionGranted;
+        }
+        return true;
     }
 
     /**
