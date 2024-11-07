@@ -179,7 +179,6 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
             builder.show();
         }
     }
-
     @Override
     public void download(String url) {
         if (!TextUtils.isEmpty(url)) {
