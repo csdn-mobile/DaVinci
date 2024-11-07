@@ -32,6 +32,7 @@ import net.csdn.davinci.core.entity.SavePath;
 import net.csdn.davinci.ui.dialog.PermissionsDialog;
 import net.csdn.davinci.utils.DavinciToastUtils;
 import net.csdn.davinci.utils.PermissionsUtils;
+import net.csdn.davinci.utils.SharedPreferenceUtil;
 import net.csdn.davinci.utils.SystemUtils;
 import net.csdn.davinci.utils.UrlUtils;
 
@@ -185,7 +186,9 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
         if (!TextUtils.isEmpty(url)) {
             mUrl = url;
         }
-        if (!PermissionsUtils.checkWriteStoragePermission(mActivity, false)) {
+
+        boolean status = SharedPreferenceUtil.getSharedPreferencesBoolean(mActivity, SharedPreferenceUtil.STATUS_PERMISSION_GRANTED, false);
+        if (!PermissionsUtils.checkWriteStoragePermission(mActivity, false) || !status) {
             PermissionsDialog dialog = new PermissionsDialog(PermissionsDialog.TYPE_STORAGE_WRITE, mActivity, new PermissionsDialog.OnButtonClickListener() {
                 @Override
                 public void onConfirmClick() {

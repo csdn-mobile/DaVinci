@@ -25,6 +25,7 @@ import net.csdn.davinci.ui.adapter.PreviewPagerAdapter;
 import net.csdn.davinci.ui.viewmodel.PreviewViewModel;
 import net.csdn.davinci.utils.DavinciToastUtils;
 import net.csdn.davinci.utils.PermissionsUtils;
+import net.csdn.davinci.utils.SharedPreferenceUtil;
 import net.csdn.mvvm_java.bus.LiveDataBus;
 import net.csdn.mvvm_java.ui.activity.BaseBindingViewModelActivity;
 import net.csdn.statusbar.StatusBar;
@@ -237,6 +238,7 @@ public class PreviewActivity extends BaseBindingViewModelActivity<DavinciActivit
             if (isAllGranted) {
                 if (mHandleManager != null) {
                     // 如果url为null，则使用之前设置的url继续下载
+                    SharedPreferenceUtil.putSharedPreferencesBoolean(PreviewActivity.this, SharedPreferenceUtil.STATUS_PERMISSION_GRANTED, true);
                     mHandleManager.download(null);
                 }
             } else {
