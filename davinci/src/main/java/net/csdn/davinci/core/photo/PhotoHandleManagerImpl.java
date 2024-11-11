@@ -29,7 +29,8 @@ import com.uuzuche.lib_zxing.activity.CodeUtils;
 import net.csdn.davinci.Config;
 import net.csdn.davinci.R;
 import net.csdn.davinci.core.entity.SavePath;
-import net.csdn.davinci.ui.dialog.PermissionsDialog;
+import net.csdn.davinci.ui.dialog.OnPermissionRemindListener;
+import net.csdn.davinci.ui.dialog.PermissionRemindDialog;
 import net.csdn.davinci.utils.DavinciToastUtils;
 import net.csdn.davinci.utils.PermissionsUtils;
 import net.csdn.davinci.utils.SharedPreferenceUtil;
@@ -189,23 +190,31 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
 
         boolean status = SharedPreferenceUtil.getSharedPreferencesBoolean(mActivity, SharedPreferenceUtil.STATUS_PERMISSION_GRANTED, false);
         if (!PermissionsUtils.checkWriteStoragePermission(mActivity, false) || !status) {
-            PermissionsDialog dialog = new PermissionsDialog(PermissionsDialog.TYPE_STORAGE_WRITE, mActivity, new PermissionsDialog.OnButtonClickListener() {
-                @Override
-                public void onConfirmClick() {
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        if (!mActivity.shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) {
-                            // 可以申请权限
-                            ActivityCompat.requestPermissions(mActivity, PermissionsUtils.PERMISSIONS_EXTERNAL_WRITE, PermissionsUtils.REQUEST_EXTERNAL_WRITE);
-                        } else {
-                            // 跳转权限页面
-                            PermissionsUtils.openPermissionPage(mActivity);
+            PermissionRemindDialog dialog = new PermissionRemindDialog.Builder(mActivity)
+                    .listener(new OnPermissionRemindListener() {
+                        @Override
+                        public void onCancel() {
                         }
-                    } else {
-                        ActivityCompat.requestPermissions(mActivity, PermissionsUtils.PERMISSIONS_EXTERNAL_WRITE, PermissionsUtils.REQUEST_EXTERNAL_WRITE);
-                    }
-                }
-            });
-            dialog.show(mActivity);
+
+                        @Override
+                        public void onNext() {
+                            if (Build.VERSION.SDK_INT >= 23) {
+                                if (!mActivity.shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) {
+                                    // 可以申请权限
+                                    ActivityCompat.requestPermissions(mActivity, PermissionsUtils.PERMISSIONS_EXTERNAL_WRITE, PermissionsUtils.REQUEST_EXTERNAL_WRITE);
+                                } else {
+                                    // 跳转权限页面
+                                    PermissionsUtils.openPermissionPage(mActivity);
+                                }
+                            } else {
+                                ActivityCompat.requestPermissions(mActivity, PermissionsUtils.PERMISSIONS_EXTERNAL_WRITE, PermissionsUtils.REQUEST_EXTERNAL_WRITE);
+                            }
+                        }
+                    })
+                    .build();
+            dialog.showDialog();
+
+
         } else {
             startDownload(url);
         }

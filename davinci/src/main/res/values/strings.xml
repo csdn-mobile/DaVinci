@@ -29,5 +29,9 @@
   <string name="davinci_permission_allow">好</string>
   <string name="davinci_permission_not_allow_desc">你还没有开启存储权限，开启后即可查看相册</string>
   <string name="davinci_permission_go_open">去开启权限</string>
+  <string name="davinci_permissions_title">"CSDN"系统权限申请</string>
+  <string name="davinci_permissions_describe">此功能需要开启系统权限</string>
+  <string name="davinci_permissions_describe_end">。不授权上述权限，不影响APP其他功能的正常使用</string>
+  <string name="davinci_permissions_describe_start">当您使用APP时，会在</string>
 
 </resources>
