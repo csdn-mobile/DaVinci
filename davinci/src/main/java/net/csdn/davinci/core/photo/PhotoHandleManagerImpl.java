@@ -188,6 +188,12 @@ public class PhotoHandleManagerImpl implements PhotoHandleManager {
             mUrl = url;
         }
 
+        // Android 10+ 写相册走 MediaStore，无需 WRITE_EXTERNAL_STORAGE / 业务授权弹窗
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startDownload(url);
+            return;
+        }
+
         boolean status = SharedPreferenceUtil.getSharedPreferencesBoolean(mActivity, SharedPreferenceUtil.STATUS_PERMISSION_GRANTED, false);
         if (!PermissionsUtils.checkWriteStoragePermission(mActivity, false) || !status) {
             PermissionRemindDialog dialog = new PermissionRemindDialog.Builder(mActivity)

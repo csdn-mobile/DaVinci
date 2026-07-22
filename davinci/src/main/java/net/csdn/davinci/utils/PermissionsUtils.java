@@ -39,25 +39,32 @@ public class PermissionsUtils {
     };
 
     /**
-     * 检测读权限
+     * 检测读权限。
+     * Android 13+ 使用 READ_MEDIA_IMAGES；更低版本仍用 READ_EXTERNAL_STORAGE。
      */
     public static boolean checkReadStoragePermission(Activity activity) {
-        int readStoragePermissionState = ContextCompat.checkSelfPermission(activity, READ_EXTERNAL_STORAGE);
+        String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                ? Manifest.permission.READ_MEDIA_IMAGES
+                : READ_EXTERNAL_STORAGE;
+        String[] requestPermissions = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                ? new String[]{Manifest.permission.READ_MEDIA_IMAGES}
+                : PERMISSIONS_EXTERNAL_READ;
+        int readStoragePermissionState = ContextCompat.checkSelfPermission(activity, permission);
         boolean readStoragePermissionGranted = readStoragePermissionState == PackageManager.PERMISSION_GRANTED;
         if (!readStoragePermissionGranted) {
             PermissionsDialog dialog = new PermissionsDialog(PermissionsDialog.TYPE_STORAGE_READ, activity, new PermissionsDialog.OnButtonClickListener() {
                 @Override
                 public void onConfirmClick() {
                     if (Build.VERSION.SDK_INT >= 23) {
-                        if (!activity.shouldShowRequestPermissionRationale(READ_EXTERNAL_STORAGE)) {
+                        if (!activity.shouldShowRequestPermissionRationale(permission)) {
                             // 可以申请权限
-                            ActivityCompat.requestPermissions(activity, PERMISSIONS_EXTERNAL_READ, REQUEST_EXTERNAL_READ);
+                            ActivityCompat.requestPermissions(activity, requestPermissions, REQUEST_EXTERNAL_READ);
                         } else {
                             // 跳转权限页面
                             openPermissionPage(activity);
                         }
                     } else {
-                        ActivityCompat.requestPermissions(activity, PERMISSIONS_EXTERNAL_READ, REQUEST_EXTERNAL_READ);
+                        ActivityCompat.requestPermissions(activity, requestPermissions, REQUEST_EXTERNAL_READ);
                     }
                 }
             });
@@ -67,9 +74,13 @@ public class PermissionsUtils {
     }
 
     /**
-     * 检测写权限
+     * 检测写权限。
+     * Android 10+ 保存到相册走 MediaStore，不再需要 WRITE_EXTERNAL_STORAGE。
      */
     public static boolean checkWriteStoragePermission(Activity activity, boolean isRequest) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return true;
+        }
         int writeStoragePermissionState = ContextCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE);
         boolean writeStoragePermissionGranted = writeStoragePermissionState == PackageManager.PERMISSION_GRANTED;
         if (!writeStoragePermissionGranted && isRequest) {
@@ -79,26 +90,34 @@ public class PermissionsUtils {
     }
 
     /**
-     * 检测相机权限
+     * 检测相机权限。
+     * Android 10+ 拍照写入应用沙箱/MediaStore，不再捆绑 WRITE_EXTERNAL_STORAGE。
      */
     public static boolean checkCameraPermission(Activity activity) {
         int cameraPermissionState = ContextCompat.checkSelfPermission(activity, CAMERA);
-        int writePermissionState = ContextCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE);
-        boolean cameraPermissionGranted = (cameraPermissionState == PackageManager.PERMISSION_GRANTED) && (writePermissionState == PackageManager.PERMISSION_GRANTED);
+        boolean cameraPermissionGranted = cameraPermissionState == PackageManager.PERMISSION_GRANTED;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            int writePermissionState = ContextCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE);
+            cameraPermissionGranted = cameraPermissionGranted
+                    && (writePermissionState == PackageManager.PERMISSION_GRANTED);
+        }
         if (!cameraPermissionGranted) {
             PermissionsDialog dialog = new PermissionsDialog(PermissionsDialog.TYPE_CAMERA, activity, new PermissionsDialog.OnButtonClickListener() {
                 @Override
                 public void onConfirmClick() {
+                    String[] permissions = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                            ? new String[]{CAMERA}
+                            : PERMISSIONS_CAMERA;
                     if (Build.VERSION.SDK_INT >= 23) {
                         if (!activity.shouldShowRequestPermissionRationale(CAMERA)) {
                             // 可以申请权限
-                            ActivityCompat.requestPermissions(activity, PERMISSIONS_CAMERA, REQUEST_CAMERA);
+                            ActivityCompat.requestPermissions(activity, permissions, REQUEST_CAMERA);
                         } else {
                             // 跳转权限页面
                             openPermissionPage(activity);
                         }
                     } else {
-                        ActivityCompat.requestPermissions(activity, PERMISSIONS_CAMERA, REQUEST_CAMERA);
+                        ActivityCompat.requestPermissions(activity, permissions, REQUEST_CAMERA);
                     }
                 }
             });
