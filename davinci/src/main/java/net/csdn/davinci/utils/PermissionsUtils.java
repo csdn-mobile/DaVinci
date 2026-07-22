@@ -41,13 +41,15 @@ public class PermissionsUtils {
     /**
      * 检测读权限。
      * Android 13+ 使用 READ_MEDIA_IMAGES；更低版本仍用 READ_EXTERNAL_STORAGE。
+     * 使用字面量以兼容本库 compileSdk 29。
      */
     public static boolean checkReadStoragePermission(Activity activity) {
-        String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                ? Manifest.permission.READ_MEDIA_IMAGES
+        final boolean isTiramisuOrAbove = Build.VERSION.SDK_INT >= 33;
+        final String permission = isTiramisuOrAbove
+                ? "android.permission.READ_MEDIA_IMAGES"
                 : READ_EXTERNAL_STORAGE;
-        String[] requestPermissions = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                ? new String[]{Manifest.permission.READ_MEDIA_IMAGES}
+        final String[] requestPermissions = isTiramisuOrAbove
+                ? new String[]{"android.permission.READ_MEDIA_IMAGES"}
                 : PERMISSIONS_EXTERNAL_READ;
         int readStoragePermissionState = ContextCompat.checkSelfPermission(activity, permission);
         boolean readStoragePermissionGranted = readStoragePermissionState == PackageManager.PERMISSION_GRANTED;
