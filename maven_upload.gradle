@@ -5,6 +5,11 @@ group = GROUP
 archivesBaseName = ARTIFACT_NAME
 version = VERSION_NAME
 
+// Legacy OSSRH is shut down (HTTP 402). Use Central Portal OSSRH Staging API compatibility endpoint.
+def STAGING_DEPLOY_URL = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
+def STAGING_SNAPSHOT_URL = "https://central.sonatype.com/repository/maven-snapshots/"
+def PORTAL_NAMESPACE = GROUP // io.github.csdn-mobile
+
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -13,11 +18,11 @@ uploadArchives {
             def ossrhUsername = getPropertyFromLocalProperties("ossrhUsername")
             def ossrhPassword = getPropertyFromLocalProperties("ossrhPassword")
 
-            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            repository(url: STAGING_DEPLOY_URL) {
                 authentication(userName: ossrhUsername, password: ossrhPassword)
             }
 
-            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+            snapshotRepository(url: STAGING_SNAPSHOT_URL) {
                 authentication(userName: ossrhUsername, password: ossrhPassword)
             }
 
@@ -58,6 +63,40 @@ def getPropertyFromLocalProperties(key) {
         Properties properties = new Properties()
         properties.load(file.newDataInputStream())
         return properties.getProperty(key)
+    }
+}
+
+/**
+ * After uploadArchives (maven-like PUT), promote the staged files into Central Publisher Portal.
+ * publishing_type=user_managed: appear at https://central.sonatype.com/publishing/deployments for manual Publish.
+ * Override: -PcentralPublishingType=automatic
+ */
+task promoteToCentralPortal {
+    dependsOn uploadArchives
+    doLast {
+        def ossrhUsername = getPropertyFromLocalProperties("ossrhUsername")
+        def ossrhPassword = getPropertyFromLocalProperties("ossrhPassword")
+        if (!ossrhUsername || !ossrhPassword) {
+            throw new GradleException("Missing ossrhUsername/ossrhPassword in local.properties")
+        }
+        def publishingType = project.findProperty("centralPublishingType") ?: "user_managed"
+        def bearer = "${ossrhUsername}:${ossrhPassword}".bytes.encodeBase64().toString()
+        def url = "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/${PORTAL_NAMESPACE}?publishing_type=${publishingType}"
+        println "Promoting staged repo to Central Portal: ${url}"
+        def conn = new URL(url).openConnection()
+        conn.setRequestMethod("POST")
+        conn.setRequestProperty("Authorization", "Bearer ${bearer}")
+        conn.setDoOutput(true)
+        conn.connectTimeout = 60000
+        conn.readTimeout = 120000
+        def code = conn.responseCode
+        def body = (code >= 200 && code < 300 ? conn.inputStream : conn.errorStream)?.getText("UTF-8")
+        println "HTTP ${code}"
+        if (body) println body
+        if (code < 200 || code >= 300) {
+            throw new GradleException("promoteToCentralPortal failed with HTTP ${code}")
+        }
+        println "Done. Open https://central.sonatype.com/publishing/deployments to Publish (if user_managed)."
     }
 }
 
